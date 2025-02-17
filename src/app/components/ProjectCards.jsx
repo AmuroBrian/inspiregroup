@@ -8,26 +8,26 @@ import { Card, CardContent } from "./ui/Card";
 const cards = [
   {
     id: 1,
-    title: "Card One",
-    image: "./images/1.jpeg",
+    title: "Company Overview",
+    image: "./images/PSEbuilding.jpg",
     link: "#",
   },
   {
     id: 2,
-    title: "Card Two",
-    image: "./images/2.jpeg",
+    title: "Mission and Vision",
+    image: "./images/Dart.jpeg",
     link: "#",
   },
   {
     id: 3,
-    title: "Card Three",
-    image: "./images/3.jpg",
+    title: "Message from Executives",
+    image: "./images/Denmark.jpeg",
     link: "#",
   },
   {
     id: 4,
-    title: "Card Three",
-    image: "./images/3.jpg",
+    title: "Organization",
+    image: "./images/CompanyMeeting.jpeg",
     link: "#",
   },
 ];
