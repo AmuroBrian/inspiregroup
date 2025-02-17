@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // Updated for Next.js 13+ (App Router)
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname(); // Get the current route
+  const isHomePage = pathname === "/"; // Check if on homepage
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +21,7 @@ const Header = () => {
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md" : "bg-transparent"
+        isHomePage && !isScrolled ? "bg-transparent" : "bg-white shadow-md"
       }`}
     >
       <div className="container mx-auto flex justify-between items-center py-3 px-6">
@@ -31,7 +34,7 @@ const Header = () => {
           />
           <span
             className={`text-xl font-bold transition-all duration-300 ${
-              isScrolled ? "text-blue-600" : "text-white"
+              isHomePage && !isScrolled ? "text-white" : "text-blue-600"
             }`}
           >
             INSPIRE GROUP
@@ -44,7 +47,7 @@ const Header = () => {
             <Link
               href="/"
               className={`flex flex-col items-center transition-all duration-300 ${
-                isScrolled ? "text-gray-700" : "text-white"
+                isHomePage && !isScrolled ? "text-white" : "text-gray-700"
               } hover:text-blue-600`}
             >
               <span className="text-lg">🏠</span>
@@ -55,9 +58,7 @@ const Header = () => {
           <li className="relative group">
             <Link
               href="/about"
-              className={`flex flex-col items-center transition-all duration-300 ${
-                isScrolled ? "text-gray-700" : "text-white"
-              } hover:text-blue-600`}
+              className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
             >
               <span className="text-lg">🏢</span>
               <span className="text-xs">ABOUT</span>
@@ -75,9 +76,7 @@ const Header = () => {
                   block: "start",
                 });
               }}
-              className={`flex flex-col items-center transition-all duration-300 ${
-                isScrolled ? "text-gray-700" : "text-white"
-              } hover:text-blue-600`}
+              className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
             >
               <span className="text-lg">✉️</span>
               <span className="text-xs">CONTACT</span>
