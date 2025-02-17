@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Header = () => {
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
       <div className="container mx-auto flex justify-between items-center py-3 px-6">
         {/* Logo */}
         <div className="flex items-center">
