@@ -28,7 +28,7 @@ const cards = [
     id: 4,
     title: "Organization",
     image: "./images/CompanyMeeting.jpeg",
-    link: "#",
+    link: "/orgchart",
   },
 ];
 

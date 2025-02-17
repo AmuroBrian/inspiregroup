@@ -4,14 +4,13 @@ import ProjectCards from "./components/ProjectCards";
 import EmailSection from "./components/EmailSection";
 import RSS from "./components/RSS";
 
-
 export default function Home() {
   return (
     <div>
       <HeroSection />
       <ProjectCards />
       <EmailSection />
-      <RSS/>
+      <RSS />
     </div>
   );
 }
