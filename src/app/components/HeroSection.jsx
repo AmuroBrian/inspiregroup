@@ -10,9 +10,14 @@ export default function HeroSection() {
         muted
         playsInline
       >
-        <source src="/videos/hero.mp4" type="video/mp4" />
+        <source src="/videos/herovideo.mp4" type="video/mp4" />
         Inspire Group
       </video>
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <h1 className="text-white text-4xl sm:text-6xl md:text-6xl font-bold text-center">
+          Welcome to Inspire Holdings Incorporated
+        </h1>
+      </div>
     </div>
   );
 }
