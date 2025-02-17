@@ -24,6 +24,12 @@ const cards = [
     image: "./images/3.jpg",
     link: "#",
   },
+  {
+    id: 4,
+    title: "Card Three",
+    image: "./images/3.jpg",
+    link: "#",
+  },
 ];
 
 const AnimatedCard = ({ title, image, link }) => {
