@@ -3,7 +3,7 @@ import React from 'react';
 export const CompanyOverview = () => {
   return (
     <div className="p-6 max-w-5xl mx-auto border-2 border-blue-500 rounded-lg shadow-lg">
-      
+      <div className='w-full h-14'></div>
       {/* Title */}
       <h1 className="text-3xl font-bold text-center">Company Overview</h1>
       <hr className="my-4 border-gray-300" />
