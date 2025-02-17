@@ -60,7 +60,7 @@ export default function Page() {
   const visibleItems = feedItems.slice(currentStartIndex, currentStartIndex + 5);
 
   return (
-    <div className="relative w-full h-[500px] bg-white text-black p-6 flex flex-col items-center mb-20">
+    <div className="relative w-full h-[500px] bg-white text-black p-6 flex flex-col items-center">
       {/* Previous Button */}
       <button
         onClick={prevPage}
@@ -70,7 +70,7 @@ export default function Page() {
       </button>
 
       {/* Feed Display - One row of 5 containers */}
-      <div className="absolute w-[1440px] h-full top-0 left-0 grid grid-cols-5 gap-4 overflow-hidden ml-10 mr-10">
+      <div className="absolute w-[95%] h-full top-0 left-0 grid grid-cols-5 gap-4 overflow-hidden ml-10 mr-10">
         {visibleItems.map((item, index) => (
           <div
             key={index}
@@ -96,10 +96,9 @@ export default function Page() {
       >
         &gt;
       </button>
+     
 
-      <div>
-
-      </div>
+      
     </div>
   );
 }
