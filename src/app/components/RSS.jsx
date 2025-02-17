@@ -60,25 +60,31 @@ export default function Page() {
   const visibleItems = feedItems.slice(currentStartIndex, currentStartIndex + 5);
 
   return (
-    <div className="bg-white text-black p-6 flex flex-col items-center relative">
+    <div className="relative w-full h-[500px] bg-white text-black p-6 flex flex-col items-center mb-20">
       {/* Previous Button */}
       <button
         onClick={prevPage}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded z-10"
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent text-black-500 p-2 rounded z-10 border-2 border-gray-500 hover:bg-gray-200 transition-all"
       >
         &lt;
       </button>
 
       {/* Feed Display - One row of 5 containers */}
-      <div className="w-full max-w-7xl grid grid-cols-5 gap-4 overflow-hidden relative">
+      <div className="absolute w-[1440px] h-full top-0 left-0 grid grid-cols-5 gap-4 overflow-hidden ml-10 mr-10">
         {visibleItems.map((item, index) => (
-          <div key={index} className="p-4 border rounded shadow bg-white flex flex-col h-full"> {/* No fixed height */}
+          <div
+            key={index}
+            className="p-4 border rounded shadow bg-white flex flex-col relative"
+            style={{
+              height: '100%', // Ensure container fills the available height
+            }}
+          >
             {item.image && <img src={item.image} alt={item.title} className="w-full h-48 object-cover mb-2" />}
             <h2 className="text-lg font-bold text-black mb-2 text-center">
               <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-black text-justify">{item.title}</a>
             </h2>
             <p className="text-sm text-black mb-2 text-justify flex-grow">{item.description}</p> {/* Justified description */}
-            <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 font-bold self-end">Read more</a> {/* Fixed bottom */}
+            <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 font-bold absolute bottom-2 left-2">Read more</a> {/* Fixed bottom */}
           </div>
         ))}
       </div>
@@ -86,10 +92,14 @@ export default function Page() {
       {/* Next Button */}
       <button
         onClick={nextPage}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded z-10"
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent text-black-500 p-2 rounded z-10 border-2 border-gray-500 hover:bg-gray-200 transition-all"
       >
         &gt;
       </button>
+
+      <div>
+
+      </div>
     </div>
   );
 }
