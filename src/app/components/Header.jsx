@@ -8,11 +8,7 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true); // Solid background, normal text color
-      } else {
-        setIsScrolled(false); // Transparent background, white text
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -44,26 +40,49 @@ const Header = () => {
 
         {/* Navigation Links */}
         <ul className="flex space-x-8">
-          {[
-            { text: "HOME", emoji: "🏠", href: "/" },
-            { text: "ABOUT", emoji: "🏢", href: "/about" },
-            { text: "CONTACT", emoji: "✉️", href: "/contact" },
-          ].map((item, index) => (
-            <li key={index} className="relative group">
-              <Link
-                href={item.href}
-                className={`flex flex-col items-center transition-all duration-300 ${
-                  isScrolled ? "text-gray-700" : "text-white"
-                } hover:text-blue-600`}
-              >
-                <span className="text-lg">{item.emoji}</span>
-                <span className="text-xs">{item.text}</span>
-              </Link>
+          <li className="relative group">
+            <Link
+              href="/"
+              className={`flex flex-col items-center transition-all duration-300 ${
+                isScrolled ? "text-gray-700" : "text-white"
+              } hover:text-blue-600`}
+            >
+              <span className="text-lg">🏠</span>
+              <span className="text-xs">HOME</span>
+            </Link>
+          </li>
 
-              {/* Underline Animation */}
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-            </li>
-          ))}
+          <li className="relative group">
+            <Link
+              href="/about"
+              className={`flex flex-col items-center transition-all duration-300 ${
+                isScrolled ? "text-gray-700" : "text-white"
+              } hover:text-blue-600`}
+            >
+              <span className="text-lg">🏢</span>
+              <span className="text-xs">ABOUT</span>
+            </Link>
+          </li>
+
+          {/* CONTACT (Smooth Scrolling) */}
+          <li className="relative group">
+            <a
+              href="#contacts"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("contacts")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
+              className={`flex flex-col items-center transition-all duration-300 ${
+                isScrolled ? "text-gray-700" : "text-white"
+              } hover:text-blue-600`}
+            >
+              <span className="text-lg">✉️</span>
+              <span className="text-xs">CONTACT</span>
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
