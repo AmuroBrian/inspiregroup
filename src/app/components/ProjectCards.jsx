@@ -16,13 +16,13 @@ const cards = [
     id: 2,
     title: "Mission and Vision",
     image: "./images/Dart.jpeg",
-    link: "#",
+    link: "/missionvision",
   },
   {
     id: 3,
     title: "Message from Executives",
     image: "./images/Denmark.jpeg",
-    link: "#",
+    link: "/messageexec",
   },
   {
     id: 4,
