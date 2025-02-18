@@ -56,15 +56,21 @@ const Header = () => {
           </li>
 
           <li className="relative group">
-            <Link
-              href="/about"
+            <a
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("about")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
               className={`flex flex-col items-center transition-all duration-300 ${
                 isHomePage && !isScrolled ? "text-white" : "text-gray-700"
               } hover:text-blue-600`}
             >
               <span className="text-lg">🏢</span>
               <span className="text-xs">ABOUT</span>
-            </Link>
+            </a>
           </li>
 
           {/* CONTACT (Smooth Scrolling) */}
