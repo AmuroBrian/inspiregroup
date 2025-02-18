@@ -43,7 +43,7 @@ const AnimatedCard = ({ title, image, link }) => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="w-full p-4"
     >
-      <a href={link} target="_blank" rel="noopener noreferrer">
+      <a href={link} rel="noopener noreferrer">
         <Card className="overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition h-full flex flex-col">
           <img src={image} alt={title} className="w-full h-48 object-cover" />
           <CardContent className="p-4 flex-grow flex flex-col">

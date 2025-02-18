@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 export default function Page() {
   // State for storing the fetched RSS feed items
@@ -10,30 +10,38 @@ export default function Page() {
   // Fetch the RSS feed from the server directly
   useEffect(() => {
     const fetchFeed = async () => {
-      const res = await fetch('https://data.gmanetwork.com/gno/rss/scitech/technology/feed.xml');
+      const res = await fetch(
+        "https://data.gmanetwork.com/gno/rss/scitech/technology/feed.xml"
+      );
       const xml = await res.text();
 
       // Parse the XML to extract RSS feed items
       const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(xml, 'application/xml');
-      const items = Array.from(xmlDoc.getElementsByTagName('item')).map((item) => {
-        const description = item.getElementsByTagName('description')[0]?.textContent || '';
-        const imgMatch = description.match(/<img[^>]+src="([^"]+)"/);
-        const imageUrl = imgMatch ? imgMatch[1] : '';
+      const xmlDoc = parser.parseFromString(xml, "application/xml");
+      const items = Array.from(xmlDoc.getElementsByTagName("item")).map(
+        (item) => {
+          const description =
+            item.getElementsByTagName("description")[0]?.textContent || "";
+          const imgMatch = description.match(/<img[^>]+src="([^"]+)"/);
+          const imageUrl = imgMatch ? imgMatch[1] : "";
 
-        return {
-          title: item.getElementsByTagName('title')[0]?.textContent,
-          description: description.replace(/<br\/>/g, '').replace(/<img[^>]+>/, '').trim(), // Clean the description
-          link: item.getElementsByTagName('link')[0]?.textContent,
-          image: imageUrl,
-        };
-      });
+          return {
+            title: item.getElementsByTagName("title")[0]?.textContent,
+            description: description
+              .replace(/<br\/>/g, "")
+              .replace(/<img[^>]+>/, "")
+              .trim(), // Clean the description
+            link: item.getElementsByTagName("link")[0]?.textContent,
+            image: imageUrl,
+          };
+        }
+      );
 
       setFeedItems(items);
     };
 
-    fetchFeed();  // Fetch the feed
-  }, []);  // Empty array means this will run only once when the component mounts
+    fetchFeed(); // Fetch the feed
+  }, []); // Empty array means this will run only once when the component mounts
 
   // Function to handle the "Next" button
   const nextPage = () => {
@@ -57,10 +65,13 @@ export default function Page() {
   };
 
   // Get the items for the current visible containers (5 items at a time)
-  const visibleItems = feedItems.slice(currentStartIndex, currentStartIndex + 5);
+  const visibleItems = feedItems.slice(
+    currentStartIndex,
+    currentStartIndex + 5
+  );
 
   return (
-    <div className="relative w-full h-[500px] bg-white text-black p-6 flex flex-col items-center">
+    <div className="relative w-full h-[600px] bg-white text-black p-6 flex flex-col items-center">
       {/* Previous Button */}
       <button
         onClick={prevPage}
@@ -76,15 +87,39 @@ export default function Page() {
             key={index}
             className="p-4 border rounded shadow bg-white flex flex-col relative"
             style={{
-              height: '100%', // Ensure container fills the available height
+              height: "100%", // Ensure container fills the available height
             }}
           >
-            {item.image && <img src={item.image} alt={item.title} className="w-full h-48 object-cover mb-2" />}
+            {item.image && (
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-48 object-cover mb-2"
+              />
+            )}
             <h2 className="text-lg font-bold text-black mb-2 text-center">
-              <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-black text-justify">{item.title}</a>
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-black text-justify"
+              >
+                {item.title}
+              </a>
             </h2>
-            <p className="text-sm text-black mb-2 text-justify flex-grow">{item.description}</p> {/* Justified description */}
-            <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 font-bold absolute bottom-2 left-2">Read more</a> {/* Fixed bottom */}
+            <p className="text-sm text-black mb-2 text-justify flex-grow">
+              {item.description}
+            </p>{" "}
+            {/* Justified description */}
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 font-bold relative"
+            >
+              Read more
+            </a>{" "}
+            {/* Fixed bottom */}
           </div>
         ))}
       </div>
@@ -96,9 +131,6 @@ export default function Page() {
       >
         &gt;
       </button>
-     
-
-      
     </div>
   );
 }

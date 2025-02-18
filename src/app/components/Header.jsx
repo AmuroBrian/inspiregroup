@@ -58,7 +58,9 @@ const Header = () => {
           <li className="relative group">
             <Link
               href="/about"
-              className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
+              className={`flex flex-col items-center transition-all duration-300 ${
+                isHomePage && !isScrolled ? "text-white" : "text-gray-700"
+              } hover:text-blue-600`}
             >
               <span className="text-lg">🏢</span>
               <span className="text-xs">ABOUT</span>
@@ -76,7 +78,9 @@ const Header = () => {
                   block: "start",
                 });
               }}
-              className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
+              className={`flex flex-col items-center transition-all duration-300 ${
+                isHomePage && !isScrolled ? "text-white" : "text-gray-700"
+              } hover:text-blue-600`}
             >
               <span className="text-lg">✉️</span>
               <span className="text-xs">CONTACT</span>
