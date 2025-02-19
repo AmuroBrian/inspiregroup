@@ -40,12 +40,12 @@ const EmailSection = () => {
 
   return (
     <div
-      className="relative min-h-[80vh] p-6 bg-cover bg-center bg-no-repeat mb-5 flex flex-col lg:flex-row lg:justify-center lg:items-center"
+      className="relative min-h-[80vh] p-6 bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center lg:flex-row"
       style={{ backgroundImage: "url('/images/building3.jpg')" }}
       id="contacts"
     >
       {/* Contact Form */}
-      <div className="max-w-lg w-full p-6 bg-transparent backdrop-blur-md rounded-lg shadow-lg z-10">
+      <div className="max-w-lg w-full p-6 bg-transparent backdrop-blur-md rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-black text-center mb-5">
           Email Us
         </h2>
@@ -89,7 +89,7 @@ const EmailSection = () => {
           ></textarea>
           <button
             type="submit"
-            className="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
             disabled={loading}
           >
             {loading ? "Sending..." : "Send Email"}
@@ -97,13 +97,19 @@ const EmailSection = () => {
         </form>
       </div>
 
-      {/* Contact Us Section - Adjusts for Small Devices */}
+      {/* Contact Us Section */}
       <div className="w-full lg:w-[350px] p-4 bg-gray-700 text-white rounded-lg shadow-lg mt-5 lg:mt-0 lg:ml-10">
         <h2 className="text-2xl font-semibold mb-2 text-center">Contact Us</h2>
         <div className="space-y-2">
           <h2 className="text-lg font-medium flex items-center">
             <Globe className="mr-2 text-blue-300" />
-            Website: <a href="https://inspirenextglobal.com" className="text-blue-300 hover:underline">inspirenextglobal.com</a>
+            Website:{" "}
+            <a
+              href="https://inspirenextglobal.com"
+              className="text-blue-300 hover:underline"
+            >
+              inspirenextglobal.com
+            </a>
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Phone className="mr-2 text-blue-300" />
@@ -111,7 +117,13 @@ const EmailSection = () => {
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Mail className="mr-2 text-blue-300" />
-            Email: <a href="mailto:info@inspirenextglobal.com" className="text-blue-300 hover:underline">info@inspirenextglobal.com</a>
+            Email:{" "}
+            <a
+              href="mailto:info@inspirenextglobal.com"
+              className="text-blue-300 hover:underline"
+            >
+              info@inspirenextglobal.com
+            </a>
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Facebook className="mr-2 text-blue-300" />
