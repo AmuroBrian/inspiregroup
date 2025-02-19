@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "../../../../script/firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 
 export const AgentCodeEntry = () => {
@@ -15,6 +16,7 @@ export const AgentCodeEntry = () => {
   const [isHomePage, setIsHomePage] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const router = useRouter(); // ✅ Ensure router is initialized
 
   const [formData, setFormData] = useState({
     lastName: "",
@@ -41,9 +43,18 @@ export const AgentCodeEntry = () => {
     try {
       const q = query(collection(db, "agents"), where("code", "==", agentCode));
       const querySnapshot = await getDocs(q);
+  
       if (!querySnapshot.empty) {
         alert("Login Successful!");
+        setAgentCode("");
+        setError("");
         closeLoginModal();
+  
+        // Store login state
+        localStorage.setItem("isLoggedIn", "true");
+  
+        // Navigate to agent-home
+        router.push("/agent-home");
       } else {
         setError("Incorrect Agent Code. Please try again.");
       }
@@ -52,6 +63,8 @@ export const AgentCodeEntry = () => {
       setError("Something went wrong. Please try again.");
     }
   };
+  
+  
 
   const handleRegisterSubmit = async () => {
     try {
