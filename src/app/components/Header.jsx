@@ -175,33 +175,28 @@ const Header = () => {
         {/* Hamburger Menu */}
 <button
   className={`md:hidden p-2 rounded-md transition-all duration-300 ${
-    isHydrated && isHomePage && !isScrolled ? "bg-transparent text-white" : "bg-white text-gray-700 shadow-md"
+    isHydrated && isHomePage && !isScrolled ? "bg-transparent text-white" : " text-gray-700 "
   }`}
   onClick={() => setIsMenuOpen(!isMenuOpen)}
 >
-  ☰
+  {isMenuOpen ? "✖" : "☰"}
 </button>
 
       </div>
 
       {/* Mobile Navigation Menu */}
 {isMenuOpen && (
-  <div
-    className={`md:hidden ${isScrolled ? "bg-white shadow-md" : "bg-transparent"} transition-all duration-300 py-4`}
-  >
+  <div className="md:hidden bg-white shadow-md transition-all duration-300 py-4">
     <ul className="flex flex-col items-center space-y-4">
-    <li>
-  <Link
-    href={isHomePage ? "#" : "/"}
-    onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
-    className={`text-lg transition-all duration-300 ${
-      isHomePage ? (isScrolled ? "text-gray-700" : "text-white") : "text-gray-500"
-    } hover:text-blue-600`}
-  >
-    🏠 HOME
-  </Link>
-</li>
-
+      <li>
+        <Link
+          href={isHomePage ? "#" : "/"}
+          onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
+          className="text-lg text-gray-500 transition-all duration-300 hover:text-blue-600"
+        >
+          🏠 HOME
+        </Link>
+      </li>
 
       {isHomePage && (
         <>
@@ -215,9 +210,7 @@ const Header = () => {
                 });
                 setIsMenuOpen(false);
               }}
-              className={`text-lg cursor-pointer transition-all duration-300 ${
-                isScrolled ? "text-gray-700" : "text-white"
-              } hover:text-blue-600`}
+              className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
             >
               🏢 ABOUT
             </a>
@@ -234,9 +227,7 @@ const Header = () => {
                 });
                 setIsMenuOpen(false);
               }}
-              className={`text-lg cursor-pointer transition-all duration-300 ${
-                isScrolled ? "text-gray-700" : "text-white"
-              } hover:text-blue-600`}
+              className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
             >
               ✉️ CONTACT
             </a>
@@ -248,9 +239,7 @@ const Header = () => {
                 setShowRegisterModal(true);
                 setIsMenuOpen(false);
               }}
-              className={`text-lg cursor-pointer transition-all duration-300 ${
-                isScrolled ? "text-gray-700" : "text-white"
-              } hover:text-blue-600`}
+              className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
             >
               📝 REGISTER
             </a>
@@ -262,9 +251,7 @@ const Header = () => {
                 setShowLoginModal(true);
                 setIsMenuOpen(false);
               }}
-              className={`text-lg cursor-pointer transition-all duration-300 ${
-                isScrolled ? "text-gray-700" : "text-white"
-              } hover:text-blue-600`}
+              className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
             >
               🔑 LOGIN
             </a>
@@ -274,6 +261,7 @@ const Header = () => {
     </ul>
   </div>
 )}
+
 
 
       {/* Register Modal */}
