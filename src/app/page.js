@@ -9,7 +9,6 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
-      <AgentCodeEntry />
       <ProjectCards />
       <EmailSection />
       <RSS />
