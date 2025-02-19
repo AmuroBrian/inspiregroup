@@ -7,7 +7,7 @@ import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 
-export const AgentCodeEntry = () => {
+export const AgentCodeEntry = ({ isMenuOpen }) => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [agentCode, setAgentCode] = useState("");
@@ -17,6 +17,7 @@ export const AgentCodeEntry = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter(); // ✅ Ensure router is initialized
+  const textColor = isMenuOpen ? "text-black" : "text-white";
 
   const [formData, setFormData] = useState({
     lastName: "",
@@ -43,16 +44,16 @@ export const AgentCodeEntry = () => {
     try {
       const q = query(collection(db, "agents"), where("code", "==", agentCode));
       const querySnapshot = await getDocs(q);
-  
+
       if (!querySnapshot.empty) {
         alert("Login Successful!");
         setAgentCode("");
         setError("");
         closeLoginModal();
-  
+
         // Store login state
         localStorage.setItem("isLoggedIn", "true");
-  
+
         // Navigate to agent-home
         router.push("/agent-home");
       } else {
@@ -63,12 +64,10 @@ export const AgentCodeEntry = () => {
       setError("Something went wrong. Please try again.");
     }
   };
-  
-  
 
   const handleRegisterSubmit = async () => {
     try {
-      const generatedCode = uuidv4().slice(0, 8);
+      const generatedCode = uuidv4().slice(0, 8).toUpperCase();
       await addDoc(collection(db, "agents"), {
         ...formData,
         code: generatedCode,
@@ -96,8 +95,8 @@ export const AgentCodeEntry = () => {
   return (
     <>
       {/* Login & Register Menu Items */}
-      <li className="relative group">
-        <a
+      <li className="relative">
+        <button
           onClick={() => setIsRegisterOpen(true)}
           className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
             isHydrated &&
@@ -106,11 +105,11 @@ export const AgentCodeEntry = () => {
         >
           <span className="text-lg">📝</span>
           <span className="text-xs">REGISTER</span>
-        </a>
+        </button>
       </li>
 
-      <li className="relative group">
-        <a
+      <li className="relative">
+        <button
           onClick={() => setIsLoginOpen(true)}
           className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
             isHydrated &&
@@ -119,7 +118,7 @@ export const AgentCodeEntry = () => {
         >
           <span className="text-lg">🔑</span>
           <span className="text-xs">LOGIN</span>
-        </a>
+        </button>
       </li>
 
       {/* Login Modal */}
@@ -163,84 +162,84 @@ export const AgentCodeEntry = () => {
 
       {/* Register Modal */}
       {isRegisterOpen && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-4">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg">
-      <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
-      
-      <input
-        type="text"
-        value={formData.lastName}
-        onChange={(e) =>
-          setFormData({ ...formData, lastName: e.target.value })
-        }
-        className="w-full p-2 border border-gray-300 rounded mb-3"
-        placeholder="Last Name"
-      />
-      
-      <input
-        type="text"
-        value={formData.firstName}
-        onChange={(e) =>
-          setFormData({ ...formData, firstName: e.target.value })
-        }
-        className="w-full p-2 border border-gray-300 rounded mb-3"
-        placeholder="First Name"
-      />
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg">
+            <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
 
-      {/* Birthdate Label and Input */}
-      <label className="block text-sm font-medium text-gray-600 mb-1">
-        Birthdate:
-      </label>
-      <input
-        type="date"
-        value={formData.birthdate}
-        onChange={(e) =>
-          setFormData({ ...formData, birthdate: e.target.value })
-        }
-        className="w-full p-2 border border-gray-300 rounded mb-3"
-      />
+            <input
+              type="text"
+              value={formData.lastName}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
+              className="w-full p-2 border border-gray-300 rounded mb-3"
+              placeholder="Last Name"
+            />
 
-      <input
-        type="text"
-        value={formData.address}
-        onChange={(e) =>
-          setFormData({ ...formData, address: e.target.value })
-        }
-        className="w-full p-2 border border-gray-300 rounded mb-3"
-        placeholder="Address"
-      />
+            <input
+              type="text"
+              value={formData.firstName}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
+              className="w-full p-2 border border-gray-300 rounded mb-3"
+              placeholder="First Name"
+            />
 
-      {/* Buttons Layout */}
-      <div className="mt-4 flex gap-2">
-        <button
-          onClick={closeRegisterModal}
-          className="w-full sm:w-auto flex-1 px-4 py-2 bg-gray-400 text-white rounded"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={() =>
-            setFormData({
-              lastName: "",
-              firstName: "",
-              birthdate: "",
-              address: "",
-            })
-          }
-          className="w-full sm:w-auto flex-1 px-4 py-2 bg-red-400 text-white rounded"
-        >
-          Clear
-        </button>
-        <button
-          onClick={handleRegisterSubmit}
-          className="w-full sm:w-auto flex-1 px-4 py-2 bg-green-400 text-white rounded"
-        >
-          Submit
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+            {/* Birthdate Label and Input */}
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Birthdate:
+            </label>
+            <input
+              type="date"
+              value={formData.birthdate}
+              onChange={(e) =>
+                setFormData({ ...formData, birthdate: e.target.value })
+              }
+              className="w-full p-2 border border-gray-300 rounded mb-3"
+            />
+
+            <input
+              type="text"
+              value={formData.address}
+              onChange={(e) =>
+                setFormData({ ...formData, address: e.target.value })
+              }
+              className="w-full p-2 border border-gray-300 rounded mb-3"
+              placeholder="Address"
+            />
+
+            {/* Buttons Layout */}
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={closeRegisterModal}
+                className="w-full sm:w-auto flex-1 px-4 py-2 bg-gray-400 text-white rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() =>
+                  setFormData({
+                    lastName: "",
+                    firstName: "",
+                    birthdate: "",
+                    address: "",
+                  })
+                }
+                className="w-full sm:w-auto flex-1 px-4 py-2 bg-red-400 text-white rounded"
+              >
+                Clear
+              </button>
+              <button
+                onClick={handleRegisterSubmit}
+                className="w-full sm:w-auto flex-1 px-4 py-2 bg-green-400 text-white rounded"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
