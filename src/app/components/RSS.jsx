@@ -5,8 +5,10 @@ import React, { useEffect, useState } from "react";
 export default function Page() {
   const [feedItems, setFeedItems] = useState([]);
   const [currentStartIndex, setCurrentStartIndex] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(1024); // Default width for SSR-safe rendering
 
   useEffect(() => {
+    // Fetch feed data
     const fetchFeed = async () => {
       const res = await fetch(
         "https://data.gmanetwork.com/gno/rss/scitech/technology/feed.xml"
@@ -34,7 +36,24 @@ export default function Page() {
       );
       setFeedItems(items);
     };
+
     fetchFeed();
+  }, []);
+
+  useEffect(() => {
+    // Function to update window width
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    // Set initial width after component mounts
+    setWindowWidth(window.innerWidth);
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const nextPage = () => {
@@ -51,7 +70,7 @@ export default function Page() {
 
   const visibleItems = feedItems.slice(
     currentStartIndex,
-    currentStartIndex + (window.innerWidth < 768 ? 1 : 3)
+    currentStartIndex + (windowWidth < 768 ? 1 : 3) // Use windowWidth state instead of window.innerWidth
   );
 
   return (
