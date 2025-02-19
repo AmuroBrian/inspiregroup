@@ -63,6 +63,7 @@ const ProjectCards = () => {
 
 
     <div className="flex flex-wrap justify-center p-8" id="about">
+  
       {/* Grid layout: 2 columns on all screen sizes with responsive padding */}
       <div className="relative flex items-center w-full mb-6">
         <div className="flex-grow border-t border-gray-400"></div>

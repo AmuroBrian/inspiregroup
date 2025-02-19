@@ -40,7 +40,7 @@ const EmailSection = () => {
 
   return (
     <div
-      className="relative min-h-[80vh]  p-6 bg-cover bg-center bg-no-repeat mb-5"
+      className="relative min-h-[80vh] p-6 bg-cover bg-center bg-no-repeat mb-5 flex flex-col lg:flex-row lg:justify-center lg:items-center"
       style={{ backgroundImage: "url('/images/building3.jpg')" }}
       id="contacts"
     >
@@ -97,19 +97,13 @@ const EmailSection = () => {
         </form>
       </div>
 
-      {/* Contact Us Section - Positioned to the Right */}
-      <div className="w-[350px] p-4 bg-gray-700 text-white rounded-lg shadow-lg absolute right-10 top-1/2 transform -translate-y-1/2">
+      {/* Contact Us Section - Adjusts for Small Devices */}
+      <div className="w-full lg:w-[350px] p-4 bg-gray-700 text-white rounded-lg shadow-lg mt-5 lg:mt-0 lg:ml-10">
         <h2 className="text-2xl font-semibold mb-2 text-center">Contact Us</h2>
         <div className="space-y-2">
           <h2 className="text-lg font-medium flex items-center">
             <Globe className="mr-2 text-blue-300" />
-            Website:{" "}
-            <a
-              href="https://inspirenextglobal.com"
-              className="text-blue-300 hover:underline"
-            >
-              inspirenextglobal.com
-            </a>
+            Website: <a href="https://inspirenextglobal.com" className="text-blue-300 hover:underline">inspirenextglobal.com</a>
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Phone className="mr-2 text-blue-300" />
@@ -117,13 +111,7 @@ const EmailSection = () => {
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Mail className="mr-2 text-blue-300" />
-            Email:{" "}
-            <a
-              href="mailto:info@inspirenextglobal.com"
-              className="text-blue-300 hover:underline"
-            >
-              info@inspirenextglobal.com
-            </a>
+            Email: <a href="mailto:info@inspirenextglobal.com" className="text-blue-300 hover:underline">info@inspirenextglobal.com</a>
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Facebook className="mr-2 text-blue-300" />
