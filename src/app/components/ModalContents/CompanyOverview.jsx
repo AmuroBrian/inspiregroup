@@ -1,6 +1,18 @@
-import React from "react";
+'use client'; // Add this line to mark the component as a client component
+
+import React, { useState, useEffect } from "react";
 
 export const CompanyOverview = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Ensure the component only renders after the client has mounted
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // If the component is not mounted yet, return null to prevent SSR mismatches
+  if (!isMounted) return null;
+
   return (
     <div className="p-6 max-w-5xl mx-auto rounded-lg shadow-lg">
       <div className="w-full h-14"></div>
@@ -12,7 +24,7 @@ export const CompanyOverview = () => {
       <div className="flex flex-col md:flex-row items-center gap-8">
         {/* Image */}
         <img
-          src="images/PSEBuilding.jpg"
+          src="/images/PSEBuilding.jpg" // Ensure the path is correct
           alt="Company"
           className="w-80 h-80 object-cover rounded-lg shadow-lg"
         />
