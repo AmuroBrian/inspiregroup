@@ -11,13 +11,11 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
-      <WelcomeToHol/>
+      <WelcomeToHol />
       <ProjectCards />
       <CompanyInfo />
       <EmailSection />
       <RSS />
-
-      
     </div>
   );
 }
