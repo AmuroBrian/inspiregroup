@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Globe, Phone, Mail, Facebook, Instagram, Music } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
 const EmailSection = () => {
@@ -38,27 +39,29 @@ const EmailSection = () => {
   };
 
   return (
-    <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-animation p-6">
-
-      {/* Waves */}
-      <div className="wave"></div>
-      <div className="wave wave2"></div>
-      <div className="wave wave3"></div>
-
+    <div
+      className="relative min-h-[80vh]  p-6 bg-cover bg-center bg-no-repeat mb-5"
+      style={{ backgroundImage: "url('/images/building3.jpg')" }}
+      id="contacts"
+    >
       {/* Contact Form */}
-      <div className="max-w-lg w-full p-6 bg-white rounded-lg shadow-lg z-10">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-black text-center ">
-          Contact Us
+      <div className="max-w-lg w-full p-6 bg-transparent backdrop-blur-md rounded-lg shadow-lg z-10">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-black text-center mb-5">
+          Email Us
         </h2>
+
         {success !== null && (
           <p
             className={`text-center text-sm ${
               success ? "text-green-500" : "text-red-500"
             }`}
           >
-            {success ? "Email sent successfully!" : "Error sending email. Try again later."}
+            {success
+              ? "Email sent successfully!"
+              : "Error sending email. Try again later."}
           </p>
         )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -81,7 +84,7 @@ const EmailSection = () => {
             placeholder="Your Message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="w-full p-3 border rounded-lg white dark:text-black focus:ring focus:ring-blue-300"
+            className="w-full p-3 border rounded-lg bg-white dark:text-black focus:ring focus:ring-blue-300"
             required
           ></textarea>
           <button
@@ -94,74 +97,48 @@ const EmailSection = () => {
         </form>
       </div>
 
-      <style jsx>{`
-        .bg-gradient-animation {
-          background: linear-gradient(315deg, rgba(101, 0, 94, 1) 3%, rgba(60, 132, 206, 1) 38%, rgba(48, 238, 226, 1) 68%, rgba(255, 25, 25, 1) 98%);
-          animation: gradient 15s ease infinite;
-          background-size: 400% 400%;
-          background-attachment: fixed;
-        }
-
-        @keyframes gradient {
-          0% {
-            background-position: 0% 0%;
-          }
-          50% {
-            background-position: 100% 100%;
-          }
-          100% {
-            background-position: 0% 0%;
-          }
-        }
-
-        .wave {
-          background: rgb(255 255 255 / 25%);
-          border-radius: 1000% 1000% 0 0;
-          position: fixed;
-          width: 200%;
-          height: 12em;
-          animation: wave 10s -3s linear infinite;
-          transform: translate3d(0, 0, 0);
-          opacity: 0.8;
-          bottom: 0;
-          left: 0;
-          z-index: -1;
-        }
-
-        .wave:nth-of-type(2) {
-          bottom: -1.25em;
-          animation: wave 18s linear reverse infinite;
-          opacity: 0.8;
-        }
-
-        .wave:nth-of-type(3) {
-          bottom: -2.5em;
-          animation: wave 20s -1s reverse infinite;
-          opacity: 0.9;
-        }
-
-        @keyframes wave {
-          2% {
-            transform: translateX(1);
-          }
-
-          25% {
-            transform: translateX(-25%);
-          }
-
-          50% {
-            transform: translateX(-50%);
-          }
-
-          75% {
-            transform: translateX(-25%);
-          }
-
-          100% {
-            transform: translateX(1);
-          }
-        }
-      `}</style>
+      {/* Contact Us Section - Positioned to the Right */}
+      <div className="w-[350px] p-4 bg-gray-700 text-white rounded-lg shadow-lg absolute right-10 top-1/2 transform -translate-y-1/2">
+        <h2 className="text-2xl font-semibold mb-2 text-center">Contact Us</h2>
+        <div className="space-y-2">
+          <h2 className="text-lg font-medium flex items-center">
+            <Globe className="mr-2 text-blue-300" />
+            Website:{" "}
+            <a
+              href="https://inspirenextglobal.com"
+              className="text-blue-300 hover:underline"
+            >
+              inspirenextglobal.com
+            </a>
+          </h2>
+          <h2 className="text-lg font-medium flex items-center">
+            <Phone className="mr-2 text-blue-300" />
+            Telephone No: 02-8538-5054 / 02-7750605 / +639946529009
+          </h2>
+          <h2 className="text-lg font-medium flex items-center">
+            <Mail className="mr-2 text-blue-300" />
+            Email:{" "}
+            <a
+              href="mailto:info@inspirenextglobal.com"
+              className="text-blue-300 hover:underline"
+            >
+              info@inspirenextglobal.com
+            </a>
+          </h2>
+          <h2 className="text-lg font-medium flex items-center">
+            <Facebook className="mr-2 text-blue-300" />
+            Facebook: Inspire Next Global Inc.
+          </h2>
+          <h2 className="text-lg font-medium flex items-center">
+            <Instagram className="mr-2 text-blue-300" />
+            Instagram: @inspire.next.global.inc
+          </h2>
+          <h2 className="text-lg font-medium flex items-center">
+            <Music className="mr-2 text-blue-300" />
+            TikTok: @inspire.next.glob
+          </h2>
+        </div>
+      </div>
     </div>
   );
 };

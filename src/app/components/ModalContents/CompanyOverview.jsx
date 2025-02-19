@@ -1,45 +1,49 @@
-import React from 'react'
+import React from "react";
 
 export const CompanyOverview = () => {
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-6">Our Services</h1>
+    <div className="p-6 max-w-5xl mx-auto rounded-lg shadow-lg">
+      <div className="w-full h-14"></div>
+      {/* Title */}
+      <h1 className="text-3xl font-bold text-center">Company Overview</h1>
+      <hr className="my-4 border-gray-300" />
 
-      {/* Grid Container */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Card 1 */}
-        <div className="border-2 border-gray-300 rounded-lg shadow-lg p-4 flex flex-col items-center">
-          <img src="images/service1.jpg" alt="Service 1" className="w-full h-60 object-cover rounded-lg" />
-          <button className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            Learn More
-          </button>
-        </div>
+      {/* Content Section */}
+      <div className="flex flex-col md:flex-row items-center gap-8">
+        {/* Image */}
+        <img
+          src="images/PSEBuilding.jpg"
+          alt="Company"
+          className="w-80 h-80 object-cover rounded-lg shadow-lg"
+        />
 
-        {/* Card 2 */}
-        <div className="border-2 border-gray-300 rounded-lg shadow-lg p-4 flex flex-col items-center">
-          <img src="images/service2.jpg" alt="Service 2" className="w-full h-60 object-cover rounded-lg" />
-          <button className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            Learn More
-          </button>
-        </div>
-
-        {/* Card 3 */}
-        <div className="border-2 border-gray-300 rounded-lg shadow-lg p-4 flex flex-col items-center">
-          <img src="images/service3.jpg" alt="Service 3" className="w-full h-60 object-cover rounded-lg" />
-          <button className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            Learn More
-          </button>
-        </div>
-
-        {/* Card 4 */}
-        <div className="border-2 border-gray-300 rounded-lg shadow-lg p-4 flex flex-col items-center">
-          <img src="images/service4.jpg" alt="Service 4" className="w-full h-60 object-cover rounded-lg" />
-          <button className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            Learn More
-          </button>
+        {/* Text */}
+        <div className="space-y-4">
+          <h2 className="text-3xl font-bold">Inspire Holdings Incorporated</h2>
+          <p className="text-gray-700 text-lg leading-relaxed">
+            Inspire Holdings is a financial, investing, and visionary management
+            company with diverse interests spanning construction and
+            development, healthcare and pharmaceuticals, gaming and
+            entertainment, agricultural trading, and specialized services,
+            serving both the private and public sectors.
+          </p>
+          <p className="text-gray-700 text-lg leading-relaxed">
+            In adherence to the Wealthy Clique Model, it orchestrates a cohesive
+            ecosystem, where the company operates as the central financial hub,
+            capitalizing and harmonizing its subsidiaries and affiliates to
+            drive innovation, efficiency, and collaboration.
+          </p>
+          <p className="text-gray-700 text-lg leading-relaxed">
+            This forward-thinking entity is on a mission to make a direct and
+            meaningful impact on the lives of individuals while also wielding
+            its influence to create positive shifts in geopolitics.
+          </p>
+          <p className="text-gray-700 text-lg leading-relaxed">
+            Simultaneously, it remains dedicated to delivering substantial
+            returns to its valued shareholders.
+          </p>
         </div>
       </div>
     </div>
-
   );
 };
