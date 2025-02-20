@@ -30,6 +30,25 @@ const cards = [
     image: "./images/CompanyMeeting.jpeg",
     link: "/orgchart",
   },
+  
+  {
+    id: 5,
+    title: "Inspire Wallet",
+    image: "./images/2.jpeg",
+    link: "/orgchart",
+  },
+  {
+    id: 6,
+    title: "Travel Protection",
+    image: "./images/travel.jpg",
+    link: "/docs/travel.pdf",
+  },
+  {
+    id: 7,
+    title: "Private Banking",
+    image: "./images/bank.jpg",
+    link: "/docs/PrivateBanker.pdf",
+  },
 ];
 
 const AnimatedCard = ({ title, image, link }) => {
@@ -59,19 +78,31 @@ const AnimatedCard = ({ title, image, link }) => {
 
 const ProjectCards = () => {
   return (
-    
-
-
     <div className="flex flex-wrap justify-center p-8" id="about">
-  
       {/* Grid layout: 2 columns on all screen sizes with responsive padding */}
       <div className="relative flex items-center w-full mb-6">
         <div className="flex-grow border-t border-gray-400"></div>
         <span className="px-4 text-lg font-semibold text-gray-700">ABOUT</span>
         <div className="flex-grow border-t border-gray-400"></div>
       </div>
+      
+      {/* First set of cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full pr-2 pl-2 md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
-        {cards.map((card) => (
+        {cards.slice(0, 4).map((card) => (
+          <AnimatedCard key={card.id} {...card} />
+        ))}
+      </div>
+      
+      {/* Horizontal line with Business Line text */}
+      <div className="relative flex items-center w-full my-6">
+        <div className="flex-grow border-t border-gray-400"></div>
+        <span className="px-4 text-lg font-semibold text-gray-700">BUSINESS LINE</span>
+        <div className="flex-grow border-t border-gray-400"></div>
+      </div>
+      
+      {/* Second set of cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full pr-2 pl-2 md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
+        {cards.slice(4).map((card) => (
           <AnimatedCard key={card.id} {...card} />
         ))}
       </div>
