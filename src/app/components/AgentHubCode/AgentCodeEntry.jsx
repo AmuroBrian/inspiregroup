@@ -95,31 +95,44 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
   return (
     <>
       {/* Login & Register Menu Items */}
-      <li className="relative">
-        <button
-          onClick={() => setIsRegisterOpen(true)}
-          className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
-            isHydrated &&
-            (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
-          } hover:text-blue-600`}
-        >
-          <span className="text-lg">📝</span>
-          <span className="text-xs">REGISTER</span>
-        </button>
-      </li>
+      <li className="relative group">
+  <button
+    onClick={() => setIsRegisterOpen(true)}
+    className={`cursor-pointer flex flex-row md:flex-col items-center space-x-2 md:space-x-0 relative ${
+      isHydrated &&
+      (isHomePage && !isScrolled
+        ? "md:text-white text-gray-500"  // White on desktop, gray-500 on mobile (not scrolled)
+        : "md:text-gray-700 text-gray-500") // Gray-700 for desktop (scrolled), Gray-500 for mobile (always)
+    } hover:text-blue-600`}
+  >
+    <span className="text-lg">📝</span>
+    <span className="text-lg md:text-xs relative">REGISTER</span> 
+  </button>
 
-      <li className="relative">
-        <button
-          onClick={() => setIsLoginOpen(true)}
-          className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
-            isHydrated &&
-            (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
-          } hover:text-blue-600`}
-        >
-          <span className="text-lg">🔑</span>
-          <span className="text-xs">LOGIN</span>
-        </button>
-      </li>
+  {/* Desktop-Only Underline Animation */}
+  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 md:group-hover:w-full"></span>
+</li>
+
+
+<li className="relative group">
+  <button
+    onClick={() => setIsLoginOpen(true)}
+    className={`cursor-pointer flex flex-row md:flex-col items-center space-x-2 md:space-x-0 relative ${
+      isHydrated &&
+      (isHomePage && !isScrolled
+        ? "md:text-white text-gray-500"  // White on desktop, Gray-500 on mobile (not scrolled)
+        : "md:text-gray-700 text-gray-500") // Gray-700 for desktop (scrolled), Gray-500 for mobile (always)
+    } hover:text-blue-600`}
+  >
+    <span className="text-lg">🔑</span>
+    <span className="text-lg md:text-xs relative">LOGIN</span> 
+  </button>
+
+  {/* Desktop-Only Underline Animation */}
+  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 md:group-hover:w-full"></span>
+</li>
+
+
 
       {/* Login Modal */}
       {isLoginOpen && (
