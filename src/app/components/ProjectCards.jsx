@@ -70,7 +70,7 @@ const ProjectCards = () => {
         <span className="px-4 text-lg font-semibold text-gray-700">ABOUT</span>
         <div className="flex-grow border-t border-gray-400"></div>
       </div>
-      <div className="grid grid-cols-2 gap-4 w-full pr-2 pl-2 md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full pr-2 pl-2 md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
         {cards.map((card) => (
           <AnimatedCard key={card.id} {...card} />
         ))}
