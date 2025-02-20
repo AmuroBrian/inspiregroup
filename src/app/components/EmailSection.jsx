@@ -15,9 +15,9 @@ const EmailSection = () => {
     e.preventDefault();
     setLoading(true);
 
-    const serviceId = "service_hymqbti";
-    const templateId = "template_i7sn93g";
-    const publicKey = "8nV8GppQ82RWajpEo";
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
     const templateParams = {
       from_name: name,
