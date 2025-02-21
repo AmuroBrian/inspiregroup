@@ -24,7 +24,7 @@ export default function WelcomeToHol() {
         {/* Video Section - Appears below on mobile */}
         <div className="w-full border-b-4 border-black pb-5 md:order-2 mt-2">
           <video
-            src="/videos/cp.mp4"
+            src="/videos/CP updated 0221.mp4"
             autoPlay
             loop
             controls

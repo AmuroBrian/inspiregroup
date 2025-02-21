@@ -1,86 +1,134 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { ShieldCheck, TrendingUp } from "lucide-react";
+"use client"; 
 
-const Advertisement = () => {
-  const [show, setShow] = useState(false);
+import React, { useState } from "react";
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setShow(scrollPosition > 100);
-    };
-    
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+const TravelProtectionForm = () => {
+  const [transactionId, setTransactionId] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleDownload = (fileName) => {
-    const link = document.createElement("a");
-    link.href = `/docs/${fileName}`;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Generate transaction ID upon submission
+    const newTransactionId = "TXN-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+    setTransactionId(newTransactionId);
+    setSubmitted(true);
   };
 
   return (
-    <div className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gray-100 p-8">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-center w-full py-8">Business Service</h1>
-      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8">
-        {/* Left Section - Travel Protection */}
-        <div
-          className={`w-full md:w-1/2 flex flex-col justify-center items-center rounded-2xl text-white font-bold transition-all duration-1000 p-8 text-center min-h-[500px] md:min-h-[600px] lg:min-h-[700px] h-full flex-1 bg-gradient-to-r from-[#004ff9] to-[#000000] ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"} transition-opacity ease-in-out`}
-        >
-          <ShieldCheck size={48} className="mb-4" />
-          <h2 className="text-2xl md:text-3xl font-extrabold mt-4">Travel Protection</h2>
-          <p className="mt-2 max-w-sm text-white text-center text-sm md:text-base">
-            Coverage for trip cancellations, medical emergencies, and lost luggage.
-          </p>
-          <p className="mt-2 max-w-sm text-white text-center text-sm md:text-base">
-            24/7 emergency assistance worldwide.
-          </p>
-          <p className="mt-2 max-w-sm text-white text-center text-sm md:text-base">
-            Affordable plans for individuals, families, and groups.
-          </p>
-          <ul className="mt-4 max-w-sm text-white text-center text-sm md:text-base">
-            <li>✅ Emergency Assistance</li>
-            <li>✅ Travel-Related Support</li>
-            <li>✅ Unforeseen Incident Coverage</li>
-          </ul>
-          <button
-            className="mt-4 px-6 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-200 hover:scale-110 transition-transform duration-300 ease-in-out"
-            onClick={() => handleDownload("Travel_Protection_Application.pdf")}
-          >
-            Download Travel Protection Form
-          </button>
-          <p className="mt-2 text-white text-center text-sm">Email us your Form After</p>
+    <div className="max-w-4xl mx-auto mt-10 p-8 bg-gray-100 shadow-lg rounded-lg">
+      <h2 className="text-xl font-bold mb-4">Travel Protection Form</h2>
+      <form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
+        {/* Type (Disabled Dropdown) */}
+        <div className="col-span-2">
+          <label className="block font-semibold">Type</label>
+          <select className="w-full p-2 border rounded mb-3 bg-white" disabled>
+            <option>Travel Protection</option>
+          </select>
         </div>
 
-        {/* Right Section - Investment Opportunity */}
-        <div
-          className={`w-full md:w-1/2 flex flex-col justify-center rounded-2xl items-center text-white font-bold transition-all duration-1000 p-8 text-center min-h-[500px] md:min-h-[600px] lg:min-h-[700px] h-full flex-1 bg-gradient-to-r from-[#12063B] to-[#09555C] ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"} transition-opacity ease-in-out`}
-        >
-          <TrendingUp size={48} className="mb-4" />
-          <h2 className="text-2xl md:text-3xl font-extrabold mt-4">Exclusive Investment Opportunity!</h2>
-          <h3 className="text-xl md:text-2xl font-semibold mt-2">Why Invest with Us?</h3>
-          <ul className="text-white mt-2 space-y-1 text-center text-sm md:text-base">
-            <li>✅ High-Growth Industry</li>
-            <li>✅ Secure & Transparent Investment</li>
-            <li>✅ Potential for High Returns</li>
-            <li>✅ Trusted & Experienced Team</li>
-          </ul>
-          <button
-            className="mt-4 px-6 py-2 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-200 hover:scale-110 transition-transform duration-300 ease-in-out"
-            onClick={() => handleDownload("Investment_Application.pdf")}
-          >
-            Download Investment Form
-          </button>
-          <p className="mt-2 text-white text-center text-sm">Email us your Form After</p>
+        {/* Name Fields */}
+        <div className="grid grid-cols-3 gap-4 col-span-2">
+          {["Last Name", "First Name", "Middle Name"].map((field, index) => (
+            <div key={index}>
+              <label className="block font-semibold">{field}</label>
+              <input type="text" placeholder={field} className="w-full p-2 border rounded bg-white" required />
+            </div>
+          ))}
         </div>
-      </div>
+
+        {/* Birthdate, Gender, Civil Status */}
+        <div className="grid grid-cols-3 gap-4 col-span-2">
+          <div>
+            <label className="block font-semibold">Birthdate</label>
+            <input type="date" className="w-full p-2 border rounded bg-white" required />
+          </div>
+          <div>
+            <label className="block font-semibold">Gender</label>
+            <select className="w-full p-2 border rounded bg-white" required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label className="block font-semibold">Civil Status</label>
+            <select className="w-full p-2 border rounded bg-white" required>
+              <option value="">Select Civil Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Divorced">Divorced</option>
+              <option value="Widowed">Widowed</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Address, Mobile Number, Landline, Email */}
+        <div className="col-span-2">
+          <label className="block font-semibold">Address</label>
+          <input type="text" placeholder="Address" className="w-full p-2 border rounded bg-white" required />
+        </div>
+        <div className="grid grid-cols-3 gap-4 col-span-2">
+          {["Personal Mobile Number", "Landline Number", "Email Address"].map((field, index) => (
+            <div key={index}>
+              <label className="block font-semibold">{field}</label>
+              <input type={field.includes("Number") ? "number" : "email"} placeholder={field} className="w-full p-2 border rounded bg-white" required />
+            </div>
+          ))}
+        </div>
+
+        {/* Citizenship, Passport, Purpose, Stay Address, Cash On Hand, Income */}
+        <div className="grid grid-cols-3 gap-4 col-span-2">
+          {["Citizenship", "Passport Number", "Purpose of Visit", "Stay In Address", "Cash On Hand", "Gross Monthly Income"].map((field, index) => (
+            <div key={index}>
+              <label className="block font-semibold">{field}</label>
+              <input type="text" placeholder={field} className="w-full p-2 border rounded bg-white" required />
+            </div>
+          ))}
+        </div>
+
+        {/* Arrival, Departure, Stay Duration, Airline Type */}
+        <div className="grid grid-cols-4 gap-4 col-span-2">
+          <div>
+            <label className="block font-semibold">Arrival Date / Time</label>
+            <input type="datetime-local" className="w-full p-2 border rounded bg-white" required />
+          </div>
+          <div>
+            <label className="block font-semibold">Departure Date / Time</label>
+            <input type="datetime-local" className="w-full p-2 border rounded bg-white" required />
+          </div>
+          <div>
+            <label className="block font-semibold">Stay In Duration (Days)</label>
+            <input type="text" placeholder="Stay Duration" className="w-full p-2 border rounded bg-white" required />
+          </div>
+          <div>
+            <label className="block font-semibold">Airline Type</label>
+            <select className="w-full p-2 border rounded bg-white" required>
+              <option value="">Select Airline</option>
+              <option value="Cebu Pacific">Cebu Pacific</option>
+              <option value="Philippine Airlines">Philippine Airlines</option>
+              <option value="AirAsia">AirAsia</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <div className="col-span-2">
+          <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Submit
+          </button>
+        </div>
+      </form>
+
+      {/* Show Transaction ID after submission */}
+      {submitted && (
+        <div className="mt-6 p-4 bg-gray-200 rounded-lg text-center">
+          <p className="font-semibold text-lg">Transaction ID:</p>
+          <p className="text-xl font-bold text-blue-600">{transactionId}</p>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Advertisement;
+export default TravelProtectionForm;
