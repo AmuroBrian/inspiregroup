@@ -193,6 +193,7 @@ const Header = () => {
                     ✉️ CONTACT
                   </a>
                 </li>
+                <AgentCodeEntry />
               </>
             )}
           </ul>
