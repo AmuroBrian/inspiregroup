@@ -36,8 +36,6 @@ const cards = [
     title: "Inspire Wallet",
     image: "./images/inspirewallet.png",
     link: "/docs/InspireWallet.pdf",
-    image: "./images/inspire-logoo.png",
-    link: "/docs/Inspire-Wallet.pdf",
   },
   {
     id: 6,
