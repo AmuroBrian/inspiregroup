@@ -34,8 +34,8 @@ const cards = [
   {
     id: 5,
     title: "Inspire Wallet",
-    image: "./images/inspirewallet.png",
-    link: "/",
+    image: "./images/inspire-logoo.png",
+    link: "/docs/Inspire-Wallet.pdf",
   },
   {
     id: 6,
@@ -46,13 +46,13 @@ const cards = [
   {
     id: 7,
     title: "Private Banking",
-    image: "./images/bank.jpg",
+    image: "./images/private-banker.png",
     link: "/docs/PrivateBanker.pdf",
   },
   {
     id: 8,
     title: "Travel Protection",
-    image: "./images/travel.jpg",
+    image: "./images/travel-protect.png",
     link: "/docs/travel.pdf",
   },
 ];
