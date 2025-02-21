@@ -34,8 +34,8 @@ const cards = [
   {
     id: 5,
     title: "Inspire Wallet",
-    image: "./images/inspire-logoo.png",
-    link: "/docs/Inspire-Wallet.pdf",
+    image: "./images/inspirewallet.png",
+    link: "/docs/InspireWallet.pdf",
   },
   {
     id: 6,
@@ -68,7 +68,9 @@ const AnimatedCard = ({ title, image, link }) => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="w-full p-4"
     >
-      <a href={link} rel="noopener noreferrer">
+      <a href={link} 
+
+      rel="noopener noreferrer">
         <Card className="overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition h-full flex flex-col">
           <img src={image} alt={title} className="w-full h-64 object-cover" />
           <CardContent className="p-4 flex-grow flex flex-col">
@@ -89,7 +91,7 @@ const ProjectCards = () => {
       <div className="relative flex items-center w-full my-6">
         <div className="flex-grow border-t border-gray-400"></div>
         <span className="px-4 text-lg font-semibold text-gray-700">
-          BUSINESS LINE
+          BUSINESS LINES
         </span>
         <div className="flex-grow border-t border-gray-400"></div>
       </div>
