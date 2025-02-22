@@ -2,7 +2,8 @@ import React from "react";
 
 export const MV = () => {
   return (
-    <div className="p-6 max-w-5xl mx-auto rounded-lg shadow-lg">
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="w-full h-[80px]"></div>
       {/* Title */}
       <h1 className="text-3xl font-bold text-center">Our Mission and Vision</h1>
       <hr className="my-4 border-gray-300" />
