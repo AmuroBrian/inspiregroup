@@ -1,4 +1,4 @@
-'use client'; // Add this line to mark the component as a client component
+"use client"; // Add this line to mark the component as a client component
 
 import React, { useState, useEffect } from "react";
 
@@ -14,15 +14,13 @@ export const CompanyOverview = () => {
   if (!isMounted) return null;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto rounded-lg shadow-lg">
-      <div className="w-full h-14"></div>
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="w-full h-[80px]"></div>
 
       <h1 className="text-3xl font-bold text-center">Company Overview</h1>
       <hr className="my-4 border-gray-300" />
 
-    
       <div className="flex flex-col md:flex-row items-center gap-8">
-
         <img
           src="/images/PSEBuilding.jpg"
           alt="Company"

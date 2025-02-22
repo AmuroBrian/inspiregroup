@@ -2,7 +2,8 @@ import React from "react";
 
 export const CompanyOrgChart = () => {
   return (
-    <div className="p-6 max-w-5xl mx-auto rounded-lg shadow-lg">
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="w-full h-[80px]"></div>
       <h1 className="text-3xl font-bold text-left">
         Inspire Holdings Inc. Organization
       </h1>
