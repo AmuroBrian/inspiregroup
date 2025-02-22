@@ -1,19 +1,25 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { geolocation } from '@vercel/functions';
 
-export function middleware(req) {
-    console.log("Detected Geo Data:", req.geo); // Log location details
+// The country to block from accessing the secret page
+const BLOCKED_COUNTRY = 'PH';
 
-    const country = req.geo?.country || "PH"; // Default to PH if unknown
-    console.log("Detected Country:", country); // Log detected country
+// Trigger this middleware to run on the `/secret-page` route
+export const config = {
+    matcher: "/((?!not-legal).*)",
+};
 
-    if (country !== "JP") {
-        return NextResponse.redirect(new URL("/not-legal", req.url));
+export default function middleware(request) {
+    // Extract country. Default to US if not found.
+    const { country = 'US' } = geolocation(request);
+
+    console.log(`Visitor from ${country}`);
+
+    // Specify the correct route based on the requests location
+    if (country === BLOCKED_COUNTRY) {
+        request.nextUrl.pathname = '/not-legal';
     }
 
-    return NextResponse.next();
+    // Rewrite to URL
+    return NextResponse.rewrite(request.nextUrl);
 }
-
-// Apply middleware to all routes except "/not-legal"
-export const config = {
-    matcher: "/((?!not-legal).*)", // Matches everything except /not-legal
-};
