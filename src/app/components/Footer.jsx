@@ -21,7 +21,7 @@ const Footer = () => {
           marginBottom: "10px",
         }}
       >
-        <a href="https://translate.google.com/translate?sl=en&tl=en&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=ja&tl=en&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           English
         </a>
         <a href="https://translate.google.com/translate?sl=en&tl=th&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
