@@ -14,6 +14,5 @@ export function middleware(req) {
 
 // Apply middleware to all routes except "/not-legal"
 export const config = {
-    runtime: "edge",
     matcher: "/((?!not-legal).*)", // Matches everything except /not-legal
 };
