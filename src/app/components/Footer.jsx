@@ -21,28 +21,28 @@ const Footer = () => {
           marginBottom: "10px",
         }}
       >
-        <a href="https://translate.google.com/translate?sl=en&tl=en&u=https://inspireholdings.ph">
+        <a href="https://translate.google.com/translate?sl=en&tl=en&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           English
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=th&u=https://sample.com">
+        <a href="https://translate.google.com/translate?sl=en&tl=th&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           Thai
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=fr&u=https://sample.com">
+        <a href="https://translate.google.com/translate?sl=en&tl=fr&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           French
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=zh-TW&u=https://sample.com">
+        <a href="https://translate.google.com/translate?sl=en&tl=zh-TW&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           繁體中文
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=zh-CN&u=https://sample.com">
+        <a href="https://translate.google.com/translate?sl=en&tl=zh-CN&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           简体中文
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=ko&u=https://sample.com">
+        <a href="https://translate.google.com/translate?sl=en&tl=ko&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           한국어
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=id&u=https://sample.com">
+        <a href="https://translate.google.com/translate?sl=en&tl=id&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           Indonesian
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=ja&u=https://sample.com">
+        <a href="https://translate.google.com/translate?sl=en&tl=ja&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
           日本語
         </a>
       </div>
