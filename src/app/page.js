@@ -5,7 +5,6 @@ import EmailSection from "./components/EmailSection";
 import WelcomeToHol from "./components/WelcomeToHol";
 import CompanyInfo from "./components/CompanyInfo";
 import RSS from "./components/RSS";
-import { AgentCodeEntry } from "./components/AgentHubCode/AgentCodeEntry";
 
 export default function Home() {
   return (
