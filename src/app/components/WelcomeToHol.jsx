@@ -12,7 +12,7 @@ export default function WelcomeToHol() {
           <h2 className="text-2xl md:text-3xl font-bold mb-4 mt-4 text-center md:text-left">
             Welcome to Inspire Group
           </h2>
-          <p className="text-md md:text-lg leading-relaxed text-center md:text-left text-justify">
+          <p className="text-md md:text-lg leading-relaxed text-center md:text-left">
             At Inspire Group, we are dedicated to providing innovative solutions
             that drive growth and success. Our team is committed to delivering
             excellence in every project, ensuring that our clients achieve their
