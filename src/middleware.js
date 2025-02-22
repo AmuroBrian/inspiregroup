@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-    const country = req.geo?.country || "PH"; // Default to PH if unknown
+    const country = req.geo?.country; // Default to PH if unknown
 
-    if (country !== "JP") {
+    if (country !== "PH") {
         return NextResponse.redirect(new URL("/not-legal", req.url));
     }
 
