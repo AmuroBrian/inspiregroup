@@ -1,12 +1,12 @@
-export const config = {
-    runtime: "experimental-edge", // Use this instead of "edge"
-    matcher: "/((?!not-legal).*)", // Matches everything except /not-legal
-};
-
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-    console.log("Full Geo Data:", req.geo); // Debugging
+    console.log("Middleware triggered!");
+
+    // Log full request headers (sometimes the country might be under a different key)
+    console.log("Request Headers:", Object.fromEntries(req.headers));
+
+    console.log("Geo Data:", req.geo);
 
     const country = req.geo?.country || "UNKNOWN";
     console.log("Detected Country:", country);
@@ -17,3 +17,8 @@ export function middleware(req) {
 
     return NextResponse.next();
 }
+
+export const config = {
+    runtime: "experimental-edge",
+    matcher: "/((?!not-legal).*)",
+};
