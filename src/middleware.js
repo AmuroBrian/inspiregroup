@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function middleware(req) {
     console.log("Middleware triggered 🚀");
 
-    const apiKey = process.env.NEXT_PUBLIC_IPINFO_API_KEY; // Read from env
+    const apiKey = process.env.IPINFO_API_KEY; // Read from env
     if (!apiKey) {
         console.error("❌ API key is missing!");
         return NextResponse.next(); // Allow request if no API key
