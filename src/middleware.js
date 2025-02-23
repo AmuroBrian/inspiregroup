@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function middleware(req) {
     console.log("Middleware triggered 🚀");
 
-    const apiKey = "fee8501efaa8bced666278f96ec2ad60"; // Hardcoded API Key (For Testing Only)
+    const apiKey = "ddc244f73edc2f18bc7aa0f944bc815f"; // Hardcoded API Key (For Testing Only)
 
     const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8"; // Fallback IP for testing
     const apiUrl = `http://api.ipapi.com/${ip}?access_key=${apiKey}`;
