@@ -112,6 +112,16 @@ const EmailSection = () => {
             </a>
           </h2>
           <h2 className="text-lg font-medium flex items-center">
+            <Globe className="mr-2 text-blue-300" />
+            Website:{" "}
+            <a
+              href="https://inspireholding.ph"
+              className="text-blue-300 hover:underline"
+            >
+              inspireholdings.ph
+            </a>
+          </h2>
+          <h2 className="text-lg font-medium flex items-center">
             <Phone className="mr-2 text-blue-300" />
             Telephone No: 02-8538-5054 / 02-7750605 / +639946529009
           </h2>
