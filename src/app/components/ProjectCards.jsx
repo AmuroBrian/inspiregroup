@@ -9,7 +9,7 @@ const cards = [
   {
     id: 1,
     title: "Company Overview",
-    image: "./images/PSEbuilding.jpg",
+    image: "./images/PSE.jpg",
     link: "/companyoverview",
   },
   {
