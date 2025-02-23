@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 export async function middleware(req) {
     const ip = req.headers.get("x-forwarded-for") || "8.8.8.8"; // Default to Google DNS for testing
+    console.log("IPAPI Key:", process.env.IPAPI_ACCESS_KEY); // Should NOT be undefined
+
     const apiUrl = `http://api.ipapi.com/${ip}?access_key=${process.env.IPAPI_ACCESS_KEY}`;
 
     console.log("Client IP:", ip);
