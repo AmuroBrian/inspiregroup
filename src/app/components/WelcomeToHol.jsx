@@ -40,12 +40,12 @@ export default function WelcomeToHol() {
         an exclusive network of elite private bankers dedicated to serving
         global entrepreneurs and investors. With strong connections to
         government authorities, major conglomerates, and key administrative
-        bodies, we continue to grow as one of the most influential trading firms
-        in the Philippines. Our unwavering trust and proven track record enable
-        us to achieve what others deem impossible, offering exclusive business
-        opportunities that go beyond conventional boundaries. At Inspire, we
-        don’t just navigate the future—we transform your vision into a lasting
-        legacy of success.
+        bodies, we continue to grow as one of the one of the most powerful
+        corporate entities business group in the Philippines. Our unwavering
+        trust and proven track record enable us to achieve what others deem
+        impossible, offering exclusive business opportunities that go beyond
+        conventional boundaries. At Inspire, we don’t just navigate the
+        future—we transform your vision into a lasting legacy of success.
       </div>
     </div>
   );
