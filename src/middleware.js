@@ -1,24 +1,30 @@
 import { NextResponse } from "next/server";
 
-export function middleware(req) {
-    console.log("Middleware triggered!");
+export async function middleware(req) {
+    const ip = req.headers.get("x-forwarded-for") || "8.8.8.8"; // Default to Google DNS for testing
+    const apiUrl = `http://api.ipapi.com/${ip}?access_key=${process.env.IPAPI_ACCESS_KEY}`;
 
-    // Log full request headers (sometimes the country might be under a different key)
-    console.log("Request Headers:", Object.fromEntries(req.headers));
+    console.log("Client IP:", ip);
+    console.log("Fetching Geo Data from:", apiUrl);
 
-    console.log("Geo Data:", req.geo);
+    try {
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+        console.log("Geo API Response:", data);
 
-    const country = req.geo?.country || "UNKNOWN";
-    console.log("Detected Country:", country);
+        const country = data.country_code || "UNKNOWN"; // Fallback
+        console.log("Detected Country:", country);
 
-    if (country !== "PH") {
-        return NextResponse.redirect(new URL("/not-legal", req.url));
+        if (country !== "PH") {
+            console.log("Redirecting to /not-legal 🚫");
+            return NextResponse.redirect(new URL("/not-legal", req.url));
+        }
+    } catch (error) {
+        console.error("Geo API Error:", error);
     }
 
+    console.log("Access granted ✅");
     return NextResponse.next();
 }
 
-export const config = {
-    runtime: "experimental-edge",
-    matcher: "/((?!not-legal).*)",
-};
+export const config = { matcher: "/((?!not-legal).*)" };
