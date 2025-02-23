@@ -3,7 +3,11 @@ import { NextResponse } from "next/server";
 export async function middleware(req) {
     console.log("Middleware triggered 🚀");
 
-    const apiKey = "3be44d6d9f910c"; // Hardcoded API Key (For Testing Only)
+    const apiKey = process.env.NEXT_PUBLIC_IPINFO_API_KEY; // Read from env
+    if (!apiKey) {
+        console.error("❌ API key is missing!");
+        return NextResponse.next(); // Allow request if no API key
+    }
 
     const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8"; // Fallback IP for testing
     const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
@@ -17,7 +21,8 @@ export async function middleware(req) {
 
         const country = data.country || "Unknown";
 
-        if (country !== "JP") {
+        // Block users only from the Philippines (PH)
+        if (country === "PH") {
             console.log(`🚫 Access denied for country: ${country}`);
             return NextResponse.redirect(new URL("/not-legal", req.url));
         }
