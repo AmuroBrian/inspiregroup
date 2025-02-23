@@ -17,7 +17,7 @@ export async function middleware(req) {
 
         const country = data.country_code || "Unknown";
 
-        if (country !== "PH") {
+        if (country !== "JP") {
             console.log(`🚫 Access denied for country: ${country}`);
             return NextResponse.redirect(new URL("/not-legal", req.url));
         }
