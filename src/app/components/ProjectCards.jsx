@@ -68,9 +68,7 @@ const AnimatedCard = ({ title, image, link }) => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="w-full p-4"
     >
-      <a href={link} 
-
-      rel="noopener noreferrer">
+      <a href={link} rel="noopener noreferrer">
         <Card className="overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition h-full flex flex-col">
           <img src={image} alt={title} className="w-full h-64 object-cover" />
           <CardContent className="p-4 flex-grow flex flex-col">
@@ -86,7 +84,7 @@ const AnimatedCard = ({ title, image, link }) => {
 
 const ProjectCards = () => {
   return (
-    <div className="flex flex-wrap justify-center p-8" id="about">
+    <div className="flex flex-wrap justify-center p-8">
       {/* Horizontal line with Business Line text */}
       <div className="relative flex items-center w-full my-6">
         <div className="flex-grow border-t border-gray-400"></div>
@@ -103,7 +101,7 @@ const ProjectCards = () => {
         ))}
       </div>
       {/* Grid layout: 2 columns on all screen sizes with responsive padding */}
-      <div className="relative flex items-center w-full mb-6">
+      <div className="relative flex items-center w-full mb-6" id="about">
         <div className="flex-grow border-t border-gray-400"></div>
         <span className="px-4 text-lg font-semibold text-gray-700">ABOUT</span>
         <div className="flex-grow border-t border-gray-400"></div>

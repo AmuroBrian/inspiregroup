@@ -22,7 +22,7 @@ export const CompanyOverview = () => {
 
       <div className="flex flex-col md:flex-row items-center gap-8">
         <img
-          src="/images/PSEBuilding.jpg"
+          src="/images/PSE.jpg"
           alt="Company"
           className="w-80 h-80 object-cover rounded-lg shadow-lg"
         />

@@ -17,8 +17,10 @@ export default function HeroSection() {
         Inspire Group
       </video>
       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <h1 className="text-white text-4xl sm:text-6xl md:text-6xl font-bold text-center">
-          Welcome to Inspire Holdings Incorporated
+        <h1 className="text-white text-2xl sm:text-4xl md:text-4xl font-bold text-center">
+          Welcome to Inspire Holdings Group - A Legacy of Unrivaled Trust and
+          Proven Excellence. This is where your future ascends to the next
+          level.
         </h1>
       </div>
     </div>
