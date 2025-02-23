@@ -21,28 +21,28 @@ const Footer = () => {
           marginBottom: "10px",
         }}
       >
-        <a href="https://translate.google.com/translate?sl=ja&tl=en&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=ja&tl=en&u=https://www.bankgroup.ph">
           English
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=th&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=en&tl=th&u=https://www.bankgroup.ph">
           Thai
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=fr&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=en&tl=fr&u=https://www.bankgroup.ph">
           French
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=zh-TW&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=en&tl=zh-TW&u=https://www.bankgroup.ph">
           繁體中文
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=zh-CN&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=en&tl=zh-CN&u=https://www.bankgroup.ph">
           简体中文
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=ko&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=en&tl=ko&u=https://www.bankgroup.ph">
           한국어
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=id&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=en&tl=id&u=https://www.bankgroup.ph">
           Indonesian
         </a>
-        <a href="https://translate.google.com/translate?sl=en&tl=ja&u=https://inspiregroup-git-main-amurobrians-projects.vercel.app">
+        <a href="https://translate.google.com/translate?sl=en&tl=ja&u=https://www.bankgroup.ph">
           日本語
         </a>
       </div>
