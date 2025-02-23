@@ -1,32 +1,36 @@
 import { NextResponse } from "next/server";
 
 export async function middleware(req) {
-    const ip = req.headers.get("x-forwarded-for") || "8.8.8.8"; // Default to Google DNS for testing
-    console.log("IPAPI Key:", process.env.IPAPI_ACCESS_KEY); // Should NOT be undefined
+    console.log("Middleware triggered 🚀");
 
-    const apiUrl = `http://api.ipapi.com/${ip}?access_key=${process.env.IPAPI_ACCESS_KEY}`;
+    const apiKey = "fee8501efaa8bced666278f96ec2ad60"; // Hardcoded API Key (For Testing Only)
 
-    console.log("Client IP:", ip);
-    console.log("Fetching Geo Data from:", apiUrl);
+    const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8"; // Fallback IP for testing
+    const apiUrl = `http://api.ipapi.com/${ip}?access_key=${apiKey}`;
+
+    console.log(`Fetching Geo Data from: ${apiUrl}`);
 
     try {
         const res = await fetch(apiUrl);
         const data = await res.json();
-        console.log("Geo API Response:", data);
+        console.log("Geo Data Response:", data);
 
-        const country = data.country_code || "UNKNOWN"; // Fallback
-        console.log("Detected Country:", country);
+        const country = data.country_code || "Unknown";
 
         if (country !== "PH") {
-            console.log("Redirecting to /not-legal 🚫");
+            console.log(`🚫 Access denied for country: ${country}`);
             return NextResponse.redirect(new URL("/not-legal", req.url));
         }
-    } catch (error) {
-        console.error("Geo API Error:", error);
-    }
 
-    console.log("Access granted ✅");
-    return NextResponse.next();
+        console.log(`✅ Access granted for country: ${country}`);
+        return NextResponse.next();
+    } catch (error) {
+        console.error("❌ Error fetching geo data:", error);
+        return NextResponse.next(); // Allow request to proceed if API fails
+    }
 }
 
-export const config = { matcher: "/((?!not-legal).*)" };
+// Apply middleware to all routes except "/not-legal"
+export const config = {
+    matcher: "/((?!not-legal).*)", // Matches everything except /not-legal
+};
