@@ -132,7 +132,7 @@ const EmailSection = () => {
               href="mailto:info@inspirenextglobal.com"
               className="text-blue-300 hover:underline"
             >
-              info@inspirenextglobal.com
+              info@inspireholdings.ph
             </a>
           </h2>
           <h2 className="text-lg font-medium flex items-center">
