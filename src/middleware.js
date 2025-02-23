@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 export async function middleware(req) {
     console.log("Middleware triggered 🚀");
 
-    const apiKey = "2ad69e5076e00e082aa7bd683a68b959"; // Hardcoded API Key (For Testing Only)
+    const apiKey = "3be44d6d9f910c"; // Hardcoded API Key (For Testing Only)
 
     const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8"; // Fallback IP for testing
-    const apiUrl = `http://api.ipapi.com/${ip}?access_key=${apiKey}`;
+    const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
 
     console.log(`Fetching Geo Data from: ${apiUrl}`);
 
