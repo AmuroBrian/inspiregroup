@@ -70,9 +70,13 @@ const AnimatedCard = ({ title, image, link }) => {
     >
       <a href={link} rel="noopener noreferrer">
         <Card className="overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition h-full flex flex-col">
-          <img src={image} alt={title} className="w-full h-64 object-cover" />
-          <CardContent className="p-4 flex-grow flex flex-col">
-            <h3 className="text-lg font-semibold flex-grow text-center">
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-32 md:h-64 object-cover"
+          />
+          <CardContent className="md:p-4 flex-grow flex flex-col">
+            <h3 className="text-base md:text-lg font-semibold flex flex-grow justify-center text-center items-center">
               {title}
             </h3>
           </CardContent>
@@ -84,7 +88,7 @@ const AnimatedCard = ({ title, image, link }) => {
 
 const ProjectCards = () => {
   return (
-    <div className="flex flex-wrap justify-center p-8">
+    <div className="flex flex-wrap justify-center p-1 md:p-8">
       {/* Horizontal line with Business Line text */}
       <div className="relative flex items-center w-full my-6">
         <div className="flex-grow border-t border-gray-400"></div>
@@ -95,7 +99,7 @@ const ProjectCards = () => {
       </div>
 
       {/* Second set of cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full pr-2 pl-2 md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 w-full md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
         {cards.slice(4).map((card) => (
           <AnimatedCard key={card.id} {...card} />
         ))}
@@ -108,7 +112,7 @@ const ProjectCards = () => {
       </div>
 
       {/* First set of cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full pr-2 pl-2 md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 w-full md:pr-44 md:pl-44 sm:pl-16 sm:pr-16 xl:pl-32 xl:pr-32">
         {cards.slice(0, 4).map((card) => (
           <AnimatedCard key={card.id} {...card} />
         ))}
