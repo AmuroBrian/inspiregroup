@@ -32,7 +32,7 @@ export default function WelcomeToHol() {
           />
         </div>
       </div>
-      <div className="text-center p-7 text-xl">
+      <div className="text-left text-lg p-2 md:text-center md:text-xl md:p-5">
         <span className="font-bold">
           For Foreign Entrepreneurs and Investors
         </span>{" "}
