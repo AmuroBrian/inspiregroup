@@ -34,18 +34,18 @@ export default function WelcomeToHol() {
       </div>
       <div className="text-left text-lg p-2 md:text-center md:text-xl md:p-5">
         <span className="font-bold">
-          For Foreign Entrepreneurs and Investors
+          For Foreign Entrepreneurs and Investors – A World-Class Private
+          Banking Expert
         </span>{" "}
-        – A World-Class Private Banking Experience At Inspire Group, we provide
-        an exclusive network of elite private bankers dedicated to serving
-        global entrepreneurs and investors. With strong connections to
-        government authorities, major conglomerates, and key administrative
-        bodies, we continue to grow as one of the one of the most powerful
-        corporate entities business group in the Philippines. Our unwavering
-        trust and proven track record enable us to achieve what others deem
-        impossible, offering exclusive business opportunities that go beyond
-        conventional boundaries. At Inspire, we don’t just navigate the
-        future—we transform your vision into a lasting legacy of success.
+        At Inspire Group, we provide an exclusive network of elite private
+        banking experts who serve global entrepreneurs and investors. With
+        strong connections to government agencies, major corporations, and key
+        administrative bodies, we continue to grow as one of the most powerful
+        corporate entities in the Philippines. Our strong reputation and proven
+        track record allow us to achieve what others consider impossible. We
+        offer unique business opportunities that go beyond conventional limits.
+        At Inspire, we don’t just create the future—we turn your vision into
+        lasting success.
       </div>
     </div>
   );
