@@ -15,7 +15,7 @@ export async function middleware(req) {
         const data = await res.json();
         console.log("Geo Data Response:", data);
 
-        const country = data.country_code || "Unknown";
+        const country = data.country || "Unknown";
 
         if (country !== "JP") {
             console.log(`🚫 Access denied for country: ${country}`);
