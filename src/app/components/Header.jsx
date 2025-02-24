@@ -9,21 +9,17 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHomePage, setIsHomePage] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false); // Ensure hydration
   const pathname = usePathname();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsHomePage(pathname === "/");
-      setIsHydrated(true);
+    setIsHomePage(pathname === "/");
 
-      const handleScroll = () => {
-        setIsScrolled(window.scrollY > 50);
-      };
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
 
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
   const scrollToHero = (e) => {
@@ -33,15 +29,12 @@ const Header = () => {
       block: "start",
     });
   };
-
-  if (!isHydrated) return null; // Prevent SSR mismatch by rendering nothing initially
+  
 
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isHydrated && isHomePage && !isScrolled
-          ? "bg-transparent"
-          : "bg-white shadow-md"
+        isHomePage && !isScrolled ? "bg-transparent" : "bg-white shadow-md"
       }`}
     >
       <div className="container mx-auto flex justify-between items-center py-3 px-6">
@@ -54,9 +47,7 @@ const Header = () => {
           />
           <span
             className={`text-xl font-bold transition-all duration-300 ${
-              isHydrated && isHomePage && !isScrolled
-                ? "text-white"
-                : "text-blue-600"
+              isHomePage && !isScrolled ? "text-white" : "text-blue-600"
             }`}
           >
             INSPIRE GROUP
@@ -65,24 +56,35 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex space-x-8">
-          <li className="relative group">
-            <Link
-              href={isHomePage ? "#" : "/"}
-              onClick={isHomePage ? scrollToHero : null}
-              className={`flex flex-col items-center transition-all duration-300 ${
-                isHydrated &&
-                (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
-              } hover:text-blue-600`}
-            >
-              <span className="text-lg">🏠</span>
-              <span className="text-xs">HOME</span>
-              {/* Underline Animation */}
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-          </li>
+          {pathname !== "/" && (
+            <li className="relative group">
+              <button
+                onClick={() => (window.location.href = "/")}
+                className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
+              >
+                <span className="text-lg">🚪</span>
+                <span className="text-xs">LOGOUT</span>
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+              </button>
+            </li>
+          )}
 
           {isHomePage && (
             <>
+              <li className="relative group">
+                <Link
+                  href="#"
+                  onClick={scrollToHero}
+                  className={`flex flex-col items-center transition-all duration-300 ${
+                    isHomePage && !isScrolled ? "text-white" : "text-gray-700"
+                  } hover:text-blue-600`}
+                >
+                  <span className="text-lg">🏠</span>
+                  <span className="text-xs">HOME</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+              </li>
+
               <li className="relative group">
                 <a
                   onClick={(e) => {
@@ -94,13 +96,11 @@ const Header = () => {
                     setIsMenuOpen(false);
                   }}
                   className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
-                    isHydrated &&
-                    (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
+                    isHomePage && !isScrolled ? "text-white" : "text-gray-700"
                   } hover:text-blue-600`}
                 >
                   <span className="text-lg">🏢</span>
                   <span className="text-xs">ABOUT</span>
-                  {/* Underline Animation */}
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
               </li>
@@ -116,13 +116,11 @@ const Header = () => {
                     setIsMenuOpen(false);
                   }}
                   className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
-                    isHydrated &&
-                    (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
+                    isHomePage && !isScrolled ? "text-white" : "text-gray-700"
                   } hover:text-blue-600`}
                 >
                   <span className="text-lg">✉️</span>
                   <span className="text-xs">CONTACT</span>
-                  {/* Underline Animation */}
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
               </li>
@@ -132,12 +130,10 @@ const Header = () => {
           )}
         </ul>
 
-        {/* Hamburger Menu */}
+        {/* Mobile Menu Toggle */}
         <button
           className={`md:hidden p-2 rounded-md transition-all duration-300 ${
-            isHydrated && isHomePage && !isScrolled
-              ? "bg-transparent text-white"
-              : " text-gray-700 "
+            isHomePage && !isScrolled ? "bg-transparent text-white" : "text-gray-700"
           }`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
@@ -149,18 +145,40 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white shadow-md transition-all duration-300 py-4">
           <ul className="flex flex-col items-center space-y-4">
-            <li>
-              <Link
-                href={isHomePage ? "#" : "/"}
-                onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
-                className="text-lg text-gray-500 transition-all duration-300 hover:text-blue-600"
-              >
-                🏠 HOME
-              </Link>
-            </li>
+           
+
+            {pathname !== "/" && (
+              <li className="relative group">
+                <button
+                  onClick={() => (window.location.href = "/")}
+                  className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
+                >
+                  <span className="text-lg">🚪</span>
+                  <span className="text-xs">LOGOUT</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </button>
+              </li>
+            )}
 
             {isHomePage && (
               <>
+              <li>
+  <a
+    onClick={(e) => {
+      e.preventDefault();
+      document.getElementById("hero")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      setIsMenuOpen(false);
+    }}
+    className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
+  >
+    🏠 HOME
+  </a>
+</li>
+
+
                 <li>
                   <a
                     onClick={(e) => {
@@ -179,7 +197,6 @@ const Header = () => {
 
                 <li>
                   <a
-                    href="#contacts"
                     onClick={(e) => {
                       e.preventDefault();
                       document.getElementById("contacts")?.scrollIntoView({
@@ -193,6 +210,7 @@ const Header = () => {
                     ✉️ CONTACT
                   </a>
                 </li>
+
                 <AgentCodeEntry />
               </>
             )}

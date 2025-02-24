@@ -5,14 +5,14 @@ import { motion } from "framer-motion";
 
 export default function AnnouncementModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false); // Track if component mounted
 
   useEffect(() => {
+    setHasMounted(true); // Prevent SSR mismatch
     setIsOpen(true); // Open modal when the component mounts
   }, []);
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  if (!hasMounted) return null; // Avoid hydration mismatch
 
   return (
     isOpen && (
@@ -38,7 +38,7 @@ export default function AnnouncementModal() {
           </p>
           <button
             className="mt-4 w-full bg-blue-700 text-white hover:bg-white hover:border-solid hover:border-2 hover:border-blue-700 hover:text-black p-3 rounded-lg font-bold"
-            onClick={closeModal}
+            onClick={() => setIsOpen(false)}
           >
             OK
           </button>
