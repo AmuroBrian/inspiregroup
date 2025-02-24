@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 
 const images = [
   { src: "/images/commision.jpg", link: "/docs/Commission.pdf", name: "Commission" },
-  { src: "/images/microinvesment.jpg", link: "/docs/MicroInvestment.pdf", name: "Micro Investment" },
+  { src: "/images/microinvesment.jpg", link: "/docs/Micro-Investment.pdf", name: "Micro Investment" },
 ];
 
 const pdfFiles = [
   { name: "Commission.pdf", link: "/docs/Commission.pdf" },
-  { name: "MicroInvestment.pdf", link: "/docs/MicroInvestment.pdf" },
+  { name: "MicroInvestment.pdf", link: "/docs/Micro-Investment.pdf" },
   { name: "PrivateBanker.pdf", link: "/docs/PrivateBanker.pdf" },
   { name: "Travel.jpg", link: "/docs/travel.pdf" },
 ];
