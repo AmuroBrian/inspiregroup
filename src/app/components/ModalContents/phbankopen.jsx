@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Link, Element } from "react-scroll";
 import { CheckCircle, XCircle } from "lucide-react";
+import Image from "next/image";
 
 const PHBankOpen = () => {
   return (
@@ -39,7 +40,7 @@ const PHBankOpen = () => {
           </ol>
         </Section>
 
-        <Section title="Conditions for Opening" name="opening">
+        <Section title="Conditions for Opening an Account" name="opening">
           {opening.map((service, index) => (
             <div key={index} className="mb-4">
               <strong>{service.title}</strong>
@@ -50,25 +51,14 @@ const PHBankOpen = () => {
               </ul>
             </div>
           ))}
-        </Section>
 
-      {/*  <Section title="Services that can help you open an account online" name="services">
-          <ul className="list-decimal pl-6 space-y-4">
-            {services.map((adv, index) => (
-              <li key={index}>
-                <div className="flex items-center mb-2">
-                  {adv.icon}
-                  <strong>{adv.title}</strong>
-                </div>
-                <ul className="list-disc pl-6 space-y-1">
-                  {adv.details.map((detail, i) => (
-                    <li key={i}>{detail}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </Section> */}
+            <div className="bg-gray-200 p-4 rounded-lg text-sm text-gray-700">
+              <p className="leading-relaxed">
+                In these cases, the service is for residents, and an ACR (Alien Certificate of Registration) is always required.
+              </p>
+            </div>
+
+        </Section>
 
 
         <Section title="Inspire Holdings Incorporated" name="inspire">
@@ -81,32 +71,134 @@ const PHBankOpen = () => {
           </p>
   
           </div>
+          
+          <div className="bg-gray-200 p-4 rounded-lg text-sm text-gray-700">
+              <h3 className="font-bold text-gray-900">⚠️ REMINDERS </h3>
+              <ul className="list-disc pl-5 mt-2 space-y-4">
+                <li>
+                  <strong>Maintain a Minimum Deposit:</strong> Some banks may charge an account maintenance fee if you drop below the minimum deposit amount. For example, BDO Unibank requires a minimum deposit of P2,000 for ATM card-only accounts and P5,000 for passbook and ATM card accounts.
+                </li>
+                <li>
+                  <strong>Continued Trading:</strong> Your account may be frozen if you don't trade for one year. Make sure you trade regularly.
+                </li>
+                <li>
+                  <strong>Check Fees:</strong> There may be various fees, such as transfer fees and ATM usage fees, so it is important to check in advance.
+                </li>
+              </ul>
+            </div>
 
           
           <div className="space-y-4">
 
-          <SectionImage src="images/pselobby.png" alt="PSE Lobby" />
+          <SectionImage src="images/phbankopeninfo.png" alt="Info" />
 
+                    <a
+                href="https://inspireholdings.ph/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center bg-white rounded-lg shadow-md overflow-hidden border hover:shadow-lg transition-shadow duration-300 w-full max-w-2xl"
+              >
+                {/* Left side - Text */}
+                <div className="p-5 flex-1">
+                  <h2 className="text-lg font-bold text-gray-900">Inspire Holdings Inc.</h2>
+                  <p className="text-gray-600 text-sm mt-1">
+                    Explore a variety of high-quality, advanced services and prod
+                  </p>
+                  <p className="text-blue-500 text-sm mt-2">inspireholdings.ph</p>
+                </div>
+
+                {/* Right side - Image */}
+                <div className="w-1/3">
+                  <Image
+                    src="/images/earth.png" // Update this with the correct path
+                    alt="Inspire Holdings"
+                    width={200}
+                    height={120}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              </a>
     
           </div>
 
         </Section>
 
-        <Section title="Company Profile" name="profile">
-          {companyProfile.map((item, index) => (
+        <Section title="INSPIRE WALLET" name="wallet">
+          {wallet.map((item, index) => (
             <h3 key={index} className="text-lg font-bold space-y-4">{item}</h3>
           ))}
         </Section>
-        <SectionImage src="images/holdingsinfo.png" alt="Holdings Info" />
+        <SectionImage src="images/inspirewallet.png" alt="Holdings Info" />
 
-        <Section title="Annual Interest Table for Microinvestments" name="interest">
-        <p className="text-gray-700 text-lg leading-relaxed">
-        The term of the contract ranges from 6 months to a maximum of 2 years.
-        You can get a bank interest rate of 1.2% per annum up to 12.1%.
-          </p>
-          <SectionImage src="images/holdingsdividend.png" alt="Dividend Info" />
-          <SectionImage src="images/dividendtimeinfo.png" alt="Dividend Time Info" />
-        </Section>
+        <Section>
+  <p className="text-gray-700 text-lg leading-relaxed justified-center">
+    Inspire Wallet is a multi-wallet that allows you to open microfinance, banking services, 
+    and accounts with partner banks while staying in Japan. In addition, there are also services 
+    such as Travel Protection at an additional cost, and the scope of the service is 
+    limited to Manila for now.
+  </p>
+
+  <p className="mt-6 text-gray-700 text-lg justified-center">
+      Inspire wallet can be pooled in two types: Philippine peso and USDT (BEP-20).
+    </p>
+
+    <p className="mt-6 text-gray-700 text-lg justified-center">
+    When you open an account, you will need to sign a contract with a passport and a photo ID such as a driver's license or My Number card.
+    </p>
+    <p className="mt-6 text-gray-700 text-lg justified-center">
+    From the menu screen, it is possible to open a bank account with our partners: BDO, Security Bank, CTBC Bank, and Union Bank.
+    This is the only wallet that can do this!
+    </p>
+ 
+
+
+  <div className="mt-6 bg-gray-100 p-6 rounded-lg shadow-md">
+    <h2 className="text-2xl font-semibold mb-6 justified-center">How to Download the Inspire Wallet App</h2>
+    
+    <ul className="space-y-8">
+      {/* Step 1 */}
+      <li className="flex flex-col items-center justified-center">
+        <img src="/images/appstore1.png" alt="App Store" className="w-100 h-100 rounded-lg shadow-md" />
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold">Step 1: Open your iOS App Store or Android Play Store</h3>
+          <p className="text-gray-600 text-lg"></p>
+        </div>
+        <hr className="w-full border-t border-gray-300 my-6" />
+      </li>
+
+      {/* Step 2 */}
+      <li className="flex flex-col items-center justified-center">
+        <img src="/images/phbankopeninspirewallet.png" alt="Search App" className="w-100 h-100 rounded-lg shadow-md" />
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold">Step 2: Search for "Inspire Wallet"</h3>
+          <p className="text-gray-600 text-lg">Type "Inspire Wallet" in the search bar, locate the correct app, and click Install.</p>
+        </div>
+        <hr className="w-full border-t border-gray-300 my-6" />
+      </li>
+
+      {/* Step 3 */}
+      <li className="flex flex-col items-center justified-center">
+        <img src="/images/phbankopenregister.png" alt="Download App" className="w-100 h-100 rounded-lg shadow-md" />
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold">Step 3: When installation is complete, open the app and click "Register"</h3>
+          <p className="text-gray-600 text-lg">Registration is FREE! Fill out the necessary information in the Registration form.</p>
+        </div>
+        <hr className="w-full border-t border-gray-300 my-6" />
+      </li>
+
+      {/* Step 4 */}
+      <li className="flex flex-col items-center justified-center">
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold">Step 4: Once done registering, your account is created!</h3>
+          <p className="text-gray-600 text-lg">You will be redirected to the homepage of the app, explore the app to see all the features!</p>
+        </div>
+      </li>
+    </ul>
+
+
+  </div>
+</Section>
+
       </div>
     </div>
   );
@@ -150,10 +242,6 @@ const opening = [
   { title: "", items: ["Buying real estate in the Philippines and receiving rental income", "Pension benefits", "Obtaining a Special Resident Retiree Visa (SRRV)","Receiving a salary for working in the Philippines","Study Abroad in Schools in the Philippines","If you have a Filipino spouse or children"] },
 ];
 
-const services = [
-  { title: "Advantages", icon: <CheckCircle className="text-green-500 w-5 h-5 mr-2" />, details: ["Can start with a small amount.", "Automated savings help build wealth.", "Lower fees compared to traditional investment options."] },
-  { title: "Disadvantages", icon: <XCircle className="text-red-500 w-5 h-5 mr-2" />, details: ["Small investments take time.", "Some services have relatively high fees.", "Automated strategies may not suit stock pickers."] },
-];
 
 const tocItems = [
   { name: "characteristics", label: "Characteristics of Microinvestments" },
@@ -164,13 +252,14 @@ const tocItems = [
   { name: "interest", label: "Annual Interest Table" },
 ];
 
-const companyProfile = [
-  "Established on January 2012",
+const wallet = [
+  /*"Established on January 2012",
   "President: Mrs. Melody Santos",
   "Nature of Business: Comprehensive consultancy",
   "Board Members: 8",
   "Employees and Agents: 85",
-  "Capital: 200,000,000 PHP (approx. 520M Yen)",
+  "Capital: 200,000,000 PHP (approx. 520M Yen)", */
 ];
 
 export default PHBankOpen
+
