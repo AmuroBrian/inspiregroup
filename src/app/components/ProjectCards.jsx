@@ -32,25 +32,52 @@ const cards = [
   },
 
   {
-    id: 5,
+    id: 5,//1
     title: "Inspire Wallet",
     image: "./images/inspirewallet.png",
     link: "/docs/InspireWallet.pdf",
   },
   {
-    id: 6,
+    id: 6,//2
+    title: "Inspire Wallet Partner Banks",
+    image: "./images/inspirepartnerbanks.png",
+    link: "/partnerbanks",
+  },
+
+  {
+    id: 7,//3
     title: "Financial Products",
     image: "./images/financialproduct.png",
     link: "/docs/FinancialProduct.pdf",
   },
+
   {
-    id: 7,
+    id: 8,//4
+    title: "Micro Investments",
+    image: "./images/microinvestments.png",
+    link: "/microinvestments",
+  },
+  {
+    id: 9,//5
     title: "Private Banking",
     image: "./images/private-banker.png",
     link: "/docs/PrivateBanker.pdf",
   },
   {
-    id: 8,
+    id: 10,//6
+    title: "Opening a Philippine Bank Account for non-residents",
+    image: "./images/bankaccounts.png",
+    link: "/phbankopen",
+  },
+  {
+    id: 11,//7
+    title: "Buying Real Estate with USDT",
+    image: "./images/realestateusdt.png",
+    link: "/realestatepurchase",
+  },
+
+  {
+    id: 12,//8
     title: "Travel Protection",
     image: "./images/travel-protect.png",
     link: "/docs/travel.pdf",
