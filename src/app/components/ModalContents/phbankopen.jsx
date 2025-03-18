@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Link, Element } from "react-scroll";
-import { CheckCircle, XCircle } from "lucide-react";
 import Image from "next/image";
 
 const PHBankOpen = () => {
