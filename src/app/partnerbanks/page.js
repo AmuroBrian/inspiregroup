@@ -1,10 +1,10 @@
 import React from "react";
-import partnerbanks from "../components/ModalContents/partnerbanks";
+import PartnerBanks from "../components/ModalContents/PartnerBanks";
 
 export default function Page() {
   return (
     <div>
-      <partnerbanks />
+      <PartnerBanks />
     </div>
   );
 }
