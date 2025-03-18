@@ -100,7 +100,7 @@ const AnimatedCard = ({ title, image, link }) => {
           <img
             src={image}
             alt={title}
-            className="w-full h-32 md:h-64 object-cover"
+            className="w-full h-32 md:h-64"
           />
           <CardContent className="md:p-4 flex-grow flex flex-col">
             <h3 className="text-base md:text-lg font-semibold flex flex-grow justify-center text-center items-center">
