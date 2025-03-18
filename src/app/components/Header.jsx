@@ -56,18 +56,18 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex space-x-8">
-          {pathname !== "/" && (
+          {pathname !== "/" ? (
             <li className="relative group">
               <button
-                onClick={() => (window.location.href = "/")}
+                onClick={() => (window.location.href = pathname === "/agent-home" ? "/" : "/")}
                 className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
               >
-                <span className="text-lg">🚪</span>
-                <span className="text-xs">LOGOUT</span>
+                <span className="text-lg">{pathname === "/agent-home" ? "🚪" : "🏠"}</span>
+                <span className="text-xs">{pathname === "/agent-home" ? "LOGOUT" : "HOME"}</span>
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
               </button>
             </li>
-          )}
+          ) : null}
 
           {isHomePage && (
             <>
