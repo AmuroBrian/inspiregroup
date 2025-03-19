@@ -116,7 +116,7 @@ const PHBankOpen = () => {
               {/* Right side - Image */}
               <div className="w-1/3">
                 <Image
-                  src="/images/earth.png" // Update this with the correct path
+                  src="/images/earth.png"
                   alt="Inspire Holdings"
                   width={200}
                   height={120}
