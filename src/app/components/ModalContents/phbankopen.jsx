@@ -159,7 +159,7 @@ const PHBankOpen = () => {
         </p>
 
         <Section
-          title="How to Download the Inspire Wallet App"
+          //title="How to Download the Inspire Wallet App"
           name="download-app"
         >
           <div className="mt-6 bg-gray-100 p-6 rounded-lg shadow-md">

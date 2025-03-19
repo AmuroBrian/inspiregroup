@@ -32,52 +32,52 @@ const cards = [
   },
 
   {
-    id: 5,//1
+    id: 5, //1
     title: "Inspire Wallet",
     image: "./images/inspirewallet.png",
-    link: "/docs/InspireWallet.pdf",
+    link: "/docs/InspireWallet(JP).pdf",
   },
   {
-    id: 6,//2
+    id: 6, //2
     title: "Inspire Wallet Partner Banks",
     image: "./images/inspirepartnerbanks.png",
-    link: "/partnerbanks",
+    link: "/docs/Bank.pdf",
   },
 
   {
-    id: 7,//3
+    id: 7, //3
     title: "Financial Products",
     image: "./images/financialproduct.png",
     link: "/docs/FinancialProduct.pdf",
   },
 
   {
-    id: 8,//4
+    id: 8, //4
     title: "Micro Investments",
     image: "./images/microinvestments.png",
-    link: "/microinvestments",
+    link: "/docs/Micro-Investment1.pdf",
   },
   {
-    id: 9,//5
+    id: 9, //5
     title: "Private Banking",
     image: "./images/private-banker.png",
     link: "/docs/PrivateBanker.pdf",
   },
   {
-    id: 10,//6
+    id: 10, //6
     title: "Opening a Philippine Bank Account for non-residents",
     image: "./images/bankaccounts.png",
-    link: "/phbankopen",
+    link: "/docs/InspireWallet(JP).pdf",
   },
   {
-    id: 11,//7
+    id: 11, //7
     title: "Buying Real Estate with USDT",
     image: "./images/realestateusdt.png",
-    link: "/realestatepurchase",
+    link: "/docs/CryptoPresentation.pdf",
   },
 
   {
-    id: 12,//8
+    id: 12, //8
     title: "Travel Protection",
     image: "./images/travel-protect.png",
     link: "/docs/travel.pdf",
@@ -97,11 +97,7 @@ const AnimatedCard = ({ title, image, link }) => {
     >
       <a href={link} rel="noopener noreferrer">
         <Card className="overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition h-full flex flex-col">
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-32 md:h-64"
-          />
+          <img src={image} alt={title} className="w-full h-32 md:h-64" />
           <CardContent className="md:p-4 flex-grow flex flex-col">
             <h3 className="text-base md:text-lg font-semibold flex flex-grow justify-center text-center items-center">
               {title}
