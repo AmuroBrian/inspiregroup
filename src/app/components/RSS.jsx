@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "@/TranslationContext";
 
 export default function Page() {
   const [feedItems, setFeedItems] = useState([]);
   const [currentStartIndex, setCurrentStartIndex] = useState(0);
   const [windowWidth, setWindowWidth] = useState(1024); // Default width for SSR-safe rendering
+  const { translateDynamicText } = useTranslation(); // Use translation function
 
   useEffect(() => {
     // Fetch feed data
@@ -34,11 +36,21 @@ export default function Page() {
           };
         }
       );
-      setFeedItems(items);
+
+      // Translate titles and descriptions
+      const translatedItems = await Promise.all(
+        items.map(async (item) => ({
+          ...item,
+          title: await translateDynamicText(item.title),
+          description: await translateDynamicText(item.description),
+        }))
+      );
+
+      setFeedItems(translatedItems);
     };
 
     fetchFeed();
-  }, []);
+  }, [translateDynamicText]);
 
   useEffect(() => {
     // Function to update window width
@@ -46,13 +58,8 @@ export default function Page() {
       setWindowWidth(window.innerWidth);
     };
 
-    // Set initial width after component mounts
     setWindowWidth(window.innerWidth);
-
-    // Add event listener for resize
     window.addEventListener("resize", handleResize);
-
-    // Cleanup event listener on unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -70,7 +77,7 @@ export default function Page() {
 
   const visibleItems = feedItems.slice(
     currentStartIndex,
-    currentStartIndex + (windowWidth < 768 ? 1 : 3) // Use windowWidth state instead of window.innerWidth
+    currentStartIndex + (windowWidth < 768 ? 1 : 3)
   );
 
   return (
