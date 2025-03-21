@@ -73,8 +73,8 @@ const Header = () => {
                 (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
               } hover:text-blue-600`}
             >
-              <span className="text-lg">🏠</span>
-              <span className="text-xs">{t.home}</span>
+              {/* <span className="text-lg">🏠</span> */}
+              {/* <span className="text-xs">{t.home}</span> */}
               {/* Underline Animation */}
               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
@@ -87,7 +87,8 @@ const Header = () => {
                 className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
               >
                 <span className="text-lg">{pathname === "/agent-home" ? "🚪" : "🏠"}</span>
-                <span className="text-xs">{pathname === "/agent-home" ? "LOGOUT" : "HOME"}</span>
+                <span className="text-xs">{pathname === "/agent-home" ? t.home : t.home}</span>
+
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
               </button>
             </li>
@@ -105,7 +106,7 @@ const Header = () => {
                   } hover:text-blue-600`}
                 >
                   <span className="text-lg">🏠</span>
-                  <span className="text-xs">HOME</span>
+                  <span className="text-xs">{t.home}</span>
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               </li>
@@ -177,7 +178,7 @@ const Header = () => {
         <div className="md:hidden bg-white shadow-md transition-all duration-300 py-4">
           <ul className="flex flex-col items-center space-y-4">
 
-            <li>
+            {/* <li>
               <Link
                 href={isHomePage ? "#" : "/"}
                 onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
@@ -185,7 +186,7 @@ const Header = () => {
               >
                 🏠 {t.home}
               </Link>
-            </li>
+            </li> */}
 
            
 
@@ -196,7 +197,7 @@ const Header = () => {
                   className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
                 >
                   <span className="text-lg">🚪</span>
-                  <span className="text-xs">LOGOUT</span>
+                  <span className="text-xs">{t.home}</span>
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </button>
               </li>
@@ -206,20 +207,20 @@ const Header = () => {
             {isHomePage && (
               <>
               <li>
-  <a
-    onClick={(e) => {
-      e.preventDefault();
-      document.getElementById("hero")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-      setIsMenuOpen(false);
-    }}
-    className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
-  >
-    🏠 HOME
-  </a>
-</li>
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("hero")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                    setIsMenuOpen(false);
+                  }}
+                  className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
+                >
+                  🏠 {t.home}
+                </a>
+              </li>
 
 
                 <li>

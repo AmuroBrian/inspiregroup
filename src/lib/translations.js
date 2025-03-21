@@ -85,8 +85,12 @@ const translations = {
         orgten:"OUTSOURCING MANAGEMENT DEPARTMENT",
         orgeleven:"SECURITY DEPARTMENT",
         orgtwelve:"INVESTIGATION DEPARTMENT",
-        orgthird:" This structure is designed to enhance efficiency and communication within the organization. A clear hierarchy ensures that responsibilities and reporting lines are well-defined, reducing confusion and potential conflicts. The distinct roles also facilitate effective task management and execution, contributing to the company's overall operational efficiency."
+        orgthird:" This structure is designed to enhance efficiency and communication within the organization. A clear hierarchy ensures that responsibilities and reporting lines are well-defined, reducing confusion and potential conflicts. The distinct roles also facilitate effective task management and execution, contributing to the company's overall operational efficiency.",
       
+        InspireWalletPartnerBanks:"Inspire Wallet Partner Banks",
+        OpeningaPhilippineBankAccountfornonresidents:"Opening a Philippine Bank Account for non-residents",
+        BuyingRealEstatewithUSDT:"Buying Real Estate with USDT",
+        MicroInvestments:"Micro Investments"
       
       },
     ja: {
@@ -176,8 +180,12 @@ const translations = {
       orgten: "アウトソーシング管理部",
       orgeleven: "警備部",
       orgtwelve: "調査部",
-      orgthird:"この構造は、組織内の効率性とコミュニケーションを向上させるために設計されています。明確な階層構造により、責任と報告のラインが明確になり、混乱や潜在的な対立を減らすことができます。また、それぞれの役割を明確にすることで、業務の管理と遂行が効果的になり、会社全体の運営効率の向上に貢献します。"
+      orgthird:"この構造は、組織内の効率性とコミュニケーションを向上させるために設計されています。明確な階層構造により、責任と報告のラインが明確になり、混乱や潜在的な対立を減らすことができます。また、それぞれの役割を明確にすることで、業務の管理と遂行が効果的になり、会社全体の運営効率の向上に貢献します。",
       
+      InspireWalletPartnerBanks:"Inspireウォレット提携銀行",
+      OpeningaPhilippineBankAccountfornonresidents:"非居住者向けフィリピン銀行口座の開設",
+      BuyingRealEstatewithUSDT:"USDTで不動産を購入",
+      MicroInvestments:"マイクロ投資"
     },
     ko: {
       title: "비즈니스 서비스",
@@ -263,8 +271,12 @@ const translations = {
       orgten: "아웃소싱 관리 부서",
       orgeleven: "보안 부서",
       orgtwelve: "조사 부서",
-      orgthird:"이 구조는 조직 내에서 효율성과 원활한 커뮤니케이션을 강화하기 위해 설계되었습니다.명확한 계층 구조를 통해 책임과 보고 라인이 명확하게 정의되어 혼란과 잠재적인 갈등을 줄일 수 있습니다.또한, 각 역할이 뚜렷하게 구분됨으로써 업무 관리 및 수행이 효과적으로 이루어져 회사의 전체적인 운영 효율성이 향상됩니다."
+      orgthird:"이 구조는 조직 내에서 효율성과 원활한 커뮤니케이션을 강화하기 위해 설계되었습니다.명확한 계층 구조를 통해 책임과 보고 라인이 명확하게 정의되어 혼란과 잠재적인 갈등을 줄일 수 있습니다.또한, 각 역할이 뚜렷하게 구분됨으로써 업무 관리 및 수행이 효과적으로 이루어져 회사의 전체적인 운영 효율성이 향상됩니다.",
 
+      InspireWalletPartnerBanks: "Inspire 월렛 제휴 은행",
+      OpeningaPhilippineBankAccountfornonresidents: "비거주자를 위한 필리핀 은행 계좌 개설",
+      BuyingRealEstatewithUSDT: "USDT로 부동산 구매",
+      MicroInvestment: "마이크로 투자"
     },
 
 
@@ -354,8 +366,13 @@ const translations = {
       orgten: "外包管理部",
       orgeleven: "安全部门",
       orgtwelve: "调查部门",
-      orgthird:"该结构旨在提高组织内部的效率和沟通。清晰的层级结构确保了职责和汇报线路的明确性，从而减少混乱和潜在冲突。明确的角色分工还能促进任务管理和执行的高效性，从而提升公司的整体运营效率。"
+      orgthird:"该结构旨在提高组织内部的效率和沟通。清晰的层级结构确保了职责和汇报线路的明确性，从而减少混乱和潜在冲突。明确的角色分工还能促进任务管理和执行的高效性，从而提升公司的整体运营效率。",
     
+
+      InspireWalletPartnerBanks: "Inspire钱包合作银行",
+      OpeningaPhilippineBankAccountfornonresidents: "非居民菲律宾银行账户开户",
+      BuyingRealEstatewithUSDT: "使用USDT购买房地产",
+      MicroInvestments: "微型投资"
     }
   };
   
