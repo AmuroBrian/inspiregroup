@@ -1,11 +1,15 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "@/TranslationContext";
 
 export const CompanyOrgChart = () => {
+  const { t } = useTranslation(); // Use translation context
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="w-full h-[80px]"></div>
       <h1 className="text-3xl font-bold text-left">
-        Inspire Holdings Inc. Organization
+       {t.org}
       </h1>
       <hr className="my-4 border-gray-300" />
 
@@ -21,64 +25,51 @@ export const CompanyOrgChart = () => {
         {/* Department List */}
         <div className="flex-1">
           <h2 className="text-2xl font-bold text-left">
-            Introduction of Each Department
+            {t.orgone}
           </h2>
 
           <br />
           <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> OFFICE OF
-              THE PRESIDENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgtwo}
+             
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> EXECUTIVE
-              VICE PRESIDENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgtwo}
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> SECRETARIAL
-              DEPARTMENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t. orgthree}
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> ACCOUNTANT
-              AUDIT DEPARTMENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgfive}
             </li>
             <li className="flex items-center text-lg">
               <span className="text-yellow-500 mr-2">&#9733;</span>{" "}
-              ADMINISTRATIVE DEPARTMENT
+              {t.orgsix}
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> HUMAN
-              RESOURCE DEPARTMENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgseven}
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> IT SOLUTION
-              DEPARTMENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgeight}
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> MARKETING
-              DEPARTMENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgnine}
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> OUTSOURCING
-              MANAGEMENT DEPARTMENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgten}
             </li>
             <li className="flex items-center text-lg">
-              <span className="text-yellow-500 mr-2">&#9733;</span> SECURITY
-              DEPARTMENT
+              <span className="text-yellow-500 mr-2">&#9733;</span> {t.orgeleven}
             </li>
             <li className="flex items-center text-lg">
               <span className="text-yellow-500 mr-2">&#9733;</span>{" "}
-              INVESTIGATION DEPARTMENT
+              {t.orgtwelve}
             </li>
           </ul>
           <br />
           <p className="text-gray-700 text-lg leading-relaxed mt-4">
-            This structure is designed to enhance efficiency and communication
-            within the organization. A clear hierarchy ensures that
-            responsibilities and reporting lines are well-defined, reducing
-            confusion and potential conflicts. The distinct roles also
-            facilitate effective task management and execution, contributing to
-            the company's overall operational efficiency.
+            {t.orgthird}
           </p>
         </div>
 

@@ -4,14 +4,18 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AgentCodeEntry } from "./AgentHubCode/AgentCodeEntry";
+import { useTranslation } from "@/TranslationContext";
+
+
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHomePage, setIsHomePage] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false); // Ensure hydration
+  const { t } = useTranslation(); // Use translation context
   const pathname = usePathname();
-
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsHomePage(pathname === "/");
@@ -75,7 +79,7 @@ const Header = () => {
               } hover:text-blue-600`}
             >
               <span className="text-lg">🏠</span>
-              <span className="text-xs">HOME</span>
+              <span className="text-xs">{t.home}</span>
               {/* Underline Animation */}
               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
@@ -99,7 +103,7 @@ const Header = () => {
                   } hover:text-blue-600`}
                 >
                   <span className="text-lg">🏢</span>
-                  <span className="text-xs">ABOUT</span>
+                  <span className="text-xs">{t.about}</span>
                   {/* Underline Animation */}
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
@@ -121,7 +125,7 @@ const Header = () => {
                   } hover:text-blue-600`}
                 >
                   <span className="text-lg">✉️</span>
-                  <span className="text-xs">CONTACT</span>
+                  <span className="text-xs">{t.contact}</span>
                   {/* Underline Animation */}
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
@@ -155,7 +159,7 @@ const Header = () => {
                 onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
                 className="text-lg text-gray-500 transition-all duration-300 hover:text-blue-600"
               >
-                🏠 HOME
+                🏠 {t.home}
               </Link>
             </li>
 
@@ -173,7 +177,7 @@ const Header = () => {
                     }}
                     className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
                   >
-                    🏢 ABOUT
+                    🏢 {t.about}
                   </a>
                 </li>
 
@@ -190,7 +194,7 @@ const Header = () => {
                     }}
                     className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
                   >
-                    ✉️ CONTACT
+                    ✉️ {t.contact}
                   </a>
                 </li>
                 <AgentCodeEntry />
