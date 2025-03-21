@@ -1,10 +1,18 @@
 import { create } from "zustand";
+const getStoredLanguage = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("selectedLanguage") || "en";
+  }
+  return "en";
+};
 
 export const useLanguageStore = create((set) => ({
-  language: localStorage.getItem("selectedLanguage") || "en", // Load from local storage or default to "en"
-  
+  language: getStoredLanguage(),
+
   setLanguage: (lang) => {
     set({ language: lang });
-    localStorage.setItem("selectedLanguage", lang); // Save to local storage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedLanguage", lang);
+    }
   },
 }));

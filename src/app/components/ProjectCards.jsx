@@ -1,4 +1,4 @@
-\"use client";
+"use client";
 
 import React from "react";
 import { motion } from "framer-motion";
@@ -132,6 +132,11 @@ const ProjectCards = () => {
     { id: 6, title: t.financialProducts, image: "./images/financialproduct.png", link: "/docs/FinancialProduct.pdf" },
     { id: 7, title: t.privateBanking, image: "./images/private-banker.png", link: "/docs/PrivateBanker.pdf" },
     { id: 8, title: t.travelProtection, image: "./images/travel-protect.png", link: "/docs/travel.pdf" },
+    { id: 9, title: t.InspireWalletPartnerBanks, image: "./images/inspirepartnerbanks.png", link: "/docs/Bank.pdf" },
+    { id: 10, title: t.OpeningaPhilippineBankAccountfornonresidents, image: "./images/bankaccounts.png", link: "/docs/InspireWallet(JP).pdf" },
+    { id: 11, title: t.BuyingRealEstatewithUSDT, image: "./images/realestateusdt.png", link: "/docs/CryptoPresentation.pdf"},
+    { id: 12, title: t.MicroInvestments, image: "./images/microinvestments.png", link: "/docs/Micro-Investment1.pdf"},
+
   ];
 
   return (
