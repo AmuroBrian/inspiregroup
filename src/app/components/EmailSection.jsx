@@ -122,7 +122,7 @@ const EmailSection = () => {
             </a>
           </h2>
           <h2 className="text-lg font-medium flex items-center">
-            <Phone className="mr-2 text-blue-300" />
+            <Phone className="mr-5 text-blue-300" />
             Telephone No: 02-8538-5054 / 02-7750605 / +639946529009
           </h2>
           <h2 className="text-lg font-medium flex items-center">
