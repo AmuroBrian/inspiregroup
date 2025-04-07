@@ -17,6 +17,7 @@ export default function Home() {
       <WelcomeToHol />
       <ProjectCards />
       <CompanyInfo />
+
       <EmailSection />
       <RSS />
     </div>

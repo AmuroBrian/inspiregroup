@@ -24,7 +24,7 @@ const translations = {
           "Experience the Ultimate Asset Management App and Seamless Bank Account Opening with Inspire! The Inspire Wallet asset management app connects effortlessly with the bank account you want to open, providing a smooth and efficient financial experience. Moreover, opening a bank account with Inspire is simple and fast, allowing you to access financial services with ease. Additionally, Inspire Wallet is officially certified by Apple and Google as a finance application, recognized at the same level as banking institutions. Discover the convenience and security of Inspire Wallet today!",
       
         home:"Home",
-        about:"about",
+        about:"About",
         contact:"Contact",
 
         companyOverview: "Company Overview",
@@ -36,11 +36,11 @@ const translations = {
         privateBanking: "Private Banking",
         travelProtection: "Travel Protection",
         businessLines: "BUSINESS LINES",
-        about: "ABOUT",
+        about: "About",
 
         herosub:"Welcome to Inspire Holdings Group – A legacy of strong trust and proven excellence. This is where your future moves to the next level.",
       
-        register:"Resgiter",
+        register:"Register",
         login:"Login",
 
         overview:"Company Overview",
@@ -74,7 +74,7 @@ const translations = {
       
         org:"Inspire Holdings Inc. Organization",
         orgone:"Introduction of Each Department",
-        orgtwo:"OFFICE OFTHE PRESIDENT",
+        orgtwo:"OFFICE OF THE PRESIDENT",
         orgthree:"EXECUTIVE VICE PRESIDENT",
         orgfour:"SECRETARIAL DEPARTMENT",
         orgfive:" ACCOUNTANT AUDIT DEPARTMENT",
@@ -87,6 +87,52 @@ const translations = {
         orgtwelve:"INVESTIGATION DEPARTMENT",
         orgthird:" This structure is designed to enhance efficiency and communication within the organization. A clear hierarchy ensures that responsibilities and reporting lines are well-defined, reducing confusion and potential conflicts. The distinct roles also facilitate effective task management and execution, contributing to the company's overall operational efficiency.",
       
+
+        divisionInfo: "DIVISIONS",
+        divisionInfoTextIntro: "Inspire Holdings Inc. generates revenue from four Main Business divisions. Detailed explanations of each division, along with the key requirements necessary for its successful operation are shown below.",
+        
+        divisionInfoText1Header: "Consumer & Community Banking (CCB):",
+        divisionInfoText1Intro: "This Division provides services such as Deposits, Home Loans, Credit Cards, and Auto Loans to individuals and small businesses.",
+        divisionInfoText1Info: "This has generated approximately $70 billion in revenue for 2023, accounting for about 44% of the total.",
+        divisionInfoText1InfoHeader: "Key Requirements:",
+        divisionInfoText1InfoList1: "Extensive branch network: Physical branches are essential for direct customer interaction.",
+        divisionInfoText1InfoList2: "Digital banking platforms: Offering mobile and online banking enhances convenience.",
+        divisionInfoText1InfoList3: "Risk management: Effective evaluation and control of credit risk for loans and credit card operations are critical.",
+        divisionInfoText1InfoList4: "Customer service: Building a high-quality customer support structure is essential.",
+
+        
+        divisionInfoText2Header: "Corporate & Investment Banking (CIB):",
+        divisionInfoText2Intro: "This Division provides Investment banking, Capital markets, Trading, and Securities services to Corporations, Investors, and Government agencies.",
+        divisionInfoText2Info: "This has generated approximately $48.8 billion in revenue for 2023, contributing about 31% of the total.",
+        divisionInfoText2InfoHeader: "Key Requirements:",
+        divisionInfoText2InfoList1: "Advanced expertise: Specialized knowledge in areas such as M&A advisory, capital raising, and risk management is required.",
+        divisionInfoText2InfoList2: "Global network: Presence in international markets and understanding of local regulations are crucial.",
+        divisionInfoText2InfoList3: "Technology infrastructure: Fast and secure trading platforms and data analysis capabilities are needed.",
+        divisionInfoText2InfoList4: "Risk management: Ongoing monitoring and control of market, credit, and operational risks are essential.",
+
+
+        divisionInfoText3Header: "Commercial Banking (CB):",
+        divisionInfoText3Intro: "This Division serves Midsized businesses, Municipalities, and Real Estate Investors by offering Lending, Financial management, and Investment Banking services.",
+        divisionInfoText3Info: "This has generated approximately $15.5 billion in revenue for 2023, accounting for about 10% of the total.",
+        divisionInfoText3InfoHeader: "Key Requirements:",
+        divisionInfoText3InfoList1: "Local relationship building: Strong ties with local businesses and municipalities are key to success.",
+        divisionInfoText3InfoList2: "Diverse financial products: A wide range of services such as loans, cash management, and commercial real estate finance is required.",
+        divisionInfoText3InfoList3: "Risk assessment capabilities: Skills to accurately assess a company’s creditworthiness and project feasibility are vital.",
+        divisionInfoText3InfoList4: "Regulatory compliance: Strict adherence to regulations and compliance in commercial banking is mandatory.",
+
+
+        divisionInfoText4Header: "Asset & Wealth Management (AWM):",
+        divisionInfoText4Intro: "This Division offers Asset management, Private banking, and Retirement Planning services to individual and Institutional Investors.",
+        divisionInfoText4Info: "This segment generated approximately $19.8 billion in revenue for 2023, accounting for about 13% of the total.",
+        divisionInfoText4InfoHeader: "Key Requirements:",
+        divisionInfoText4InfoList1: "Investment expertise: Deep understanding and hands-on experience across various asset classes are required.  ",
+        divisionInfoText4InfoList2: "Customized services: Ability to propose personalized asset management strategies based on each client’s needs.",
+        divisionInfoText4InfoList3: "Reliable platform: A robust system is needed to ensure secure asset management and transactions.",
+        divisionInfoText4InfoList4: "Regulatory compliance: Strict observance of investment advisory laws and regulations is essential.",
+
+
+
+
         InspireWalletPartnerBanks:"Inspire Wallet Partner Banks",
         OpeningaPhilippineBankAccountfornonresidents:"Opening a Philippine Bank Account for non-residents",
         BuyingRealEstatewithUSDT:"Buying Real Estate with USDT",
