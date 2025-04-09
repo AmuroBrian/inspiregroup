@@ -1,9 +1,12 @@
 "use client"; // Add this line to mark the component as a client component
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "@/TranslationContext"; 
+
 
 export const CompanyOverview = () => {
   const [isMounted, setIsMounted] = useState(false);
+   const { t } = useTranslation(); // Use translation context
 
   // Ensure the component only renders after the client has mounted
   useEffect(() => {
@@ -17,7 +20,7 @@ export const CompanyOverview = () => {
     <div className="p-6 max-w-5xl mx-auto">
       <div className="w-full h-[80px]"></div>
 
-      <h1 className="text-3xl font-bold text-center">Company Overview</h1>
+      <h1 className="text-3xl font-bold text-center">{t.overview}</h1>
       <hr className="my-4 border-gray-300" />
 
       <div className="flex flex-col md:flex-row items-center gap-8">
@@ -29,29 +32,23 @@ export const CompanyOverview = () => {
 
         {/* Text */}
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold">Inspire Holdings Incorporated</h2>
+          <h2 className="text-3xl font-bold">{t.inc}</h2>
           <p className="text-gray-700 text-lg leading-relaxed">
-            Inspire Holdings is a financial, investing, and visionary management
-            company with diverse interests spanning construction and
-            development, healthcare and pharmaceuticals, gaming and
-            entertainment, agricultural trading, and specialized services,
-            serving both the private and public sectors.
+           {t.incone}
           </p>
+
           <p className="text-gray-700 text-lg leading-relaxed">
-            In adherence to the Wealthy Clique Model, it orchestrates a cohesive
-            ecosystem, where the company operates as the central financial hub,
-            capitalizing and harmonizing its subsidiaries and affiliates to
-            drive innovation, efficiency, and collaboration.
+            {t.inctwo}
           </p>
+
           <p className="text-gray-700 text-lg leading-relaxed">
-            This forward-thinking entity is on a mission to make a direct and
-            meaningful impact on the lives of individuals while also wielding
-            its influence to create positive shifts in geopolitics.
+            {t.incthree}
           </p>
+
           <p className="text-gray-700 text-lg leading-relaxed">
-            Simultaneously, it remains dedicated to delivering substantial
-            returns to its valued shareholders.
+            {t.incfour}
           </p>
+
         </div>
       </div>
     </div>

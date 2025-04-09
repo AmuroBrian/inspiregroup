@@ -6,6 +6,7 @@ import { db } from "../../../../script/firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "@/TranslationContext";
 
 export const AgentCodeEntry = ({ isMenuOpen }) => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -18,6 +19,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
   const pathname = usePathname();
   const router = useRouter(); // ✅ Ensure router is initialized
   const textColor = isMenuOpen ? "text-black" : "text-white";
+  const { t } = useTranslation(); // Use translation context
 
   const [formData, setFormData] = useState({
     lastName: "",
@@ -106,7 +108,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
     } hover:text-blue-600`}
   >
     <span className="text-lg">📝</span>
-    <span className="text-lg md:text-xs relative">REGISTER</span> 
+    <span className="text-lg md:text-xs relative">{t.register}</span> 
   </button>
 
   {/* Desktop-Only Underline Animation */}
@@ -125,13 +127,12 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
     } hover:text-blue-600`}
   >
     <span className="text-lg">🔑</span>
-    <span className="text-lg md:text-xs relative">LOGIN</span> 
+    <span className="text-lg md:text-xs relative">{t.login}</span> 
   </button>
 
   {/* Desktop-Only Underline Animation */}
   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 md:group-hover:w-full"></span>
 </li>
-
 
 
       {/* Login Modal */}

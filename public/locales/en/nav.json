@@ -1,0 +1,23 @@
+const translations = {
+    en: {
+      inspire_group: "Inspire Group",
+      home: "Home",
+      about: "About Us",
+      contact: "Contact",
+      welcome: "Welcome to Inspire Group",
+      description:
+        "At Inspire Group, we are dedicated to providing innovative solutions that drive growth and success. Our team is committed to delivering excellence in every project, ensuring that our clients achieve their business goals with confidence. With a focus on integrity, innovation, and collaboration, we are shaping the future together.",
+    },
+    jp: {
+      inspire_group: "インスパイア・グループ",
+      home: "ホーム",
+      about: "私たちについて",
+      contact: "お問い合わせ",
+      welcome: "インスパイア・グループへようこそ",
+      description:
+        "インスパイア・グループでは、成長と成功を促進する革新的なソリューションを提供することに尽力しています。 私たちのチームは、すべてのプロジェクトで卓越した成果を提供し、お客様が自信を持ってビジネス目標を達成できるようサポートします。 誠実さ、革新性、協力を重視し、共に未来を築いていきます。",
+    },
+  };
+  
+  export default translations;
+  
