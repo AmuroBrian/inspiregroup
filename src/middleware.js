@@ -31,7 +31,16 @@ export async function middleware(req) {
 
         if (country === "PH") {
             console.log(`🚫 Access denied for country: ${country}`);
-            return NextResponse.redirect(new URL("/not-legal", req.url));
+            // Return a 403 Forbidden response
+            return new NextResponse(null, {
+                status: 403,
+                headers: {
+                    'Location': '/not-legal',
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
         }
 
         console.log(`✅ Access granted for country: ${country}`);
