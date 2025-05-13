@@ -10,6 +10,7 @@ export async function middleware(req) {
     }
 
     const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8";
+    console.log("🔍 Detected IP:", ip);
 
     // 🚀 Skip API call on localhost (127.0.0.1, ::1, 192.168.x.x)
     if (ip === "127.0.0.1" || ip.startsWith("192.168.") || ip === "::1") {
@@ -23,7 +24,8 @@ export async function middleware(req) {
     try {
         const res = await fetch(apiUrl);
         const data = await res.json();
-        console.log("Geo Data Response:", data);
+        console.log("📊 Full Geo Data Response:", JSON.stringify(data, null, 2));
+        console.log("🌍 Detected Country:", data.country);
 
         const country = data.country || "Unknown";
 
@@ -40,7 +42,17 @@ export async function middleware(req) {
     }
 }
 
-// Apply middleware to all routes except "/not-legal"
+// Apply middleware to all routes and resources
 export const config = {
-    matcher: "/((?!not-legal).*)",
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * - not-legal (the not-legal page itself)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico|not-legal).*)',
+    ],
 };
