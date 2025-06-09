@@ -29,8 +29,7 @@ export async function middleware(req) {
 
         if (country === "PH") {
             console.log(`🚫 Returning 404 for: ${country}`);
-           return NextResponse.rewrite(new URL('/not-legal', req.url));
-
+            return new NextResponse('Not Found', { status: 404 });
         }
 
         return NextResponse.next();
@@ -42,7 +41,5 @@ export async function middleware(req) {
 
 // Match everything
 export const config = {
-    matcher: [
-        '/((?!not-legal).*)',
-    ],
+    matcher: '/:path*',
 };
