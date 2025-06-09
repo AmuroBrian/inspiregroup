@@ -28,7 +28,7 @@ export async function middleware(req) {
 
         if (country === "PH") {
             console.log(`🚫 Rewriting to /not-legal for: ${country}`);
-            return NextResponse.rewrite(new URL('/src/app/not-legal/page.js', req.url));
+            return NextResponse.rewrite(new URL('/not-legal', req.url));
         }
 
         return NextResponse.next();
@@ -38,8 +38,6 @@ export async function middleware(req) {
     }
 }
 
-// Match everything except /not-legal to prevent infinite loop
-// Match everything
 export const config = {
-    matcher: '/src/app/not-legal/page.js',
+    matcher: ['/((?!not-legal).*)'],
 };
