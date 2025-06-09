@@ -12,7 +12,6 @@ export async function middleware(req) {
     const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8";
     console.log("🔍 Detected IP:", ip);
 
-    // Skip local IPs
     if (ip === "127.0.0.1" || ip.startsWith("192.168.") || ip === "::1") {
         console.log("🛑 Skipping API call for localhost.");
         return NextResponse.next();
@@ -28,8 +27,8 @@ export async function middleware(req) {
         console.log("🌍 Detected Country:", country);
 
         if (country === "PH") {
-            console.log(`🚫 Returning 404 for: ${country}`);
-           return NextResponse.rewrite(new URL('/not-legal', req.url));
+            console.log(`🚫 Rewriting to /not-legal for: ${country}`);
+            return NextResponse.rewrite(new URL('/src/app/not-legal/page.js', req.url));
         }
 
         return NextResponse.next();
@@ -39,7 +38,8 @@ export async function middleware(req) {
     }
 }
 
+// Match everything except /not-legal to prevent infinite loop
 // Match everything
 export const config = {
-    matcher: '/not-legal',
+    matcher: '/src/app/not-legal/page.js',
 };
