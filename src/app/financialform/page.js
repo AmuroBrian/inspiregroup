@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { app, db, storage } from "../../../script/firebaseConfig";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useTranslation } from "@/TranslationContext";
 
 export default function FinanceForm() {
     const [formData, setFormData] = useState({});
@@ -12,6 +13,7 @@ export default function FinanceForm() {
     const [govIdImage, setGovIdImage] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { t } = useTranslation(); // Use translation context
 
     const handleChange = (e) => {
         setFormData({
@@ -74,11 +76,11 @@ export default function FinanceForm() {
     return (
         <div className="max-w-4xl mx-auto p-8">
             <div className="w-full h-[80px]"></div>
-            <h2 className="text-xl font-bold mb-4 text-center">Financial Form</h2>
+            <h2 className="text-xl font-bold mb-4 text-center">{t.FinancialForm}</h2>
             <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
                 {[
-                    "Last Name", "First Name", "Middle Name", "Birthdate", "Gender", "Civil Status",
-                    "Address", "Personal Mobile Number", "Landline Number", "Email Address", "Citizenship", "Passport Number", "Source of Fund", "Gross Monthly Income"
+                    t.LastName, t.FirstName, t.MiddleName, t.BirthDate, t.Gender, t.CivilStatus,
+                    t.Address, t.PersonalMobileNumber, t.LandlineNumber, t.EmailAddress, t.Citizenship, t.PassportNumber, t.SourceofFund, t.GrossMonthlyIncome
                 ].map((field, index) => (
                     <div key={index} className="col-span-1">
                         <label className="block font-semibold">{field}</label>
@@ -86,18 +88,18 @@ export default function FinanceForm() {
                             <input type="date" name={field} className="w-full p-2 border rounded bg-white" required onChange={handleChange} />
                         ) : field === "Gender" ? (
                             <select name={field} className="w-full p-2 border rounded bg-white" required onChange={handleChange}>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                <option value="">{t.SelectGender}</option>
+                                <option value="Male">{t.Male}</option>
+                                <option value="Female">{t.Female}</option>
+                                <option value="Other">{t.Others}</option>
                             </select>
                         ) : field === "Civil Status" ? (
                             <select name={field} className="w-full p-2 border rounded bg-white" required onChange={handleChange}>
-                                <option value="">Select Civil Status</option>
-                                <option value="Single">Single</option>
-                                <option value="Married">Married</option>
-                                <option value="Divorced">Divorced</option>
-                                <option value="Widowed">Widowed</option>
+                                <option value="">{t.SelectCivilStatus}</option>
+                                <option value="Single">{t.Single}</option>
+                                <option value="Married">{t.Married}</option>
+                                <option value="Divorced">{t.Divorced}</option>
+                                <option value="Widowed">{t.Widowed}</option>
                             </select>
                         ) : (
                             <input type={field.includes("Number") ? "number" : field.includes("Email") ? "email" : "text"} name={field} placeholder={field} className="w-full p-2 border rounded bg-white" required onChange={handleChange} />
@@ -106,13 +108,13 @@ export default function FinanceForm() {
                 ))}
                 {/* Upload Passport */}
                 <div className="col-span-1">
-                    <label className="block font-semibold">Upload Passport</label>
+                    <label className="block font-semibold">{t.UploadPassport}</label>
                     <input type="file" accept="image/*" className="w-full p-2 border rounded bg-white" onChange={(e) => handleFileChange(e, "passport")} required />
                 </div>
 
                 {/* Upload Government ID */}
                 <div className="col-span-1">
-                    <label className="block font-semibold">Upload Government ID</label>
+                    <label className="block font-semibold">{t.UploadGovernmentID}</label>
                     <input type="file" accept="image/*" className="w-full p-2 border rounded bg-white" onChange={(e) => handleFileChange(e, "govId")} required />
                 </div>
 
@@ -122,7 +124,7 @@ export default function FinanceForm() {
                         className={`w-full md:w-full p-2 rounded ${submitted ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 text-white"}`}
                         disabled={submitted || loading}
                     >
-                        {loading ? "Submitting..." : submitted ? "Submitted" : "Submit"}
+                        {loading ? "Submitting..." : submitted ? "Submitted" : t.Submit}
                     </button>
                 </div>
 

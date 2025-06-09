@@ -12,7 +12,7 @@ export async function middleware(req) {
     const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8";
     console.log("🔍 Detected IP:", ip);
 
-    // 🚀 Skip API call on localhost (127.0.0.1, ::1, 192.168.x.x)
+    // Skip local IPs
     if (ip === "127.0.0.1" || ip.startsWith("192.168.") || ip === "::1") {
         console.log("🛑 Skipping API call for localhost.");
         return NextResponse.next();
@@ -24,26 +24,14 @@ export async function middleware(req) {
     try {
         const res = await fetch(apiUrl);
         const data = await res.json();
-        console.log("📊 Full Geo Data Response:", JSON.stringify(data, null, 2));
-        console.log("🌍 Detected Country:", data.country);
-
         const country = data.country || "Unknown";
+        console.log("🌍 Detected Country:", country);
 
         if (country === "PH") {
-            console.log(`🚫 Access denied for country: ${country}`);
-            // Return a 403 Forbidden response
-            return new NextResponse(null, {
-                status: 403,
-                headers: {
-                    'Location': '/not-legal',
-                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                }
-            });
+            console.log(`🚫 Returning 404 for: ${country}`);
+            return new NextResponse('Not Found', { status: 404 });
         }
 
-        console.log(`✅ Access granted for country: ${country}`);
         return NextResponse.next();
     } catch (error) {
         console.error("❌ Error fetching geo data:", error);
@@ -51,10 +39,7 @@ export async function middleware(req) {
     }
 }
 
-// Apply middleware to all routes and resources
+// Match everything
 export const config = {
-    matcher: [
-        // Match all paths except the not-legal page
-        '/((?!not-legal).*)',
-    ],
+    matcher: '/:path*',
 };

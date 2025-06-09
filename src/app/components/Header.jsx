@@ -17,6 +17,8 @@ const Header = () => {
 
 
   const pathname = usePathname();
+
+  
   
   useEffect(() => {
     setIsHomePage(pathname === "/");
@@ -36,6 +38,41 @@ const Header = () => {
       block: "start",
     });
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined")
+      {
+      const shouldScroll = localStorage.getItem("scrollToAbout");
+      if (shouldScroll) {
+        localStorage.removeItem("scrollToAbout");
+        const el = document.getElementById("ProjectCards");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }
+  }, []);
+  
+  const scrollToProjectCards = (e) => {
+    e.preventDefault();
+    const el = document.getElementById("projectcards");
+  
+    if (el) {
+      const header = document.getElementById("header"); // Use the ID or class of your header
+      const headerHeight = header ? header.offsetHeight : 0; // Get the actual header height
+      const y = el.getBoundingClientRect().top + window.pageYOffset - headerHeight; // Adjust scroll position by header height
+  
+      window.scrollTo({ top: y, behavior: "smooth" });
+    } else {
+      localStorage.setItem("scrollToProjectCards", "true");
+      window.location.href = "/";
+    }
+  
+    setIsMenuOpen(false); // Close mobile menu after clicking
+  };
+  
+
+
   
 
   return (
@@ -68,7 +105,7 @@ const Header = () => {
             <Link
               href={isHomePage ? "#" : "/"}
               onClick={isHomePage ? scrollToHero : null}
-              className={`flex flex-col items-center transition-all duration-300 ${
+              className={`flex flex-col items-center transition-all duration-200 ${
                 isHydrated &&
                 (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
               } hover:text-blue-600`}
@@ -112,27 +149,91 @@ const Header = () => {
               </li>
 
               <li className="relative group">
-                <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById("about")?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                    setIsMenuOpen(false);
-                  }}
-                  className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
-                    isHomePage && !isScrolled ? "text-white" : "text-gray-700"
-                  } hover:text-blue-600`}
-                >
-                  <span className="text-lg">🏢</span>
+  <a
+   onClick={(e) => {
+    e.preventDefault();
+    const el = document.getElementById("projectcards");
+  
+    if (el) {
+      const yOffset = 3200; // adjust this value to match your header height
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+  
+      window.scrollTo({ top: y, behavior: "smooth" });
+    } else {
+      localStorage.setItem("scrollToProjectCards", "true");
+      window.location.href = "/";
+    }
+  
+    setIsMenuOpen(false);
+  }}
+  
+    className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
+      isHomePage && !isScrolled ? "text-white" : "text-gray-700"
+    } hover:text-blue-600`}
+  >
+    <span className="text-lg">🏢</span>
+    <span className="text-xs">{t.about}</span>
+    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+  </a>
+</li>
 
-                  <span className="text-xs">{t.about}</span>
-                  {/* Underline Animation */}
 
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-              </li>
+{isMenuOpen && (
+  <div className="md:hidden bg-white shadow-md transition-all duration-300 py-4">
+    <ul className="flex flex-col items-center space-y-4">
+
+      <li>
+        <Link
+          href={isHomePage ? "#" : "/"}
+          onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
+          className="text-lg text-gray-500 transition-all duration-300 hover:text-blue-600"
+        >
+          🏠 {t.home}
+        </Link>
+      </li>
+
+      {/* About Link */}
+      <li>
+        <a
+          onClick={(e) => {
+            e.preventDefault();
+            const el = document.getElementById("about");
+            if (el) {
+              const header = document.getElementById("header");
+              const headerHeight = header ? header.offsetHeight : 0;
+              const y = el.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+              window.scrollTo({ top: y, behavior: "smooth" });
+            }
+            setIsMenuOpen(false); // Close menu
+          }}
+          className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
+        >
+          🏢 {t.about}
+        </a>
+      </li>
+    </ul>
+  </div>
+)}
+
+
+
+
+              {/* {pathname !== "/" && (
+                <li className="relative group">
+                  <button
+                    onClick={() => (window.location.href = "/")}
+                    className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
+                  >
+                    <span className="text-lg">
+                      {pathname === "/ProjectCards" ? "🚪" : "🏠"}
+                    </span>
+                    <span className="text-xs">{pathname === "/ProjectCards" ? t.home : t.home}</span>
+
+                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                  </button>
+                </li>
+              )} */}
 
               <li className="relative group">
                 <a
@@ -178,7 +279,7 @@ const Header = () => {
         <div className="md:hidden bg-white shadow-md transition-all duration-300 py-4">
           <ul className="flex flex-col items-center space-y-4">
 
-            {/* <li>
+            <li>
               <Link
                 href={isHomePage ? "#" : "/"}
                 onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
@@ -186,7 +287,7 @@ const Header = () => {
               >
                 🏠 {t.home}
               </Link>
-            </li> */}
+            </li>
 
            
 
@@ -206,7 +307,7 @@ const Header = () => {
 
             {isHomePage && (
               <>
-              <li>
+              {/* <li>
                 <a
                   onClick={(e) => {
                     e.preventDefault();
@@ -220,24 +321,33 @@ const Header = () => {
                 >
                   🏠 {t.home}
                 </a>
-              </li>
+              </li> */}
 
 
-                <li>
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById("about")?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                      setIsMenuOpen(false);
-                    }}
-                    className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
-                  >
-                    🏢 {t.about}
-                  </a>
-                </li>
+<li>
+  <a 
+    onClick={(e) => {
+      e.preventDefault();
+      const el = document.getElementById("about");
+      if (el) {
+        const header = document.getElementById("header");
+        const headerHeight = header ? header.offsetHeight : 0;
+        const y = el.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+        window.scrollTo({ top: y, behavior: "smooth" });
+      } else {
+        localStorage.setItem("scrollToProjectCards", "true");
+        window.location.href = "/";
+      }
+
+      setIsMenuOpen(false);
+    }}
+    className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
+  >
+    🏢 {t.about}
+  </a>
+</li>
+
 
                 <li>
                   <a

@@ -100,7 +100,6 @@ const translations = {
     divisionInfoText1InfoList3: "Risk management: Effective evaluation and control of credit risk for loans and credit card operations are critical.",
     divisionInfoText1InfoList4: "Customer service: Building a high-quality customer support structure is essential.",
 
-
     divisionInfoText2Header: "Corporate & Investment Banking (CIB):",
     divisionInfoText2Intro: "This Division provides Investment banking, Capital markets, Trading, and Securities services to Corporations, Investors, and Government agencies.",
     divisionInfoText2Info: "This has generated approximately $48.8 billion in revenue for 2023, contributing about 31% of the total.",
@@ -109,7 +108,6 @@ const translations = {
     divisionInfoText2InfoList2: "Global network: Presence in international markets and understanding of local regulations are crucial.",
     divisionInfoText2InfoList3: "Technology infrastructure: Fast and secure trading platforms and data analysis capabilities are needed.",
     divisionInfoText2InfoList4: "Risk management: Ongoing monitoring and control of market, credit, and operational risks are essential.",
-
 
     divisionInfoText3Header: "Commercial Banking (CB):",
     divisionInfoText3Intro: "This Division serves Midsized businesses, Municipalities, and Real Estate Investors by offering Lending, Financial management, and Investment Banking services.",
@@ -120,7 +118,6 @@ const translations = {
     divisionInfoText3InfoList3: "Risk assessment capabilities: Skills to accurately assess a company’s creditworthiness and project feasibility are vital.",
     divisionInfoText3InfoList4: "Regulatory compliance: Strict adherence to regulations and compliance in commercial banking is mandatory.",
 
-
     divisionInfoText4Header: "Asset & Wealth Management (AWM):",
     divisionInfoText4Intro: "This Division offers Asset management, Private banking, and Retirement Planning services to individual and Institutional Investors.",
     divisionInfoText4Info: "This segment generated approximately $19.8 billion in revenue for 2023, accounting for about 13% of the total.",
@@ -130,13 +127,63 @@ const translations = {
     divisionInfoText4InfoList3: "Reliable platform: A robust system is needed to ensure secure asset management and transactions.",
     divisionInfoText4InfoList4: "Regulatory compliance: Strict observance of investment advisory laws and regulations is essential.",
 
-
-
-
     InspireWalletPartnerBanks: "Inspire Wallet Partner Banks",
     OpeningaPhilippineBankAccountfornonresidents: "Opening a Philippine Bank Account for non-residents",
     BuyingRealEstatewithUSDT: "Buying Real Estate with USDT",
-    MicroInvestments: "Micro Investments"
+    MicroInvestments: "Micro Investments",
+    ContactUs:"Contact Us:",
+    website:"Website:",
+    TelephoneNo:"Telephone No:",
+    Email:"Email:",
+
+    EmailUs:"Email Us",
+    Placeholderone:"Your Name",
+    Placeholdertwo:"Your Email",
+    Placeholderthree:"Your Message",
+
+
+    FinancialForm:"Financial Form",
+    LastName:"Last Name",
+    FirstName:"Firs Name",
+    MiddleName:"Middle Name",
+    BirthDate:"Birth Date",
+    Gender:" Gender",
+    CivilStatus:"Civil Status",
+    Address:"Address",
+    PersonalMobileNumber:"Personal Mobile Number",
+    LandlineNumber:"Landline Number",
+    EmailAddress:" Email Address",
+    Citizenship:"Citizenship",
+    PassportNumber:"Passport Number",
+    SourceofFund:"Source of Fund",
+    GrossMonthlyIncome:"Gross Monthly Income",
+    UploadPassport:"Upload Passport",
+    UploadGovernmentID:"Upload Government ID",
+    Submit:"Submit",
+
+    SelectGender:"Select Gender",
+    Male:"Male",
+    Female:"Female",
+    Others:"Others",
+    SelectCivilStatus:"Select Civil Status",
+    Single:"Single",
+    Married:"Married",
+    Divorced:"Divored",
+    Widowed:"Widowed",
+
+   
+      PurposeOfVisit: "Purpose Of Visit",
+      StayInAddress: "Stay In Address",
+      CashOnHand: "Cash On Hand",
+      GrossMonthlyIncome: "Gross Monthly Income",
+      ArrivalDateTime: "ArrivalDateTime",
+      DepartureDateTime: "Departure Date Time",
+      StayInDurationDays: "Stay in Duration (Days)",
+      AirlineType: "Airline Type",
+      TravelProtectionForm:"Travel Protection Form"
+
+  
+
 
   },
   ja: {
@@ -270,7 +317,74 @@ const translations = {
     InspireWalletPartnerBanks: "Inspireウォレット提携銀行",
     OpeningaPhilippineBankAccountfornonresidents: "非居住者向けフィリピン銀行口座の開設",
     BuyingRealEstatewithUSDT: "USDTで不動産を購入",
-    MicroInvestments: "マイクロ投資"
+    MicroInvestments: "マイクロ投資",
+   
+      ContactUs: "お問い合わせ:",
+      website: "ウェブサイト:",
+      TelephoneNo: "電話番号:",
+      Email: "メール:",
+
+
+       EmailUs: "メールを送る",
+    
+        Placeholderone: "お名前",
+        Placeholdertwo: "メールアドレス",
+        Placeholderthree: "メッセージ内容",
+       
+          SendEmail: "メール送信",
+
+          FinancialForm: "財務申告書",
+          LastName: "姓",
+          FirstName: "名",
+          MiddleName: "ミドルネーム",
+          BirthDate: "生年月日",
+          Gender: "性別",
+          CivilStatus: "婚姻状況",
+          Address: "住所",
+          PersonalMobileNumber: "携帯電話番号",
+          LandlineNumber: "固定電話番号",
+          EmailAddress: "メールアドレス",
+          Citizenship: "国籍",
+          PassportNumber: "パスポート番号",
+          SourceofFund: "資金源",
+          GrossMonthlyIncome: "月収（総額）",
+          UploadPassport: "パスポートをアップロード",
+          UploadGovernmentID: "政府発行のIDをアップロード",
+          Submit: "送信",
+
+          SelectGender: "性別を選択",
+          Male: "男性",
+          Female: "女性",
+          Others: "その他",
+          SelectCivilStatus: "婚姻状況を選択",
+          Single: "未婚",
+          Married: "既婚",
+          Divorced: "離婚",
+          Widowed: "死別",
+
+         
+            PurposeOfVisit: "訪問の目的",
+            StayInAddress: "滞在先住所",
+            CashOnHand: "手持ち現金",
+            GrossMonthlyIncome: "月収（総額）",
+            ArrivalDateTime: "到着日時",
+            DepartureDateTime: "出発日時",
+            StayInDurationDays: "滞在期間（日数）",
+          
+              AirlineType: "航空会社の種類",
+              
+                TravelProtectionForm: "旅行保険申請書"
+          
+          
+
+        
+    
+      
+  
+    
+ 
+  
+
   },
   ko: {
     title: "비즈니스 서비스",
@@ -400,7 +514,67 @@ const translations = {
     InspireWalletPartnerBanks: "Inspire 월렛 제휴 은행",
     OpeningaPhilippineBankAccountfornonresidents: "비거주자를 위한 필리핀 은행 계좌 개설",
     BuyingRealEstatewithUSDT: "USDT로 부동산 구매",
-    MicroInvestment: "마이크로 투자"
+    MicroInvestments: "마이크로 투자",
+   
+      ContactUs: "문의하기:",
+      website: "웹사이트:",
+      TelephoneNo: "전화번호:",
+      Email: "이메일:",
+
+   
+        EmailUs: "이메일 보내기",
+        Placeholderone: "이름",
+        Placeholdertwo: "이메일",
+        Placeholderthree: "메시지",
+       SendEmail: "이메일 보내기",
+
+       FinancialForm: "재무 양식",
+       LastName: "성",
+       FirstName: "이름",
+       MiddleName: "미들네임",
+       BirthDate: "생년월일",
+       Gender: "성별",
+       CivilStatus: "혼인 여부",
+       Address: "주소",
+       PersonalMobileNumber: "휴대폰 번호",
+       LandlineNumber: "집 전화번호",
+       EmailAddress: "이메일 주소",
+       Citizenship: "시민권",
+       PassportNumber: "여권 번호",
+       SourceofFund: "자금 출처",
+       GrossMonthlyIncome: "월 총소득",
+       UploadPassport: "여권 업로드",
+       UploadGovernmentID: "정부 발급 신분증 업로드",
+       Submit: "제출",
+  
+     
+        SelectGender: "성별 선택",
+        Male: "남성",
+        Female: "여성",
+        Others: "기타",
+        SelectCivilStatus: "혼인 여부 선택",
+        Single: "미혼",
+        Married: "기혼",
+        Divorced: "이혼",
+        Widowed: "사별",
+
+          PurposeOfVisit: "방문 목적",
+          StayInAddress: "체류 주소",
+          CashOnHand: "소지 현금",
+          GrossMonthlyIncome: "월 총소득",
+          ArrivalDateTime: "도착 날짜/시간",
+          DepartureDateTime: "출발 날짜/시간",
+          StayInDurationDays: "체류 기간 (일)",
+          
+            AirlineType: "항공사 종류",
+             TravelProtectionForm: "여행 보호 신청서"
+       
+        
+         
+
+    
+ 
+  
   },
 
 
@@ -534,7 +708,52 @@ const translations = {
     InspireWalletPartnerBanks: "Inspire钱包合作银行",
     OpeningaPhilippineBankAccountfornonresidents: "非居民菲律宾银行账户开户",
     BuyingRealEstatewithUSDT: "使用USDT购买房地产",
-    MicroInvestments: "微型投资"
+    MicroInvestments: "微型投资",
+    ContactUs: "联系我们:",
+    website: "网站:",
+    TelephoneNo: "电话号码:",
+    Email: "电子邮件:",
+
+      EmailUs: "给我们发邮件",
+      Placeholderone: "您的姓名",
+      Placeholdertwo: "您的电子邮件",
+      Placeholderthree: "您的留言",
+    
+        SendEmail: "发送邮件",
+   
+    FinancialForm: "财务表格",
+    LastName: "姓",
+    FirstName: "名",
+    MiddleName: "中间名",
+    BirthDate: "出生日期",
+    Gender: "性别",
+    CivilStatus: "婚姻状况",
+    Address: "地址",
+    PersonalMobileNumber: "个人手机号码",
+    LandlineNumber: "座机号码",
+    EmailAddress: "电子邮箱",
+    Citizenship: "国籍",
+    PassportNumber: "护照号码",
+    SourceofFund: "资金来源",
+    GrossMonthlyIncome: "每月总收入",
+    UploadPassport: "上传护照",
+    UploadGovernmentID: "上传政府身份证",
+    Submit: "提交",
+
+   
+      PurposeOfVisit: "访问目的",
+      StayInAddress: "居住地址",
+      CashOnHand: "随身现金",
+      GrossMonthlyIncome: "每月总收入",
+      ArrivalDateTime: "抵达日期/时间",
+      DepartureDateTime: "离开日期/时间",
+      StayInDurationDays: "停留时间（天）",
+      AirlineType: "航空公司类型",
+      TravelProtectionForm: "旅行保障表格"
+    
+    
+ 
+  
   }
 };
 

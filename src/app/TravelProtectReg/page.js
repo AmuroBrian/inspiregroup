@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { db, storage } from "../../../script/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useTranslation } from "@/TranslationContext";
 
 const TravelProtectionForm = () => {
   const [formData, setFormData] = useState({});
@@ -12,6 +14,7 @@ const TravelProtectionForm = () => {
   const [submissionId, setSubmissionId] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false); // Loading state
+  const { t } = useTranslation(); // Use translation context
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -70,10 +73,10 @@ const TravelProtectionForm = () => {
   return (
     <div className="max-w-4xl mx-auto p-8">
       <div className="w-full h-[80px]"></div>
-      <h2 className="text-xl font-bold mb-4 w-full text-center">Travel Protection Form</h2>
+      <h2 className="text-xl font-bold mb-4 w-full text-center">{t.TravelProtectionForm}</h2>
       <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
         {/* Input Fields */}
-        {["Last Name", "First Name", "Middle Name", "Birthdate", "Gender", "Civil Status", "Address", "Personal Mobile Number", "Landline Number", "Email Address", "Citizenship", "Passport Number", "Purpose of Visit", "Stay In Address", "Cash On Hand", "Gross Monthly Income", "Arrival Date / Time", "Departure Date / Time", "Stay In Duration (Days)", "Airline Type"].map((field, index) => (
+        {[ t.LastName, t.FirstName, t.MiddleName, t.BirthDate, t.Gender, t.CivilStatus, t.Address , t.PersonalMobileNumber, t.LandlineNumber, t.EmailAddress, t.Citizenship, t.PassportNumber, t.PurposeOfVisit, t.StayInAddress, t.CashOnHand, t.GrossMonthlyIncome, t.ArrivalDateTime, t. DepartureDateTime, t.StayInDurationDays, t.AirlineType].map((field, index) => (
           <div key={index} className="col-span-1">
             <label className="block font-semibold">{field}</label>
             {field === "Birthdate" ? (
@@ -95,13 +98,13 @@ const TravelProtectionForm = () => {
 
         {/* Upload Passport */}
         <div className="col-span-1">
-          <label className="block font-semibold">Upload Passport</label>
+          <label className="block font-semibold">{t.UploadPassport}</label>
           <input type="file" accept="image/*" className="w-full p-2 border rounded bg-white" onChange={(e) => handleFileChange(e, "passport")} required />
         </div>
 
         {/* Upload Government ID */}
         <div className="col-span-1">
-          <label className="block font-semibold">Upload Government ID</label>
+          <label className="block font-semibold">{t.UploadGovernmentID}</label>
           <input type="file" accept="image/*" className="w-full p-2 border rounded bg-white" onChange={(e) => handleFileChange(e, "govId")} required />
         </div>
 

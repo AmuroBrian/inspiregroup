@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Globe, Phone, Mail, Facebook, Instagram, Music } from "lucide-react";
 import emailjs from "@emailjs/browser";
+import { useTranslation } from "@/TranslationContext";
 
 const EmailSection = () => {
   const [name, setName] = useState("");
@@ -10,6 +11,7 @@ const EmailSection = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
+  const { t } = useTranslation(); // Use translation context
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,7 +49,7 @@ const EmailSection = () => {
       {/* Contact Form */}
       <div className="max-w-lg w-full p-6 bg-transparent backdrop-blur-md rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-black text-center mb-5">
-          Email Us
+        {t.EmailUs}
         </h2>
 
         {success !== null && (
@@ -65,7 +67,7 @@ const EmailSection = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            placeholder="Your Name"
+            placeholder={t.Placeholderone}
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full p-3 border rounded-lg bg-white dark:text-black focus:ring focus:ring-blue-300"
@@ -73,7 +75,7 @@ const EmailSection = () => {
           />
           <input
             type="email"
-            placeholder="Your Email"
+            placeholder={t.Placeholdertwo}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 border rounded-lg bg-white dark:text-black focus:ring focus:ring-blue-300"
@@ -81,7 +83,7 @@ const EmailSection = () => {
           />
           <textarea
             rows="5"
-            placeholder="Your Message"
+            placeholder={t.Placeholderthree}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             className="w-full p-3 border rounded-lg bg-white dark:text-black focus:ring focus:ring-blue-300"
@@ -92,18 +94,18 @@ const EmailSection = () => {
             className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
             disabled={loading}
           >
-            {loading ? "Sending..." : "Send Email"}
+            {loading ? "Sending..." : t.SendEmail }
           </button>
         </form>
       </div>
 
       {/* Contact Us Section */}
       <div className="w-full lg:w-[350px] p-4 bg-gray-700 text-white rounded-lg shadow-lg mt-5 lg:mt-0 lg:ml-10">
-        <h2 className="text-2xl font-semibold mb-2 text-center">Contact Us</h2>
+        <h2 className="text-2xl font-semibold mb-2 text-center">{t.ContactUs}</h2>
         <div className="space-y-2">
           <h2 className="text-lg font-medium flex items-center">
             <Globe className="mr-2 text-blue-300" />
-            Website:{" "}
+           {t.website}{" "}
             <a
               href="https://inspirenextglobal.com"
               className="text-blue-300 hover:underline"
@@ -113,7 +115,7 @@ const EmailSection = () => {
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Globe className="mr-2 text-blue-300" />
-            Website:{" "}
+            {t.website}{" "}
             <a
               href="https://inspireholding.ph"
               className="text-blue-300 hover:underline"
@@ -123,11 +125,11 @@ const EmailSection = () => {
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Phone className="mr-5 text-blue-300" />
-            Telephone No: 02-8538-5054 / 02-7750605 / +639946529009
+            {t.ContactUs} 02-8538-5054 / 02-7750605 / +639946529009
           </h2>
           <h2 className="text-lg font-medium flex items-center">
             <Mail className="mr-2 text-blue-300" />
-            Email:{" "}
+            {t.Email}{" "}
             <a
               href="mailto:info@inspirenextglobal.com"
               className="text-blue-300 hover:underline"
