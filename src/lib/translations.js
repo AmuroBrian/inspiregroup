@@ -1,6 +1,6 @@
 const translations = {
   en: {
-    title: "Business Services",
+    title: "Financial & Travel Solutions",
     inspireWallet: "Inspire Wallet",
     inspireDesc: "Using just your smartphone, handle all your financial needs with ease.",
     financialProducts: "Inspire Financial Products",
