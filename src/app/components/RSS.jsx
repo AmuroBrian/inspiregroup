@@ -2,58 +2,86 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "@/TranslationContext";
+import { FiChevronLeft, FiChevronRight, FiExternalLink } from "react-icons/fi";
 
-export default function Page() {
+export default function NewsFeed() {
   const [feedItems, setFeedItems] = useState([]);
   const [currentStartIndex, setCurrentStartIndex] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(1024); // Default width for SSR-safe rendering
-  const { translateDynamicText } = useTranslation(); // Use translation function
+  const [windowWidth, setWindowWidth] = useState(1024);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { translateDynamicText } = useTranslation();
+
+  // Determine number of visible items based on screen size
+  const getVisibleCount = () => {
+    if (windowWidth < 640) return 1;
+    if (windowWidth < 1024) return 2;
+    return 3;
+  };
 
   useEffect(() => {
-    // Fetch feed data
     const fetchFeed = async () => {
-      const res = await fetch(
-        "https://data.gmanetwork.com/gno/rss/scitech/technology/feed.xml"
-      );
-      const xml = await res.text();
-      const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(xml, "application/xml");
-      const items = Array.from(xmlDoc.getElementsByTagName("item")).map(
-        (item) => {
-          const description =
-            item.getElementsByTagName("description")[0]?.textContent || "";
-          const imgMatch = description.match(/<img[^>]+src="([^"]+)"/);
-          const imageUrl = imgMatch ? imgMatch[1] : "";
-
-          return {
-            title: item.getElementsByTagName("title")[0]?.textContent,
-            description: description
-              .replace(/<br\/>/g, "")
-              .replace(/<img[^>]+>/, "")
-              .trim(),
-            link: item.getElementsByTagName("link")[0]?.textContent,
-            image: imageUrl,
-          };
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const res = await fetch(
+          "https://data.gmanetwork.com/gno/rss/scitech/technology/feed.xml"
+        );
+        if (!res.ok) throw new Error("Failed to fetch feed");
+        
+        const xml = await res.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xml, "application/xml");
+        
+        // Parse error handling
+        if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+          throw new Error("Error parsing XML feed");
         }
-      );
 
-      // Translate titles and descriptions
-      const translatedItems = await Promise.all(
-        items.map(async (item) => ({
-          ...item,
-          title: await translateDynamicText(item.title),
-          description: await translateDynamicText(item.description),
-        }))
-      );
+        const items = Array.from(xmlDoc.getElementsByTagName("item")).map(
+          (item) => {
+            const description =
+              item.getElementsByTagName("description")[0]?.textContent || "";
+            const imgMatch = description.match(/<img[^>]+src="([^"]+)"/);
+            const imageUrl = imgMatch ? imgMatch[1] : "";
+            const pubDate = item.getElementsByTagName("pubDate")[0]?.textContent;
 
-      setFeedItems(translatedItems);
+            return {
+              title: item.getElementsByTagName("title")[0]?.textContent,
+              description: description
+                .replace(/<[^>]+>/g, " ") // Remove all HTML tags
+                .replace(/\s+/g, " ") // Collapse multiple spaces
+                .trim(),
+              link: item.getElementsByTagName("link")[0]?.textContent,
+              image: imageUrl,
+              date: pubDate ? new Date(pubDate).toLocaleDateString() : "",
+            };
+          }
+        );
+
+        // Translate items
+        const translatedItems = await Promise.all(
+          items.map(async (item) => ({
+            ...item,
+            title: await translateDynamicText(item.title),
+            description: await translateDynamicText(item.description),
+          }))
+        );
+
+        setFeedItems(translatedItems);
+      } catch (err) {
+        console.error("Error fetching feed:", err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchFeed();
   }, [translateDynamicText]);
 
   useEffect(() => {
-    // Function to update window width
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -64,75 +92,148 @@ export default function Page() {
   }, []);
 
   const nextPage = () => {
-    setCurrentStartIndex((prevIndex) =>
-      prevIndex + 1 >= feedItems.length ? 0 : prevIndex + 1
-    );
+    setCurrentStartIndex((prevIndex) => {
+      const nextIndex = prevIndex + getVisibleCount();
+      return nextIndex >= feedItems.length ? 0 : nextIndex;
+    });
   };
 
   const prevPage = () => {
-    setCurrentStartIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : feedItems.length - 1
-    );
+    setCurrentStartIndex((prevIndex) => {
+      const prevIndexNew = prevIndex - getVisibleCount();
+      return prevIndexNew < 0 ? feedItems.length - getVisibleCount() : prevIndexNew;
+    });
   };
 
   const visibleItems = feedItems.slice(
     currentStartIndex,
-    currentStartIndex + (windowWidth < 768 ? 1 : 3)
+    currentStartIndex + getVisibleCount()
   );
 
-  return (
-    <div className="relative w-full h-[40%] bg-white text-black p-6 flex flex-col items-center">
-      <button
-        onClick={prevPage}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent text-black-500 p-2 rounded z-10 border-2 border-gray-500 hover:bg-gray-200 transition-all"
-      >
-        &lt;
-      </button>
-
-      <div className="w-[95%] h-full top-0 left-0 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
-        {visibleItems.map((item, index) => (
-          <div
-            key={index}
-            className="p-4 border rounded shadow bg-white flex flex-col relative"
-          >
-            {item.image && (
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-48 object-cover mb-2"
-              />
-            )}
-            <h2 className="text-lg font-bold text-black mb-2 text-center">
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-black text-justify"
-              >
-                {item.title}
-              </a>
-            </h2>
-            <p className="text-sm text-black mb-2 text-justify flex-grow">
-              {item.description}
-            </p>
-            <a
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 font-bold relative"
-            >
-              Read more
-            </a>
-          </div>
-        ))}
+  // Simple skeleton loader using Tailwind
+  const renderSkeletons = () => {
+    return Array(getVisibleCount()).fill(0).map((_, index) => (
+      <div key={index} className="p-4 border rounded-lg shadow-sm bg-white flex flex-col h-full animate-pulse">
+        <div className="w-full h-48 bg-gray-200 rounded-md mb-4"></div>
+        <div className="w-3/4 h-6 bg-gray-200 mb-3"></div>
+        <div className="w-full h-4 bg-gray-200 mb-2"></div>
+        <div className="w-full h-4 bg-gray-200 mb-2"></div>
+        <div className="w-full h-4 bg-gray-200 mb-2"></div>
+        <div className="w-24 h-4 bg-gray-200 mt-auto"></div>
       </div>
+    ));
+  };
 
-      <button
-        onClick={nextPage}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent text-black-500 p-2 rounded z-10 border-2 border-gray-500 hover:bg-gray-200 transition-all"
-      >
-        &gt;
-      </button>
-    </div>
+  return (
+    <section className="relative w-full bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          Latest Tech News
+        </h2>
+        
+        {error ? (
+          <div className="text-center py-10">
+            <p className="text-red-500 mb-4">Error loading news feed: {error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            >
+              Retry
+            </button>
+          </div>
+        ) : (
+          <div className="relative">
+            <button
+              onClick={prevPage}
+              aria-label="Previous articles"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-8 bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 transition-all z-10 border border-gray-200 hover:border-gray-300"
+            >
+              <FiChevronLeft className="w-5 h-5" />
+            </button>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {isLoading ? (
+                renderSkeletons()
+              ) : (
+                visibleItems.map((item, index) => (
+                  <article
+                    key={`${index}-${item.link}`}
+                    className="group p-4 border rounded-lg shadow-sm bg-white flex flex-col h-full hover:shadow-md transition-shadow duration-300"
+                  >
+                    {item.image && (
+                      <div className="relative overflow-hidden rounded-md mb-4 aspect-video">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-grow">
+                      {item.date && (
+                        <span className="text-xs text-gray-500 mb-2 block">
+                          {item.date}
+                        </span>
+                      )}
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-blue-600 transition-colors"
+                        >
+                          {item.title}
+                        </a>
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                        {item.description}
+                      </p>
+                    </div>
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+                    >
+                      Read more <FiExternalLink className="ml-1 w-4 h-4" />
+                    </a>
+                  </article>
+                ))
+              )}
+            </div>
+
+            <button
+              onClick={nextPage}
+              aria-label="Next articles"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 transition-all z-10 border border-gray-200 hover:border-gray-300"
+            >
+              <FiChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        )}
+
+        {/* Pagination indicators */}
+        {!isLoading && !error && feedItems.length > 0 && (
+          <div className="flex justify-center mt-8 space-x-2">
+            {Array(Math.ceil(feedItems.length / getVisibleCount()))
+              .fill(0)
+              .map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentStartIndex(index * getVisibleCount())}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    currentStartIndex >= index * getVisibleCount() &&
+                    currentStartIndex < (index + 1) * getVisibleCount()
+                      ? "bg-blue-600"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
+                  aria-label={`Go to page ${index + 1}`}
+                />
+              ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
