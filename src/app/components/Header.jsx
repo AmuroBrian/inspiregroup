@@ -5,262 +5,200 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AgentCodeEntry } from "./AgentHubCode/AgentCodeEntry";
 import { useTranslation } from "@/TranslationContext";
-
-
+import { Home, Info, Mail, UserPlus, Key } from "lucide-react";
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isHomePage, setIsHomePage] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false); // Ensure hydration
-  const { t } = useTranslation(); // Use translation context
-
-
   const pathname = usePathname();
-  
-  useEffect(() => {
-    setIsHomePage(pathname === "/");
+  const isHomePage = pathname === "/";
+  const { t } = useTranslation();
 
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
-
-  const scrollToHero = (e) => {
+  const scrollToSection = (e, id) => {
     e.preventDefault();
-    document.getElementById("hero-section")?.scrollIntoView({
+    document.getElementById(id)?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
+    setIsMenuOpen(false);
   };
-  
+
+  const commonLinkClasses = "relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group";
+  const mobileNavLinkClasses = "text-lg cursor-pointer transition-colors duration-300 flex items-center space-x-2";
+  const underlineAnimation = "absolute bottom-0 left-1/2 w-0 h-[3px] bg-blue-500 rounded-full transition-all duration-300 transform -translate-x-1/2 group-hover:w-[calc(100%-1rem)] group-focus:w-[calc(100%-1rem)]";
+
+  const buttonBaseClasses = "inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md";
+  const registerButtonClasses = `${buttonBaseClasses} bg-blue-500 text-white hover:bg-blue-600 hover:shadow-lg`;
+  const loginButtonClasses = `${buttonBaseClasses} bg-gray-200 text-gray-800 hover:bg-gray-300 hover:shadow-lg`;
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isHomePage && !isScrolled ? "bg-transparent" : "bg-white shadow-md"
-      }`}
+      className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg"
+      aria-label="Main Navigation"
     >
-      <div className="container mx-auto flex justify-between items-center py-3 px-6">
+      <div className="container mx-auto flex justify-between items-center py-4 px-6 md:px-8">
         {/* Logo */}
         <div className="flex items-center">
-          <img
-            src="/images/inspirelogo.png"
-            alt="Inspire Connect"
-            className="h-10 mr-2"
-          />
-          <span
-            className={`text-xl font-bold transition-all duration-300 ${
-              isHomePage && !isScrolled ? "text-white" : "text-blue-600"
-            }`}
-          >
-            INSPIRE GROUP
-          </span>
+          <Link href="/" className="flex items-center space-x-2">
+            <img
+              src="/images/inspirelogo.png"
+              alt="Inspire Connect Logo"
+              className="h-10 md:h-12 object-contain"
+            />
+            <span className="text-2xl md:text-3xl font-extrabold whitespace-nowrap text-gray-800">
+              INSPIRE GROUP
+            </span>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex space-x-8">
-
-          <li className="relative group">
+        <ul className="hidden md:flex items-center space-x-6 lg:space-x-8">
+          <li className="group">
             <Link
-              href={isHomePage ? "#" : "/"}
-              onClick={isHomePage ? scrollToHero : null}
-              className={`flex flex-col items-center transition-all duration-300 ${
-                isHydrated &&
-                (isHomePage && !isScrolled ? "text-white" : "text-gray-700")
-              } hover:text-blue-600`}
+              href={isHomePage ? "#hero-section" : "/"}
+              onClick={isHomePage ? (e) => scrollToSection(e, "hero-section") : null}
+              className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
+              aria-label={t.home}
             >
-              {/* <span className="text-lg">🏠</span> */}
-              {/* <span className="text-xs">{t.home}</span> */}
-              {/* Underline Animation */}
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+              <Home size={18} />
+              <span>{t.home}</span>
+              <span className={underlineAnimation}></span>
             </Link>
           </li>
 
-          {pathname !== "/" ? (
-            <li className="relative group">
-              <button
-                onClick={() => (window.location.href = pathname === "/agent-home" ? "/" : "/")}
-                className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
-              >
-                <span className="text-lg">{pathname === "/agent-home" ? "🚪" : "🏠"}</span>
-                <span className="text-xs">{pathname === "/agent-home" ? t.home : t.home}</span>
-
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-              </button>
-            </li>
-          ) : null}
-
-
           {isHomePage && (
             <>
-              <li className="relative group">
-                <Link
-                  href="#"
-                  onClick={scrollToHero}
-                  className={`flex flex-col items-center transition-all duration-300 ${
-                    isHomePage && !isScrolled ? "text-white" : "text-gray-700"
-                  } hover:text-blue-600`}
-                >
-                  <span className="text-lg">🏠</span>
-                  <span className="text-xs">{t.home}</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-                </Link>
-              </li>
-
-              <li className="relative group">
+              <li className="group">
                 <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById("about")?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                    setIsMenuOpen(false);
-                  }}
-                  className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
-                    isHomePage && !isScrolled ? "text-white" : "text-gray-700"
-                  } hover:text-blue-600`}
+                  onClick={(e) => scrollToSection(e, "about")}
+                  className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
+                  aria-label={t.about}
                 >
-                  <span className="text-lg">🏢</span>
-
-                  <span className="text-xs">{t.about}</span>
-                  {/* Underline Animation */}
-
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                  <Info size={18} />
+                  <span>{t.about}</span>
+                  <span className={underlineAnimation}></span>
                 </a>
               </li>
 
-              <li className="relative group">
+              <li className="group">
                 <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById("contacts")?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                    setIsMenuOpen(false);
-                  }}
-                  className={`cursor-pointer flex flex-col items-center transition-all duration-300 ${
-                    isHomePage && !isScrolled ? "text-white" : "text-gray-700"
-                  } hover:text-blue-600`}
+                  onClick={(e) => scrollToSection(e, "contacts")}
+                  className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
+                  aria-label={t.contact}
                 >
-                  <span className="text-lg">✉️</span>
-
-                  <span className="text-xs">{t.contact}</span>
-                  {/* Underline Animation */}
-
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                  <Mail size={18} />
+                  <span>{t.contact}</span>
+                  <span className={underlineAnimation}></span>
                 </a>
               </li>
-
-              <AgentCodeEntry />
             </>
           )}
+          <li className="flex items-center space-x-2">
+            <Link href="/register" className={registerButtonClasses}>
+              <UserPlus size={18} />
+              <span>{t.register || "Register"}</span>
+            </Link>
+            <Link href="/login" className={loginButtonClasses}>
+              <Key size={18} />
+              <span>{t.login || "Login"}</span>
+            </Link>
+          </li>
         </ul>
 
         {/* Mobile Menu Toggle */}
         <button
-          className={`md:hidden p-2 rounded-md transition-all duration-300 ${
-            isHomePage && !isScrolled ? "bg-transparent text-white" : "text-gray-700"
-          }`}
+          className="md:hidden p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-gray-700"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
-          {isMenuOpen ? "✖" : "☰"}
+          <svg
+            className="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {isMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            )}
+          </svg>
         </button>
       </div>
 
       {/* Mobile Navigation Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white shadow-md transition-all duration-300 py-4">
-          <ul className="flex flex-col items-center space-y-4">
+      <div
+        className={`md:hidden bg-white shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? "max-h-screen py-4" : "max-h-0 py-0"
+        }`}
+      >
+        <ul className="flex flex-col items-center space-y-4">
+          <li>
+            <Link
+              href={isHomePage ? "#hero-section" : "/"}
+              onClick={isHomePage ? (e) => scrollToSection(e, "hero-section") : () => setIsMenuOpen(false)}
+              className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
+            >
+              <Home size={20} />
+              <span>{t.home}</span>
+            </Link>
+          </li>
 
-            {/* <li>
-              <Link
-                href={isHomePage ? "#" : "/"}
-                onClick={isHomePage ? scrollToHero : () => setIsMenuOpen(false)}
-                className="text-lg text-gray-500 transition-all duration-300 hover:text-blue-600"
-              >
-                🏠 {t.home}
-              </Link>
-            </li> */}
-
-           
-
-            {pathname !== "/" && (
-              <li className="relative group">
-                <button
-                  onClick={() => (window.location.href = "/")}
-                  className="flex flex-col items-center transition-all duration-300 text-gray-700 hover:text-blue-600"
-                >
-                  <span className="text-lg">🚪</span>
-                  <span className="text-xs">{t.home}</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-                </button>
-              </li>
-            )}
-
-
-            {isHomePage && (
-              <>
+          {isHomePage && (
+            <>
               <li>
                 <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById("hero")?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                    setIsMenuOpen(false);
-                  }}
-                  className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
+                  onClick={(e) => scrollToSection(e, "about")}
+                  className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
                 >
-                  🏠 {t.home}
+                  <Info size={20} />
+                  <span>{t.about}</span>
                 </a>
               </li>
 
-
-                <li>
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById("about")?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                      setIsMenuOpen(false);
-                    }}
-                    className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
-                  >
-                    🏢 {t.about}
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById("contacts")?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                      setIsMenuOpen(false);
-                    }}
-                    className="text-lg cursor-pointer text-gray-500 transition-all duration-300 hover:text-blue-600"
-                  >
-                    ✉️ {t.contact}
-                  </a>
-                </li>
-
-                <AgentCodeEntry />
-              </>
-            )}
-          </ul>
-        </div>
-      )}
+              <li>
+                <a
+                  onClick={(e) => scrollToSection(e, "contacts")}
+                  className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
+                >
+                  <Mail size={20} />
+                  <span>{t.contact}</span>
+                </a>
+              </li>
+            </>
+          )}
+          <li>
+            <Link
+              href="/register"
+              onClick={() => setIsMenuOpen(false)}
+              className={`${mobileNavLinkClasses} ${registerButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+            >
+              <UserPlus size={20} />
+              <span>{t.register || "Register"}</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/login"
+              onClick={() => setIsMenuOpen(false)}
+              className={`${mobileNavLinkClasses} ${loginButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+            >
+              <Key size={20} />
+              <span>{t.login || "Login"}</span>
+            </Link>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
 };
