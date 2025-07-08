@@ -277,27 +277,27 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   )}
                 </div>
 
-                <div>
+              <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">{t("last_name")}</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
                     className={`w-full p-4 border-2 ${formErrors.lastName ? 'border-red-300 focus:ring-red-100' : 'border-gray-200 focus:ring-green-100'} rounded-xl focus:ring-4 focus:border-green-500 transition-all duration-200 input-focus-effect`}
-                    placeholder={t("enter_last_name")}
-                    aria-invalid={formErrors.lastName}
-                    aria-describedby={formErrors.lastName ? "lastNameError" : undefined}
-                  />
-                  {formErrors.lastName && (
+                  placeholder={t("enter_last_name")}
+                  aria-invalid={formErrors.lastName}
+                  aria-describedby={formErrors.lastName ? "lastNameError" : undefined}
+                />
+                {formErrors.lastName && (
                     <p id="lastNameError" className="mt-2 text-sm text-red-600 flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
                       {t("field_required")}
                     </p>
-                  )}
-                </div>
+                )}
+              </div>
               </div>
 
               <div>

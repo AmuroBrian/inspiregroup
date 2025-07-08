@@ -2,12 +2,12 @@
 
 import React from "react";
 import { motion } from "framer-motion"; // Used for scroll-triggered animations
+import { useTranslation } from "@/TranslationContext";
 
 export default function InspireWalletIntro({ darkMode = false }) {
-  // Placeholder text for demonstration purposes.
-  // In a real application, you would integrate your translation context here.
-  const introWalletTitle = "Elevate Your Financial Journey";
-  const introWalletDesc = "Discover a seamless and secure way to manage your finances. Our intuitive platform empowers you with intelligent insights and robust tools, ensuring every transaction brings you closer to your goals. Experience the future of personal finance, designed for clarity and control.";
+  const { t } = useTranslation();
+  const introWalletTitle = t.introWalletTitle;
+  const introWalletDesc = t.introWalletDesc;
 
   return (
     <section

@@ -1,4 +1,4 @@
-const translations = {
+ const translations = {
   en: {
     title: "Financial & Travel Solutions",
     inspireWallet: "Inspire Wallet",
@@ -17,7 +17,7 @@ const translations = {
     welcometohol: "Welcome to Inspire Holdings Group",
     welcometohol_desc: "At Inspire Group, we are dedicated to providing innovative solutions that drive growth and success. Our team is committed to delivering excellence in every project, ensuring that our clients achieve their business goals with confidence. With a focus on integrity, innovation, and collaboration, we are shaping the future together.",
     welcometohol_subheading: "For Foreign Entrepreneurs and Investors – A World-Class Private Banking Expert",
-    welcometohol_body: "At Inspire Group, we provide an exclusive network of elite private banking experts who serve global entrepreneurs and investors. With strong connections to government agencies, major corporations, and key administrative bodies, we continue to grow as one of the most powerful corporate entities in the Philippines. Our strong reputation and proven track record allow us to achieve what others consider impossible. We offer unique business opportunities that go beyond conventional limits. At Inspire, we don’t just create the future—we turn your vision into lasting success.",
+    welcometohol_body: "At Inspire Group, we provide an exclusive network of elite private banking experts who serve global entrepreneurs and investors. With strong connections to government agencies, major corporations, and key administrative bodies, we continue to grow as one of the most powerful corporate entities in the Philippines. Our strong reputation and proven track record allow us to achieve what others consider impossible. We offer unique business opportunities that go beyond conventional limits. At Inspire, we don't just create the future—we turn your vision into lasting success.",
 
     introWalletTitle: "Introducing Inspire Wallet",
     introWalletDesc:
@@ -39,6 +39,9 @@ const translations = {
     about: "About",
 
     herosub: "Welcome to Inspire Holdings Group – A legacy of strong trust and proven excellence. This is where your future moves to the next level.",
+    heroDescription: "Empowering your financial journey with secure, smart, and seamless digital solutions.",
+    getStarted: "Learn More",
+    learnMore: "Get Started",
 
     register: "Register",
     login: "Login",
@@ -117,7 +120,7 @@ const translations = {
     divisionInfoText3InfoHeader: "Key Requirements:",
     divisionInfoText3InfoList1: "Local relationship building: Strong ties with local businesses and municipalities are key to success.",
     divisionInfoText3InfoList2: "Diverse financial products: A wide range of services such as loans, cash management, and commercial real estate finance is required.",
-    divisionInfoText3InfoList3: "Risk assessment capabilities: Skills to accurately assess a company’s creditworthiness and project feasibility are vital.",
+    divisionInfoText3InfoList3: "Risk assessment capabilities: Skills to accurately assess a company's creditworthiness and project feasibility are vital.",
     divisionInfoText3InfoList4: "Regulatory compliance: Strict adherence to regulations and compliance in commercial banking is mandatory.",
 
 
@@ -126,7 +129,7 @@ const translations = {
     divisionInfoText4Info: "This segment generated approximately $19.8 billion in revenue for 2023, accounting for about 13% of the total.",
     divisionInfoText4InfoHeader: "Key Requirements:",
     divisionInfoText4InfoList1: "Investment expertise: Deep understanding and hands-on experience across various asset classes are required.  ",
-    divisionInfoText4InfoList2: "Customized services: Ability to propose personalized asset management strategies based on each client’s needs.",
+    divisionInfoText4InfoList2: "Customized services: Ability to propose personalized asset management strategies based on each client's needs.",
     divisionInfoText4InfoList3: "Reliable platform: A robust system is needed to ensure secure asset management and transactions.",
     divisionInfoText4InfoList4: "Regulatory compliance: Strict observance of investment advisory laws and regulations is essential.",
 
@@ -180,6 +183,9 @@ const translations = {
     about: "概要",
 
     herosub: "Inspire Holdings Groupへようこそ – 強い信頼と確かな実績の伝統。ここからあなたの未来が次のレベルへと進みます。",
+    heroDescription: "安全でスマート、シームレスなデジタルソリューションで、あなたの金融の旅をサポートします。",
+    getStarted: "もっと詳しく",
+    learnMore: "始める",
 
     register: "登録",
     login: "ログイン",
@@ -310,6 +316,9 @@ const translations = {
 
 
     herosub: "Inspire Holdings Group에 오신 것을 환영합니다 – 강한 신뢰와 입증된 탁월함의 전통.여기서 당신의 미래가 다음 단계로 나아갑니다.",
+    heroDescription: "안전하고 스마트하며 원활한 디지털 솔루션으로 당신의 금융 여정을 지원합니다.",
+    getStarted: "더 자세히 알아보기",
+    learnMore: "시작하기",
 
     register: "등록",
     login: "로그인",
@@ -327,7 +336,7 @@ const translations = {
     compMthree: "2005년에 저는 작은 금융 회사를 설립했으며, 그 이후로 크게 성장해 왔습니다.2012년까지 우리는 금융 업계에 깊이 자리 잡고, 주요 기업들과 협력하게 되었습니다.존경하는 파트너들의 변함없는 지원 덕분에 2023년 상장을 향한 여정을 시작했고, 2024년 성공적으로 상장을 이루어냈습니다.",
     compMfour: "우리의 비전은 야심찹니다. 2027년까지 필리핀을 아시아에서 가장 중요한 경제 강국으로 자리매김하는 것입니다.인스파이어 홀딩스는 비즈니스 파트너들을 지원하고, 혁신을 주도하며, 함께 놀라운 성장을 이루기 위해 최선을 다하고 있습니다.여러분의 신뢰와 지속적인 지원에 진심으로 감사드립니다.",
     compMfift: "우리 총괄 부사장의 메시지",
-    compMsix: "“2012년, 인스파이어 홀딩스 주식회사는 유명 기업들 사이에서 눈에 띄는 성공을 거두었으며,마이크로파이낸스, 부동산 개발, 판매, 경영, 그리고 국가 인프라 프로젝트 등 다양한 분야에서 활발히 활동해 왔습니다.”",
+    compMsix: "「2012년, 인스파이어 홀딩스 주식회사는 유명 기업들 사이에서 눈에 띄는 성공을 거두었으며,마이크로파이낸스, 부동산 개발, 판매, 경영, 그리고 국가 인프라 프로젝트 등 다양한 분야에서 활발히 활동해 왔습니다.」",
     compMseven: "이 모든 것은 우리의 목표를 달성하기 위해 열심히 노력해 준 훌륭한 동료들 덕분입니다.이에 대해 우리는 깊이 감사하며, 모든 직원들에게 진심 어린 감사를 전합니다.",
     compMeight: "우리 회사는 모든 사람에게 행복을 선사하고, 보다 생산적인 삶에 기여하는 것을 목표로 하고 있습니다.우리는 매일이 웃음의 원천이 될 수 있도록 노력하며, 개인과 기업 발전을 위해 더 밝은 미래로 나아가고 있습니다.",
 
@@ -444,6 +453,9 @@ const translations = {
     about: "关于我们",
 
     herosub: "欢迎来到 Inspire Holdings Group – 坚实信任与卓越品质的传承。在这里，您的未来将迈向新的高度。",
+    heroDescription: "以安全、智能和无缝的数字解决方案为您的财务旅程提供支持。",
+    getStarted: "了解更多",
+    learnMore: "开始",
 
     register: "注册",
     login: "登录",
@@ -461,7 +473,7 @@ const translations = {
     compMthree: "2005年，我创立了一家小型金融公司，此后公司迅速发展壮大。到2012年，我们已经深深扎根于金融行业，并与顶级企业建立了合作关系。在尊敬的合作伙伴们坚定不移的支持下，我们于2023年迈向上市之路，并于2024年成功上市。",
     compMfour: "我们的愿景雄心勃勃：到2027年，使菲律宾成为亚洲最重要的经济体。在Inspire Holdings，我们致力于赋能商业伙伴，推动创新，并共同实现非凡的增长。感谢您的信任和持续支持。",
     compMfift: "我们执行副总裁的致辞",
-    compMsix: "“2012年，Inspire Holdings股份有限公司在知名企业中取得了显著成功，并积极参与微型金融、房地产开发、销售、管理以及国家基础设施项目等广泛领域的业务。”",
+    compMsix: "「2012年，Inspire Holdings股份有限公司在知名企业中取得了显著成功，并积极参与微型金融、房地产开发、销售、管理以及国家基础设施项目等广泛领域的业务。",
     compMseven: "这一切都要归功于我们优秀的同事们，他们为实现目标付出了辛勤努力。为此，我们深感感激，并向所有员工致以诚挚的谢意。",
     compMeight: "我们公司致力于为每个人创造幸福，并促进充实的生活。我们努力让每一天都充满微笑，并不断迈向更加光明的未来，推动个人和企业的共同发展。",
 
