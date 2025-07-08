@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Globe, Phone, Mail, Facebook, Instagram, Youtube, ArrowRight, Smartphone, PhoneCall } from "lucide-react";
+import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
 
 const EmailSection = () => {
@@ -12,12 +13,6 @@ const EmailSection = () => {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Animation trigger when component is in view
-    setIsVisible(true);
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -176,7 +171,7 @@ const EmailSection = () => {
 
   return (
     <section
-      className={`relative min-h-screen p-4 md:p-8 bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      className="relative min-h-screen p-4 md:p-8 bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center"
       style={{ 
         backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/building3.jpg')",
         backgroundAttachment: "fixed"
@@ -184,8 +179,14 @@ const EmailSection = () => {
       id="contacts"
     >
       <div className="w-full max-w-7xl mx-auto z-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Contact Form */}
-        <div className={`p-6 md:p-8 bg-white rounded-xl shadow-lg transform transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        {/* Contact Form - Slides in from left */}
+        <motion.div 
+          className="p-6 md:p-8 bg-white rounded-xl shadow-lg"
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <div className="relative pb-6 mb-6 border-b border-gray-200">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center">
               Let's Start a Conversation
@@ -277,10 +278,16 @@ const EmailSection = () => {
               )}
             </button>
           </form>
-        </div>
+        </motion.div>
 
-        {/* Contact Information */}
-        <div className={`p-6 md:p-8 bg-gray-900 rounded-xl shadow-lg transform transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        {/* Contact Information - Slides in from right */}
+        <motion.div 
+          className="p-6 md:p-8 bg-gray-900 rounded-xl shadow-lg"
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        >
           <div className="pb-4 md:pb-6 mb-4 md:mb-6 border-b border-gray-700">
             <h2 className="text-2xl md:text-3xl font-bold text-white text-center">
               Connect With Us
@@ -292,16 +299,20 @@ const EmailSection = () => {
           
           <div className="space-y-4 md:space-y-6">
             {contactItems.map((item, index) => (
-              <div 
+              <motion.div 
                 key={index} 
                 className="flex items-start p-3 md:p-4 hover:bg-gray-800 rounded-lg transition-colors duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <span className="mt-0.5 md:mt-1 flex-shrink-0">{item.icon}</span>
                 <div className="text-sm md:text-base">
                   <span className="font-medium text-gray-400">{item.label}</span>{" "}
                   <span className="text-white">{item.content}</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -310,7 +321,7 @@ const EmailSection = () => {
             <p className="text-gray-400 text-sm md:text-base">Monday - Friday: 9:30 AM - 6:30 PM</p>
             <p className="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Closed on Saturday, Sundays and Public Holidays</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
