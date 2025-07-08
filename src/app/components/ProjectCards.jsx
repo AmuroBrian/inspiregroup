@@ -25,7 +25,7 @@ const ProjectCards = () => {
     {
       id: 1,
       title: t.companyOverview,
-      image: "/images/PSE.jpg",
+      image: "/images/Alliance-Global3.jpg",
       link: "/companyoverview",
     },
     {
@@ -43,7 +43,7 @@ const ProjectCards = () => {
     {
       id: 4,
       title: t.organization,
-      image: "/images/CompanyMeeting.jpeg",
+      image: "/images/Orgs.jpg",
       link: "/orgchart",
     },
     {
@@ -96,37 +96,46 @@ const ProjectCards = () => {
     },
   ];
 
-const SectionTitle = ({ title }) => (
-  <motion.div 
-    className="relative w-full my-8 md:my-12 text-center"
-    initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-    animate={prefersReducedMotion ? false : { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        ...springConfig,
-        delay: 0.2
-      }
-    }}
-  >
-    <h2 className="inline-block text-2xl md:text-xl lg:text-2xl font-bold text-gray-800 relative pb-2">
-      {title}
-      {!prefersReducedMotion && (
-        <motion.span 
-          initial={{ scaleX: 0 }}
-          whileInView={{ 
-            scaleX: 1,
-            transition: {
-              ...springConfig,
-              delay: 0.3
-            }
-          }}
-          className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 origin-left"
-        />
-      )}
-    </h2>
-  </motion.div>
-);
+  const SectionTitle = ({ title }) => {
+    const [ref, inView] = useInView({
+      triggerOnce: true,
+      threshold: 0.1,
+    });
+
+    return (
+      <motion.div 
+        ref={ref}
+        className="relative w-full my-8 md:my-12 text-center"
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+        animate={prefersReducedMotion ? false : inView ? { 
+          opacity: 1, 
+          y: 0,
+          transition: {
+            ...springConfig,
+            delay: 0.2
+          }
+        } : {}}
+      >
+        <h2 className="inline-block text-2xl md:text-xl lg:text-2xl font-bold text-gray-800 relative pb-2">
+          {title}
+          {!prefersReducedMotion && (
+            <motion.span 
+              initial={{ scaleX: 0 }}
+              animate={inView ? { 
+                scaleX: 1,
+                transition: {
+                  ...springConfig,
+                  delay: 0.3
+                }
+              } : {}}
+              className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 origin-left"
+            />
+          )}
+        </h2>
+      </motion.div>
+    );
+  };
+
   const AnimatedCard = ({ title, image, link, index }) => {
     const [ref, inView] = useInView({
       triggerOnce: true,
@@ -135,20 +144,18 @@ const SectionTitle = ({ title }) => (
     });
 
     const [isLoading, setIsLoading] = useState(false);
+    const direction = index % 2 === 0 ? -1 : 1; // Alternate direction
+    const delay = index * 0.08;
 
     const handleClick = (e) => {
       e.preventDefault();
       setIsLoading(true);
       
-      // Simulate loading for demo purposes
       setTimeout(() => {
         setIsLoading(false);
         window.location.href = link;
       }, 1500);
     };
-
-    const delay = index * 0.08;
-    const direction = index % 2 === 0 ? -1 : 1; // Alternate direction for each card
 
     return (
       <motion.div
@@ -156,8 +163,8 @@ const SectionTitle = ({ title }) => (
         initial={prefersReducedMotion ? false : { 
           opacity: 0, 
           y: 40,
-          x: direction * 100, // More pronounced horizontal starting position
-          rotate: direction * 5 // Slightly more rotation
+          x: direction * 100,
+          rotate: direction * 5
         }}
         animate={prefersReducedMotion ? false : inView ? { 
           opacity: 1, 
@@ -167,13 +174,13 @@ const SectionTitle = ({ title }) => (
           transition: {
             ...springConfig,
             delay: delay,
-            x: { ...springConfig, delay: delay * 0.7 }, // Slightly delayed horizontal movement
-            rotate: { ...springConfig, delay: delay * 0.9 } // Rotation comes last
+            x: { ...springConfig, delay: delay * 0.7 },
+            rotate: { ...springConfig, delay: delay * 0.9 }
           }
         } : {}}
         whileHover={prefersReducedMotion ? false : { 
           y: -5,
-          x: direction * 2, // Slight horizontal movement on hover
+          x: direction * 2,
           transition: { ...springConfig, stiffness: 200 }
         }}
         whileTap={prefersReducedMotion ? false : { 
@@ -195,19 +202,19 @@ const SectionTitle = ({ title }) => (
               transition={{ duration: 0.5, ease: "easeInOut" }}
             />
             
-            <motion.div 
-              className="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden"
-              whileHover={{ scale: 1.02 }}
-              transition={springConfig}
-            >
+            <motion.div className="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden flex items-center justify-center">
+              {/* Background layer (optional, matches card theme) */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 to-gray-100/20"></div>
+              
+              {/* Image with `object-contain` (shows full image without zooming) */}
               <Image
                 src={image}
                 alt={title}
                 fill
-                className="object-cover"
+                className="object-contain p-2" // Adds slight padding to prevent edge touching
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 placeholder="blur"
-                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVlZWVlIi8+PC9zdmc+"
+                blurDataURL="data:image/svg+xml;base64,..."
                 priority={index < 4}
               />
             </motion.div>
@@ -274,50 +281,128 @@ const SectionTitle = ({ title }) => (
       threshold: 0.1,
     });
 
+    const direction = title.includes("Consumer") ? -1 : 1;
+
     return (
       <motion.div
         ref={ref}
         className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200/70 hover:border-blue-200 transition-all duration-300 h-full"
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 20, x: title.includes("Consumer") ? -50 : 50 }}
+        initial={prefersReducedMotion ? false : { 
+          opacity: 0, 
+          y: 20,
+          x: direction * 100,
+          rotate: direction * 3
+        }}
         animate={prefersReducedMotion ? false : inView ? { 
           opacity: 1, 
           y: 0,
           x: 0,
+          rotate: 0,
           transition: {
             ...springConfig,
-            delay: title.includes("Consumer") ? 0.1 : 0.2
+            delay: title.includes("Consumer") ? 0.1 : 0.2,
+            x: { ...springConfig, delay: (title.includes("Consumer") ? 0.1 : 0.2) * 0.7 },
+            rotate: { ...springConfig, delay: (title.includes("Consumer") ? 0.1 : 0.2) * 0.9 }
           }
         } : {}}
+        whileHover={prefersReducedMotion ? false : { 
+          y: -5,
+          transition: { ...springConfig, stiffness: 200 }
+        }}
         viewport={{ once: true }}
       >
-        <div className="relative h-48 w-full bg-gray-100 overflow-hidden">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            placeholder="blur"
-            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVlZWVlIi8+PC9zdmc+"
-          />
-        </div>
+        <motion.div className="relative h-48 w-full bg-white overflow-hidden flex items-center justify-center">
+        {/* Optional subtle background */}
+        <div className="absolute inset-0 bg-gray-50/30"></div>
+        
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-contain p-2" // Prevents edge bleeding
+          sizes="(max-width: 768px) 100vw, 50vw"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,..."
+        />
+      </motion.div>
         
         <div className="p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-2">{header}</h3>
-          <p className="text-gray-600 mb-4">{intro}</p>
+          <motion.h3 
+            className="text-xl font-bold text-gray-800 mb-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { 
+              opacity: 1, 
+              y: 0,
+              transition: { ...springConfig, delay: 0.3 }
+            } : {}}
+          >
+            {header}
+          </motion.h3>
+          
+          <motion.p 
+            className="text-gray-600 mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { 
+              opacity: 1, 
+              y: 0,
+              transition: { ...springConfig, delay: 0.35 }
+            } : {}}
+          >
+            {intro}
+          </motion.p>
           
           <div className="border-t border-gray-200 pt-4">
-            <h4 className="font-semibold text-gray-700 mb-2">{infoHeader}</h4>
-            <p className="text-gray-600 mb-3">{info}</p>
+            <motion.h4 
+              className="font-semibold text-gray-700 mb-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { 
+                opacity: 1, 
+                y: 0,
+                transition: { ...springConfig, delay: 0.4 }
+              } : {}}
+            >
+              {infoHeader}
+            </motion.h4>
             
-            <ul className="space-y-2">
+            <motion.p 
+              className="text-gray-600 mb-3"
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { 
+                opacity: 1, 
+                y: 0,
+                transition: { ...springConfig, delay: 0.45 }
+              } : {}}
+            >
+              {info}
+            </motion.p>
+            
+            <motion.ul 
+              className="space-y-2"
+              initial={{ opacity: 0 }}
+              animate={inView ? { 
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1,
+                  delayChildren: 0.5
+                }
+              } : {}}
+            >
               {infoList.map((item, index) => (
-                <li key={index} className="flex items-start">
+                <motion.li 
+                  key={index} 
+                  className="flex items-start"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={inView ? { 
+                    opacity: 1, 
+                    x: 0,
+                    transition: { ...springConfig }
+                  } : {}}
+                >
                   <span className="text-blue-500 mr-2">•</span>
                   <span className="text-gray-600">{item}</span>
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           </div>
         </div>
       </motion.div>
@@ -381,7 +466,7 @@ const SectionTitle = ({ title }) => (
               type: "spring",
               stiffness: 50,
               damping: 15
-            }
+                       }
           }}
           transition={{ duration: 0.5 }}
           className="bg-gradient-to-br from-blue-50/70 to-gray-100/70 py-10 md:py-14 px-4 sm:px-6 md:px-10 rounded-3xl shadow-inner my-10 border border-gray-200/50 relative overflow-hidden"
@@ -395,11 +480,11 @@ const SectionTitle = ({ title }) => (
               transition: {
                 type: "spring",
                 stiffness: 50,
-                damping: 15
+                damping: 15,
+                delay: 0.1
               }
             }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
             className="w-full max-w-4xl mx-auto text-center text-base md:text-lg font-medium text-gray-700 px-4 mb-10 md:mb-14 leading-relaxed"
           >
             {t.divisionInfoTextIntro}
