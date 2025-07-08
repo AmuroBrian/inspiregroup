@@ -1,16 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "@/TranslationContext";
 import { motion } from "framer-motion";
 
 export const CompanyOrgChart = () => {
   const { t } = useTranslation(); // Use translation context
-  const [zoomed, setZoomed] = useState(false);
-
-  // Helper to detect mobile (tailwind: <640px)
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-
   return (
     <motion.div
       className="p-0 sm:p-4 md:p-6 max-w-full md:max-w-5xl mx-auto bg-white/90 rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden"
@@ -31,19 +26,10 @@ export const CompanyOrgChart = () => {
         {/* Org Chart Image */}
         <div className="flex-1 w-full flex justify-center md:justify-start">
           <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-            {/* Mobile: Clickable for zoom */}
             <img
               src="images/OrgChart.jpg"
               alt="Organization Image"
-              className="w-full h-auto object-cover rounded-2xl shadow-lg border-4 border-blue-200 transition-transform duration-300 hover:scale-105 cursor-pointer block sm:hidden"
-              style={{ minWidth: 0 }}
-              onClick={() => setZoomed(true)}
-            />
-            {/* Desktop: Not clickable */}
-            <img
-              src="images/OrgChart.jpg"
-              alt="Organization Image"
-              className="w-full h-auto object-cover rounded-2xl shadow-lg border-4 border-blue-200 transition-transform duration-300 hover:scale-105 hidden sm:block"
+              className="w-full h-auto object-cover rounded-2xl shadow-lg border-4 border-blue-200 transition-transform duration-300 hover:scale-105"
               style={{ minWidth: 0 }}
             />
           </div>
@@ -94,26 +80,6 @@ export const CompanyOrgChart = () => {
           </p>
         </div>
       </div>
-
-      {/* Zoom Modal for Mobile */}
-      {zoomed && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 sm:hidden">
-          <div className="relative w-full h-full flex items-center justify-center">
-            <img
-              src="images/OrgChart.jpg"
-              alt="Zoomed Organization Image"
-              className="max-w-full max-h-full object-contain rounded-2xl border-4 border-blue-200 shadow-2xl"
-            />
-            <button
-              className="absolute top-4 right-4 bg-white bg-opacity-80 rounded-full p-2 shadow-md text-blue-700 text-2xl font-bold focus:outline-none"
-              onClick={() => setZoomed(false)}
-              aria-label="Close zoom"
-            >
-              ×
-            </button>
-          </div>
-        </div>
-      )}
     </motion.div>
   );
 };
