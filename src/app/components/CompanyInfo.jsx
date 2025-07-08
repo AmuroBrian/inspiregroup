@@ -7,12 +7,27 @@ import { Wallet, TrendingUp, ShieldCheck } from "lucide-react";
 import TranslatedButton from "./TranslatedButton";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Spring animation configuration
+const springConfig = {
+  type: "spring",
+  stiffness: 100,
+  damping: 15,
+  mass: 0.5,
+  restDelta: 0.001
+};
+
 const CompanyInfo = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
+    // Set prefers-reduced-motion only after component mounts (client-side)
+    setPrefersReducedMotion(
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
       { threshold: 0.1 }
@@ -53,29 +68,44 @@ const CompanyInfo = () => {
       className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.h1 
-          className="text-4xl font-bold text-center text-gray-900 mb-12"
+        {/* Title with animated underline */}
+        <motion.div 
+          className="relative w-full mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {t.title}
-        </motion.h1>
+          <h1 className="inline-block text-2xl font-bold text-gray-900 relative pb-2">
+            {t.title}
+            {!prefersReducedMotion && (
+              <motion.span 
+                initial={{ scaleX: 0 }}
+                animate={isVisible ? { 
+                  scaleX: 1,
+                  transition: {
+                    ...springConfig,
+                    delay: 0.3
+                  }
+                } : {}}
+                className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 origin-left"
+              />
+            )}
+          </h1>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>
             {features.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isVisible ? { 
-                  opacity: 1, 
-                  y: 0,
-                  transition: { 
-                    delay: index * 0.1,
-                    duration: 0.5 
-                  }
-                } : {}}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }} // Alternate left/right starting positions
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ 
+                  duration: 0.8, 
+                  ease: "easeOut",
+                  delay: index * 0.1 
+                }}
                 className="flex flex-col h-full"
               >
                 <div className="flex flex-col items-center text-center p-8 rounded-2xl h-full bg-gradient-to-br from-[#09555C] to-[#004ff9] shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">

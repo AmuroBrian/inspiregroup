@@ -134,14 +134,21 @@ const SectionTitle = ({ title }) => (
       rootMargin: "-50px 0px",
     });
 
-    const [isClicked, setIsClicked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleClick = () => {
-      setIsClicked(true);
-      setTimeout(() => setIsClicked(false), 300);
+    const handleClick = (e) => {
+      e.preventDefault();
+      setIsLoading(true);
+      
+      // Simulate loading for demo purposes
+      setTimeout(() => {
+        setIsLoading(false);
+        window.location.href = link;
+      }, 1500);
     };
 
     const delay = index * 0.08;
+    const direction = index % 2 === 0 ? -1 : 1; // Alternate direction for each card
 
     return (
       <motion.div
@@ -149,8 +156,8 @@ const SectionTitle = ({ title }) => (
         initial={prefersReducedMotion ? false : { 
           opacity: 0, 
           y: 40,
-          x: index % 2 === 0 ? -30 : 30,
-          rotate: index % 2 === 0 ? -2 : 2
+          x: direction * 100, // More pronounced horizontal starting position
+          rotate: direction * 5 // Slightly more rotation
         }}
         animate={prefersReducedMotion ? false : inView ? { 
           opacity: 1, 
@@ -159,11 +166,14 @@ const SectionTitle = ({ title }) => (
           rotate: 0,
           transition: {
             ...springConfig,
-            delay: delay
+            delay: delay,
+            x: { ...springConfig, delay: delay * 0.7 }, // Slightly delayed horizontal movement
+            rotate: { ...springConfig, delay: delay * 0.9 } // Rotation comes last
           }
         } : {}}
         whileHover={prefersReducedMotion ? false : { 
           y: -5,
+          x: direction * 2, // Slight horizontal movement on hover
           transition: { ...springConfig, stiffness: 200 }
         }}
         whileTap={prefersReducedMotion ? false : { 
@@ -218,25 +228,38 @@ const SectionTitle = ({ title }) => (
               transition={{ ...springConfig, delay: delay + 0.15 }}
             >
               <motion.button 
-                className="bg-blue-600 hover:bg-transparent text-white hover:text-blue-600 font-medium py-1.5 px-3 md:py-2 md:px-4 border border-blue-600 hover:border-blue-600 rounded flex items-center gap-2 text-sm md:text-base"
-                whileHover={{ 
-                  backgroundColor: "rgba(255,255,255,0.1)",
+                className={`bg-blue-600 text-white font-medium py-1.5 px-3 md:py-2 md:px-4 border border-blue-600 rounded flex items-center gap-2 text-sm md:text-base hover:bg-blue-700 transition-colors ${isLoading ? 'cursor-not-allowed' : ''}`}
+                whileHover={isLoading ? {} : { 
+                  backgroundColor: "#1d4ed8",
                   transition: { ...springConfig, stiffness: 300 }
                 }}
-                whileTap={{ 
+                whileTap={isLoading ? {} : { 
                   scale: 0.95,
-                  backgroundColor: "rgba(255,255,255,0.9)",
                   transition: { ...springConfig, stiffness: 500 }
                 }}
+                disabled={isLoading}
               >
-                Read More
-                <motion.span 
-                  className="inline-block"
-                  whileHover={{ x: 4 }}
-                  transition={springConfig}
-                >
-                  →
-                </motion.span>
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <motion.span
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="block w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                    />
+                    {t.loading || "Loading..."}
+                  </div>
+                ) : (
+                  <>
+                    {t.readMore || "Read More"}
+                    <motion.span 
+                      className="inline-block"
+                      whileHover={{ x: 4 }}
+                      transition={springConfig}
+                    >
+                      →
+                    </motion.span>
+                  </>
+                )}
               </motion.button>
             </motion.div>
           </Card>
@@ -246,18 +269,25 @@ const SectionTitle = ({ title }) => (
   };
 
   const InfoCard = ({ title, image, header, intro, info, infoHeader, infoList }) => {
+    const [ref, inView] = useInView({
+      triggerOnce: true,
+      threshold: 0.1,
+    });
+
     return (
       <motion.div
+        ref={ref}
         className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200/70 hover:border-blue-200 transition-all duration-300 h-full"
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-        whileInView={prefersReducedMotion ? false : { 
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 20, x: title.includes("Consumer") ? -50 : 50 }}
+        animate={prefersReducedMotion ? false : inView ? { 
           opacity: 1, 
           y: 0,
+          x: 0,
           transition: {
             ...springConfig,
-            delay: 0.1
+            delay: title.includes("Consumer") ? 0.1 : 0.2
           }
-        }}
+        } : {}}
         viewport={{ once: true }}
       >
         <div className="relative h-48 w-full bg-gray-100 overflow-hidden">
