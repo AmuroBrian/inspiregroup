@@ -1,25 +1,25 @@
+// components/HeroSection.jsx
 "use client";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "@/TranslationContext";
-import Link from "next/link";
+import Link from "next/link"; // Link is imported but not used. Consider removing if not needed.
 import { motion, useAnimation, useInView } from "framer-motion";
 
 export default function HeroSection() {
   const { t } = useTranslation();
   const controls = useAnimation();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.5 });
+  const isInView = useInView(ref, { once: false, amount: [0.6, 0.8] });
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
-    }
+        delayChildren: 0.3,
+      },
+    },
   };
 
   const itemVariants = {
@@ -30,24 +30,21 @@ export default function HeroSection() {
       transition: {
         type: "spring",
         stiffness: 100,
-        damping: 10
-      }
-    }
+        damping: 10,
+      },
+    },
   };
 
-  // Trigger animations on mount and when in view
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
-    } else {
-      controls.start("hidden");
     }
   }, [controls, isInView]);
 
   return (
     <section
       id="hero"
-      className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden py-16 sm:py-20 md:py-24 lg:py-0"
       ref={ref}
     >
       {/* Background Video */}
@@ -58,61 +55,61 @@ export default function HeroSection() {
         muted
         playsInline
         preload="auto"
-        loading="eager"
         aria-label="Background video showing financial concepts"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
       >
-        <source src="/videos/herovideo.mp4" type="video/mp4" />
         <source src="/videos/herovideo.webm" type="video/webm" />
+        <source src="/videos/herovideo.mp4" type="video/mp4" />
         Your browser does not support HTML5 video.
       </motion.video>
 
       {/* Overlay with animated content */}
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 flex items-center"
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 flex items-center justify-center text-center sm:text-left"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
         <motion.div
-          className="w-full px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 text-left"
+          className="w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20"
           variants={containerVariants}
           initial="hidden"
           animate={controls}
         >
           <div className="max-w-7xl mx-auto">
-            <motion.h1 
-              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight drop-shadow-lg max-w-6xl"
+            <motion.h1
+              className="text-white text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold leading-tight tracking-tight drop-shadow-lg max-w-6xl mx-auto sm:mx-0"
               variants={itemVariants}
             >
               {t.herosub}
             </motion.h1>
-            
-            <motion.p 
-              className="text-white/90 mt-6 text-lg md:text-xl max-w-5xl leading-relaxed"
+
+            <motion.p
+              className="text-white/90 mt-4 sm:mt-6 text-xs sm:text-sm md:text-base max-w-5xl leading-relaxed mx-auto sm:mx-0"
               variants={itemVariants}
             >
-              {t.heroDescription || "Empowering your financial journey with secure, smart, and seamless digital solutions."}
+              {t.heroDescription ||
+                "Empowering your financial journey with secure, smart, and seamless digital solutions."}
             </motion.p>
-            
-            <motion.div 
-              className="mt-8 flex flex-col sm:flex-row gap-4"
+
+            <motion.div
+              className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 justify-center sm:justify-start"
               variants={itemVariants}
             >
-              <Link
-                href="#cta"
-                className="inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-black bg-white hover:bg-gray-100 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              <a
+                href="#welcome-to-hol"
+                className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 text-base font-semibold text-black bg-white hover:bg-gray-100 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white text-center"
               >
-                {t.getStarted || "Get Started"}
-              </Link>
-              <Link
-                href="#features"
-                className="inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-white border border-white hover:bg-white/10 rounded-lg transition-all duration-300 transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                {t.getStarted || "Learn More"}
+              </a>
+              <a
+                href="#IW" // This was already set to #IW from our previous conversation.
+                className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 text-base font-semibold text-white border border-white hover:bg-white/10 rounded-lg transition-all duration-300 transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white text-center"
               >
-                {t.learnMore || "Learn More"}
-              </Link>
+                {t.learnMore || "Get Started"}
+              </a>
             </motion.div>
           </div>
         </motion.div>
