@@ -13,8 +13,8 @@ export default function Home() {
     <div>
       <AnnouncementModal />
       <HeroSection />
+       <WelcomeToHol />
       <InspireWalletIntro />
-      <WelcomeToHol />
       <ProjectCards />
       <CompanyInfo />
 
