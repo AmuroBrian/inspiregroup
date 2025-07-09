@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "@/TranslationContext";
 import { FiChevronLeft, FiChevronRight, FiExternalLink } from "react-icons/fi";
@@ -8,8 +7,8 @@ import { motion } from "framer-motion";
 // Constants
 const SPRING_CONFIG = {
   type: "spring",
-  stiffness: 100,
-  damping: 15,
+  stiffness: 300,
+  damping: 20,
   mass: 0.5,
   restDelta: 0.001
 };
@@ -145,7 +144,6 @@ export default function NewsFeed() {
     setCurrentStartIndex(prevIndex => {
       const prevIndexNew = prevIndex - visibleCount;
       if (prevIndexNew < 0) {
-        // Calculate the start index of the last page
         const lastPageStart = Math.max(0, feedItems.length - (feedItems.length % visibleCount || visibleCount));
         return lastPageStart;
       }
@@ -178,12 +176,12 @@ export default function NewsFeed() {
   // Skeleton loader
   const renderSkeletons = useCallback(() => (
     Array(visibleCount).fill(0).map((_, index) => (
-      <div key={`skeleton-${index}`} className="p-4 border rounded-lg shadow-sm bg-white flex flex-col h-full animate-pulse">
-        <div className="w-3/4 h-6 bg-gray-200 mb-3 rounded"></div>
-        <div className="w-full h-4 bg-gray-200 mb-2 rounded"></div>
-        <div className="w-full h-4 bg-gray-200 mb-2 rounded"></div>
-        <div className="w-5/6 h-4 bg-gray-200 mb-2 rounded"></div>
-        <div className="w-24 h-4 bg-gray-200 mt-auto rounded"></div>
+      <div key={`skeleton-${index}`} className="p-6 border border-blue-100 rounded-2xl shadow-sm bg-white flex flex-col h-full animate-pulse">
+        <div className="w-3/4 h-6 bg-blue-100 mb-4 rounded-lg"></div>
+        <div className="w-full h-4 bg-blue-100 mb-3 rounded-lg"></div>
+        <div className="w-full h-4 bg-blue-100 mb-3 rounded-lg"></div>
+        <div className="w-5/6 h-4 bg-blue-100 mb-3 rounded-lg"></div>
+        <div className="w-24 h-4 bg-blue-100 mt-auto rounded-lg"></div>
       </div>
     ))
   ), [visibleCount]);
@@ -202,7 +200,7 @@ export default function NewsFeed() {
           key={`dot-${index}`}
           onClick={() => setCurrentStartIndex(index * visibleCount)}
           className={`w-3 h-3 rounded-full transition-colors ${
-            isActive ? "bg-blue-600" : "bg-gray-300 hover:bg-gray-400"
+            isActive ? "bg-blue-600" : "bg-blue-200 hover:bg-blue-400"
           }`}
           aria-label={`Go to page ${index + 1}`}
           aria-current={isActive ? "true" : "false"}
@@ -214,22 +212,30 @@ export default function NewsFeed() {
   return (
     <section 
       id="news-feed"
-      className="relative w-full bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+      className="relative w-full min-h-screen bg-gradient-to-br from-blue-50 to-white py-16 px-4 sm:px-6 lg:px-8"
       aria-busy={isLoading}
       aria-live="polite"
     >
-      <div className="max-w-7xl mx-auto">
-        {/* Title with animated underline */}
+      <div className="max-w-7xl mx-auto relative">
+        {/* Floating decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-100 opacity-20 blur-xl"></div>
+          <div className="absolute bottom-40 right-20 w-48 h-48 rounded-full bg-blue-200 opacity-15 blur-xl"></div>
+        </div>
+
+        {/* Title with modern underline */}
         <motion.div 
-          className="relative w-full mb-8 text-center"
+          className="relative w-full mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="inline-block text-2xl font-bold text-gray-900 relative pb-2">
-            WORLD'S LATEST TECH NEWS
+          <div className="inline-block relative">
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
+              WORLD'S LATEST TECH NEWS
+            </h2>
             {!prefersReducedMotion && (
-              <motion.span 
+              <motion.div
                 initial={{ scaleX: 0 }}
                 animate={isVisible ? { 
                   scaleX: 1,
@@ -238,37 +244,42 @@ export default function NewsFeed() {
                     delay: 0.3
                   }
                 } : {}}
-                className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 origin-left"
+                className="absolute -bottom-2 left-0 right-0 mx-auto h-1.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
+                style={{ width: '70%' }}
               />
             )}
-          </h2>
+          </div>
         </motion.div>
         
         {error ? (
-          <div className="text-center py-10">
+          <motion.div 
+            className="text-center py-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             <p className="text-red-500 mb-4">Error loading news feed: {error}</p>
             <button 
               onClick={fetchFeed}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-md"
               aria-label="Retry loading news feed"
             >
               Retry
             </button>
-          </div>
+          </motion.div>
         ) : (
           <div className="relative">
             <button
               onClick={prevPage}
               aria-label="Previous articles"
               disabled={isLoading || feedItems.length <= visibleCount}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-8 bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 transition-all z-10 border border-gray-200 hover:border-gray-300 ${
+              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-8 bg-white text-blue-600 p-3 rounded-full shadow-lg hover:bg-blue-50 transition-all z-10 border border-blue-100 hover:border-blue-200 ${
                 isLoading || feedItems.length <= visibleCount ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              <FiChevronLeft className="w-5 h-5" />
+              <FiChevronLeft className="w-6 h-6" />
             </button>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {isLoading ? (
                 renderSkeletons()
               ) : (
@@ -284,16 +295,17 @@ export default function NewsFeed() {
                         duration: 0.5
                       }
                     } : {}}
-                    className="group p-4 border rounded-lg shadow-sm bg-white flex flex-col h-full hover:shadow-md transition-shadow duration-300"
+                    whileHover={{ y: -5 }}
+                    className="group bg-white p-6 rounded-2xl shadow-lg border border-blue-100 flex flex-col h-full hover:shadow-xl transition-all duration-300"
                     aria-labelledby={`article-title-${item.id}`}
                   >
                     <div className="flex-grow">
                       {item.date && (
-                        <time dateTime={item.date} className="text-xs text-gray-500 mb-2 block">
+                        <time dateTime={item.date} className="text-sm text-blue-500 mb-2 block">
                           {item.date}
                         </time>
                       )}
-                      <h3 id={`article-title-${item.id}`} className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                      <h3 id={`article-title-${item.id}`} className="text-xl font-semibold text-blue-900 mb-3 line-clamp-2">
                         <a
                           href={item.link}
                           target="_blank"
@@ -303,7 +315,7 @@ export default function NewsFeed() {
                           {item.title}
                         </a>
                       </h3>
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                      <p className="text-blue-900/90 mb-4 line-clamp-3">
                         {item.description}
                       </p>
                     </div>
@@ -311,10 +323,10 @@ export default function NewsFeed() {
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-auto inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+                      className="mt-auto inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors group-hover:underline"
                       aria-label={`Read more about ${item.title}`}
                     >
-                      Read more <FiExternalLink className="ml-1 w-4 h-4" />
+                      Read more <FiExternalLink className="ml-2 w-4 h-4" />
                     </a>
                   </motion.article>
                 ))
@@ -325,20 +337,24 @@ export default function NewsFeed() {
               onClick={nextPage}
               aria-label="Next articles"
               disabled={isLoading || feedItems.length <= visibleCount}
-              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 transition-all z-10 border border-gray-200 hover:border-gray-300 ${
+              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 bg-white text-blue-600 p-3 rounded-full shadow-lg hover:bg-blue-50 transition-all z-10 border border-blue-100 hover:border-blue-200 ${
                 isLoading || feedItems.length <= visibleCount ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              <FiChevronRight className="w-5 h-5" />
+              <FiChevronRight className="w-6 h-6" />
             </button>
           </div>
         )}
 
         {/* Pagination indicators */}
         {!isLoading && !error && feedItems.length > visibleCount && (
-          <div className="flex justify-center mt-8 space-x-2">
+          <motion.div 
+            className="flex justify-center mt-10 space-x-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             {paginationDots}
-          </div>
+          </motion.div>
         )}
       </div>
     </section>
