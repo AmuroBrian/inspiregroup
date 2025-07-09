@@ -35,7 +35,7 @@ export default function HeroSection() {
   const { t } = useTranslation();
   const controls = useAnimation();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: [0.6, 0.8] });
+  const isInView = useInView(ref, { once: false, amount: 0.3 });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -64,6 +64,8 @@ export default function HeroSection() {
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
+    } else {
+      controls.start("hidden");
     }
   }, [controls, isInView]);
 
@@ -133,18 +135,24 @@ export default function HeroSection() {
               className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 justify-center sm:justify-start"
               variants={itemVariants}
             >
-              <a
+              <motion.a
                 href="#welcome-to-hol"
                 className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 text-base font-semibold text-black bg-white hover:bg-gray-100 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white text-center"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {t.getStarted || "Learn More"}
-              </a>
-              <a
-                href="#IW" // This was already set to #IW from our previous conversation.
+              </motion.a>
+              <motion.a
+                href="#IW"
                 className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 text-base font-semibold text-white border border-white hover:bg-white/10 rounded-lg transition-all duration-300 transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white text-center"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {t.learnMore || "Get Started"}
-              </a>
+              </motion.a>
             </motion.div>
           </div>
         </motion.div>

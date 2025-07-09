@@ -51,6 +51,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
         closeLoginModal();
         localStorage.setItem("isLoggedIn", "true");
         setIsLoggedIn(true);
+        window.dispatchEvent(new Event("loginStatusChanged"));
         router.push("/agent-home");
       } else {
         setError("Incorrect Agent Code. Please try again.");
@@ -119,6 +120,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
+    window.dispatchEvent(new Event("loginStatusChanged"));
     router.push("/");
   };
 
@@ -150,14 +152,8 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
             </button>
           </li>
         </>
-      ) : (
-        <li>
-          <button onClick={handleLogout} className="inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md bg-red-500 text-white hover:bg-red-600 hover:shadow-lg">
-            <LogOut size={18} />
-            <span>Logout</span>
-          </button>
-        </li>
-      )}
+      ) : null}
+      {/* Only render logout button in mobile navigation, not desktop */}
 
       {/* Login Modal */}
       {isLoginOpen && (
@@ -180,13 +176,13 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">Agent Login</h2>
-              <p className="text-gray-600 text-sm">Enter your agent code to access your dashboard</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">{t.agentLoginTitle || "Agent Login"}</h2>
+              <p className="text-gray-600 text-sm">{t.agentLoginSubtitle || "Enter your agent code to access your dashboard"}</p>
             </div>
             {/* Form */}
             <form className="space-y-6" onSubmit={e => { e.preventDefault(); handleLogin(); }}>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Agent Code</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">{t.agentCodeLabel || "Agent Code"}</label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -198,7 +194,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                     value={agentCode}
                     onChange={(e) => setAgentCode(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg"
-                    placeholder="Enter your agent code"
+                    placeholder={t.agentCodePlaceholder || "Enter your agent code"}
                     aria-label="Agent code"
                   />
                 </div>
@@ -208,7 +204,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-sm font-medium">{error}</span>
+                  <span className="text-sm font-medium">{error ? t[error] || error : ""}</span>
                 </div>
               )}
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -218,7 +214,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   className="flex-1 py-3 px-6 rounded-xl font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all duration-300 border-2 border-gray-200 hover:border-gray-300 flex items-center justify-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                  Cancel
+                  {t.cancel || "Cancel"}
                 </button>
                 <button
                   type="button"
@@ -226,14 +222,14 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   className="flex-1 py-3 px-6 rounded-xl font-semibold text-white bg-red-400 hover:bg-red-500 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                  Clear
+                  {t.clear || "Clear"}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 py-3 px-6 rounded-xl font-semibold text-white bg-blue-500 hover:bg-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Login
+                  {t.login || "Login"}
                 </button>
               </div>
             </form>
@@ -262,48 +258,48 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">Register</h2>
-              <p className="text-gray-600 text-sm">Join our agent network and start earning</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">{t.registerTitle || "Register"}</h2>
+              <p className="text-gray-600 text-sm">{t.registerSubtitle || "Join our agent network and start earning"}</p>
             </div>
             {/* Form */}
             <form className="space-y-6" onSubmit={e => { e.preventDefault(); handleRegisterSubmit(); }}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">{t.lastNameLabel || "Last Name"}</label>
                   <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
                     className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.lastName ? ' border-red-500' : ''}`}
-                    placeholder="Last Name"
+                    placeholder={t.lastNamePlaceholder || "Last Name"}
                     aria-invalid={formErrors?.lastName}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">{t.firstNameLabel || "First Name"}</label>
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
                     className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.firstName ? ' border-red-500' : ''}`}
-                    placeholder="First Name"
+                    placeholder={t.firstNamePlaceholder || "First Name"}
                     aria-invalid={formErrors?.firstName}
                     required
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Birthdate</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">{t.birthdateLabel || "Birthdate"}</label>
                 <input
                   type="date"
                   name="birthdate"
                   value={formData.birthdate}
                   onChange={handleInputChange}
                   className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.birthdate ? ' border-red-500' : ''}`}
-                  placeholder="Birthdate"
+                  placeholder={t.birthdatePlaceholder || "Birthdate"}
                   aria-invalid={formErrors?.birthdate}
                   required
                 />
@@ -315,14 +311,14 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                 </div>
               )}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">{t.addressLabel || "Address"}</label>
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
                   className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.address ? ' border-red-500' : ''}`}
-                  placeholder="Address"
+                  placeholder={t.addressPlaceholder || "Address"}
                   aria-invalid={formErrors?.address}
                   required
                 />
@@ -337,8 +333,18 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   required
                 />
                 <label htmlFor="acknowledgeCode" className="text-sm text-gray-700 select-none">
-                  I understand that I must copy and keep my agent code safe after registration.
+                  {t.acknowledgeCodeLabel || "I understand that I must copy and keep my agent code safe after registration."}
                 </label>
+              </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
+                <div className="flex items-start gap-2">
+                  <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" />
+                  </svg>
+                  <p className="text-sm text-blue-800">
+                    <strong>{t.note || "Note:"}</strong> {t.agentCodeNote || "Your unique agent code will be generated and displayed once you complete the registration process."}
+                  </p>
+                </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <button
@@ -347,7 +353,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   className="flex-1 py-3 px-6 rounded-xl font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all duration-300 border-2 border-gray-200 hover:border-gray-300 flex items-center justify-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                  Cancel
+                  {t.cancel || "Cancel"}
                 </button>
                 <button
                   type="button"
@@ -355,14 +361,14 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   className="flex-1 py-3 px-6 rounded-xl font-semibold text-white bg-red-400 hover:bg-red-500 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                  Clear
+                  {t.clear || "Clear"}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 py-3 px-6 rounded-xl font-semibold text-white bg-green-500 hover:bg-green-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Submit
+                  {t.submit || "Submit"}
                 </button>
               </div>
             </form>
@@ -379,12 +385,12 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Registration Complete!</h2>
-            <p className="text-gray-700 mb-4">Congratulations! Your agent code is:</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.registrationCompleteTitle || "Registration Complete!"}</h2>
+            <p className="text-gray-700 mb-4">{t.registrationCompleteSubtitle || "Congratulations! Your agent code is:"}</p>
             <div className="text-2xl font-mono font-bold text-blue-600 bg-blue-50 rounded-lg px-4 py-2 mb-2 inline-block">{registerSuccess.code}</div>
             <div className="flex items-center justify-center gap-2 mb-2">
               <svg className="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
-              <span className="text-yellow-700 text-sm font-semibold">You must be 18 years or older to register. Please keep your agent code safe; you’ll need it to log in.</span>
+              <span className="text-yellow-700 text-sm font-semibold">{t.registrationAgeNote || "You must be 18 years or older to register. Please keep your agent code safe; you’ll need it to log in."}</span>
             </div>
             <button
               onClick={() => {
@@ -392,14 +398,14 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
               }}
               className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
             >
-              Copy Code
+              {t.copyCode || "Copy Code"}
             </button>
             <div>
               <button
                 onClick={() => setRegisterSuccess({ show: false, code: "" })}
                 className="mt-2 px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
               >
-                Go to Login
+                {t.goToLogin || "Go to Login"}
               </button>
             </div>
           </div>

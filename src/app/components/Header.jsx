@@ -38,16 +38,23 @@ const Header = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsHydrated(true); // Hydration check
-      
       // Check login state from localStorage
       const loginStatus = localStorage.getItem("isLoggedIn");
       setIsLoggedIn(loginStatus === "true");
-      
+      // Listen for login status changes
+      const handleLoginStatusChange = () => {
+        const loginStatus = localStorage.getItem("isLoggedIn");
+        setIsLoggedIn(loginStatus === "true");
+      };
+      window.addEventListener("loginStatusChanged", handleLoginStatusChange);
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 50);
       };
       window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("loginStatusChanged", handleLoginStatusChange);
+        window.removeEventListener("scroll", handleScroll);
+      };
     }
   }, []); // Empty dependency array means this runs once on mount
 
@@ -75,6 +82,7 @@ const Header = () => {
         // Store login state
         localStorage.setItem("isLoggedIn", "true");
         setIsLoggedIn(true);
+        window.dispatchEvent(new Event("loginStatusChanged"));
 
         // Navigate to agent-home
         router.push("/agent-home");
@@ -118,6 +126,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
+    window.dispatchEvent(new Event("loginStatusChanged"));
     router.push("/");
   };
 
@@ -193,19 +202,32 @@ const Header = () => {
               </li>
             </>
           )}
-          {/* AgentCodeEntry handles login/register/logout UI */}
-          <AgentCodeEntry />
+          {/* Always show AgentCodeEntry for Login/Register when not logged in */}
+          {!isLoggedIn && <AgentCodeEntry />}
+          {/* Show Agent Site and Logout only when logged in */}
           {isLoggedIn && (
-            <li className="group">
-              <Link
-                href="/agent-home"
-                className={`${commonLinkClasses} text-blue-700 hover:text-blue-900`}
-                aria-label={t.agentSite || "Agent Site"}
-              >
-                <span>{t.agentSite || "Agent Site"}</span>
-                <span className={underlineAnimation}></span>
-              </Link>
-            </li>
+            <>
+              <li className="group">
+                <Link
+                  href="/agent-home"
+                  className={`${commonLinkClasses} text-blue-700 hover:text-blue-900`}
+                  aria-label={t.agentSite || "Agent Site"}
+                >
+                  <span>{t.agentSite || "Agent Site"}</span>
+                  <span className={underlineAnimation}></span>
+                </Link>
+              </li>
+              <li className="group">
+                <button
+                  onClick={handleLogout}
+                  className={logoutButtonClasses}
+                  aria-label="Logout"
+                >
+                  <LogOut size={18} />
+                  <span>Logout</span>
+                </button>
+              </li>
+            </>
           )}
         </ul>
 
