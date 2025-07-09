@@ -49,49 +49,49 @@ const ProjectCards = () => {
     {
       id: 5,
       title: t.inspireWallet,
-      image: "/images/inspirewallet.png",
+      image: "/images/InspireWalletNew.png",
       link: "/docs/InspireWallet.pdf",
     },
     {
       id: 6,
       title: t.financialProducts,
-      image: "/images/financialproduct.png",
+      image: "/images/FinancialPproduct.png",
       link: "/docs/FinancialProduct.pdf",
     },
     {
       id: 7,
       title: t.privateBanking,
-      image: "/images/private-banker.png",
+      image: "/images/Privatebanking.png",
       link: "/docs/PrivateBanker.pdf",
     },
     {
       id: 8,
       title: t.travelProtection,
-      image: "/images/travel-protect.png",
+      image: "/images/Travelprotection.png",
       link: "/docs/travel.pdf",
     },
     {
       id: 9,
       title: t.InspireWalletPartnerBanks,
-      image: "/images/inspirepartnerbanks.png",
+      image: "/images/InspireWalletBankpartner.png",
       link: "/docs/Bank.pdf",
     },
     {
       id: 10,
       title: t.OpeningaPhilippineBankAccountfornonresidents,
-      image: "/images/bankaccounts.png",
+      image: "/images/OpeningPHBank.png",
       link: "/docs/InspireWallet(JP).pdf",
     },
     {
       id: 11,
       title: t.BuyingRealEstatewithUSDT,
-      image: "/images/realestateusdt.png",
+      image: "/images/Buyingrealestate.png",
       link: "/docs/CryptoPresentation.pdf",
     },
     {
       id: 12,
       title: t.MicroInvestments,
-      image: "/images/microinvestments.png",
+      image: "/images/Microinvestmentnew.png",
       link: "/docs/Micro-Investment1.pdf",
     },
   ];
@@ -104,18 +104,18 @@ const ProjectCards = () => {
 
     return (
       <motion.div 
-        ref={ref}
-        className="relative w-full my-8 md:my-12 text-center"
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-        animate={prefersReducedMotion ? false : inView ? { 
-          opacity: 1, 
-          y: 0,
-          transition: {
-            duration: 0.5,
-            ease: "easeOut"
-          }
-        } : {}}
+      ref={ref}
+      className="relative w-full my-12 text-center"
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5 }}
       >
+        {/* Floating decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-100 opacity-20 blur-xl"></div>
+          <div className="absolute bottom-40 right-20 w-48 h-48 rounded-full bg-blue-200 opacity-15 blur-xl"></div>
+        </div>
+
         <div className="inline-block relative">
           <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
             {title}
@@ -126,13 +126,11 @@ const ProjectCards = () => {
               animate={inView ? { 
                 scaleX: 1,
                 transition: {
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 20,
+                  ...springConfig,
                   delay: 0.3
                 }
               } : {}}
-               className="absolute -bottom-2 left-0 right-0 mx-auto h-1.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
+              className="absolute -bottom-2 left-0 right-0 mx-auto h-1.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
               style={{ width: '70%' }}
             />
           )}
@@ -207,21 +205,17 @@ const ProjectCards = () => {
               transition={{ duration: 0.5, ease: "easeInOut" }}
             />
             
-            <motion.div className="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden flex items-center justify-center">
-              {/* Background layer (optional, matches card theme) */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 to-gray-100/20"></div>
-              
-              {/* Image with `object-contain` (shows full image without zooming) */}
-              <Image
-                src={image}
-                alt={title}
-                fill
-                className="object-contain p-2" // Adds slight padding to prevent edge touching
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                placeholder="blur"
-                blurDataURL="data:image/svg+xml;base64,..."
-                priority={index < 4}
-              />
+            <motion.div className="relative h-48 w-full bg-white overflow-hidden">
+          {/* Remove padding and use object-cover to fill container */}
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,..."
+          />
             </motion.div>
             
             <motion.h3 
@@ -434,13 +428,13 @@ const ProjectCards = () => {
           <rect width="100%" height="100%" fill="url(#pattern)" />
         </svg>
       </motion.div>
-
+      {/* Main content container */}
       <motion.div 
-        className="w-full max-w-[1200px] mx-auto px-4 py-8 md:py-12 relative z-10"
-        initial={prefersReducedMotion ? false : { y: 30, opacity: 0 }}
-        animate={prefersReducedMotion ? false : { y: 0, opacity: 1 }}
-        transition={{ ...springConfig, delay: 0.2 }}
-        viewport={{ once: true }}
+          className="w-full max-w-[1200px] mx-auto relative z-10"
+          initial={prefersReducedMotion ? false : { y: 30, opacity: 0 }}
+          animate={prefersReducedMotion ? false : { y: 0, opacity: 1 }}
+          transition={{ ...springConfig, delay: 0.2 }}
+          viewport={{ once: true }}
       >
         <SectionTitle title={t.businessLines} />
         <motion.div 
