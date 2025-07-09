@@ -29,6 +29,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
   });
   const [registerError, setRegisterError] = useState("");
   const [registerSuccess, setRegisterSuccess] = useState({ show: false, code: "" });
+  const [checkboxChecked, setCheckboxChecked] = useState(false);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -61,6 +62,33 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
   };
 
   const handleRegisterSubmit = async () => {
+    // Validation
+    const errors = {
+      lastName: !formData.lastName.trim(),
+      firstName: !formData.firstName.trim(),
+      birthdate: !formData.birthdate,
+      address: !formData.address.trim(),
+    };
+    setFormErrors(errors);
+    setRegisterError("");
+    if (Object.values(errors).some(Boolean)) {
+      setRegisterError("All fields are required.");
+      return;
+    }
+    // Age validation
+    const birthDateObj = new Date(formData.birthdate);
+    const today = new Date();
+    const age = today.getFullYear() - birthDateObj.getFullYear() - (today < new Date(birthDateObj.setFullYear(today.getFullYear())) ? 1 : 0);
+    if (isNaN(age) || age < 18) {
+      setRegisterError("You must be at least 18 years old to register.");
+      setFormErrors(prev => ({ ...prev, birthdate: true }));
+      return;
+    }
+    // Checkbox validation
+    if (!checkboxChecked) {
+      setRegisterError("You must acknowledge and understand your agent code before submitting.");
+      return;
+    }
     try {
       const generatedCode = uuidv4().slice(0, 8).toUpperCase();
       await addDoc(collection(db, "agents"), {
@@ -85,6 +113,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
   const closeRegisterModal = () => {
     setIsRegisterOpen(false);
     setFormData({ lastName: "", firstName: "", birthdate: "", address: "" });
+    setCheckboxChecked(false);
   };
 
   const handleLogout = () => {
@@ -246,9 +275,10 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200"
+                    className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.lastName ? ' border-red-500' : ''}`}
                     placeholder="Last Name"
                     aria-invalid={formErrors?.lastName}
+                    required
                   />
                 </div>
                 <div>
@@ -258,9 +288,10 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200"
+                    className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.firstName ? ' border-red-500' : ''}`}
                     placeholder="First Name"
                     aria-invalid={formErrors?.firstName}
+                    required
                   />
                 </div>
               </div>
@@ -271,9 +302,10 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   name="birthdate"
                   value={formData.birthdate}
                   onChange={handleInputChange}
-                  className="w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200"
+                  className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.birthdate ? ' border-red-500' : ''}`}
                   placeholder="Birthdate"
                   aria-invalid={formErrors?.birthdate}
+                  required
                 />
               </div>
               {registerError && (
@@ -289,10 +321,24 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  className="w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200"
+                  className={`w-full p-4 border-2 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-300 text-base border-gray-200${formErrors.address ? ' border-red-500' : ''}`}
                   placeholder="Address"
                   aria-invalid={formErrors?.address}
+                  required
                 />
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="checkbox"
+                  id="acknowledgeCode"
+                  checked={checkboxChecked}
+                  onChange={e => setCheckboxChecked(e.target.checked)}
+                  className="form-checkbox h-5 w-5 text-green-600"
+                  required
+                />
+                <label htmlFor="acknowledgeCode" className="text-sm text-gray-700 select-none">
+                  I understand that I must copy and keep my agent code safe after registration.
+                </label>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <button
