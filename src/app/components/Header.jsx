@@ -155,8 +155,8 @@ const Header = () => {
         <ul className="hidden md:flex items-center space-x-6 lg:space-x-8">
           <li className="group">
             <Link
-              href={isHomePage ? "#hero-section" : "/"}
-              onClick={isHomePage ? (e) => scrollToSection(e, "hero-section") : null}
+              href={isHomePage ? "#hero" : "/"}
+              onClick={isHomePage ? (e) => scrollToSection(e, "hero") : null}
               className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
               aria-label={t.home}
             >
@@ -195,39 +195,19 @@ const Header = () => {
           )}
           {/* AgentCodeEntry handles login/register/logout UI */}
           <AgentCodeEntry />
+          {isLoggedIn && (
+            <li className="group">
+              <Link
+                href="/agent-home"
+                className={`${commonLinkClasses} text-blue-700 hover:text-blue-900`}
+                aria-label={t.agentSite || "Agent Site"}
+              >
+                <span>{t.agentSite || "Agent Site"}</span>
+                <span className={underlineAnimation}></span>
+              </Link>
+            </li>
+          )}
         </ul>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-gray-700"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        >
-          <svg
-            className="w-7 h-7"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {isMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-            )}
-          </svg>
-        </button>
-      </div>
 
       {/* Mobile Navigation Menu */}
       <div
@@ -238,8 +218,8 @@ const Header = () => {
         <ul className="flex flex-col items-center space-y-4">
           <li>
             <Link
-              href={isHomePage ? "#hero-section" : "/"}
-              onClick={isHomePage ? (e) => scrollToSection(e, "hero-section") : () => setIsMenuOpen(false)}
+                href={isHomePage ? "#hero" : "/"}
+                onClick={isHomePage ? (e) => scrollToSection(e, "hero") : () => setIsMenuOpen(false)}
               className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
             >
               <Home size={20} />
@@ -270,40 +250,41 @@ const Header = () => {
               </li>
             </>
           )}
-          {/* Conditionally show login/register or logout buttons in mobile */}
-          {!isLoggedIn ? (
-            <>
+            {/* Conditionally show login/register or logout buttons in mobile */}
+            {!isLoggedIn ? (
+              <>
+                <li>
+                  <button
+                    onClick={() => { setIsRegisterOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
+                    className={`${mobileNavLinkClasses} ${registerButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+                  >
+                    <UserPlus size={20} />
+                    <span>{t.register || "Register"}</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
+                    className={`${mobileNavLinkClasses} ${loginButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+                  >
+                    <Key size={20} />
+                    <span>{t.login || "Login"}</span>
+                  </button>
+                </li>
+              </>
+            ) : (
               <li>
-                <button
-                  onClick={() => { setIsRegisterOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
-                  className={`${mobileNavLinkClasses} ${registerButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+                <Link
+                  href="/agent-home"
+                  onClick={() => { handleLogout(); setIsMenuOpen(false); }} // Close mobile menu when logging out
+                  className={`${mobileNavLinkClasses} text-blue-700 hover:text-blue-900`}
                 >
-                  <UserPlus size={20} />
-                  <span>{t.register || "Register"}</span>
-                </button>
+                  <span>{t.agentSite || "Agent Site"}</span>
+                </Link>
               </li>
-              <li>
-                <button
-                  onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
-                  className={`${mobileNavLinkClasses} ${loginButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
-                >
-                  <Key size={20} />
-                  <span>{t.login || "Login"}</span>
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <button
-                onClick={() => { handleLogout(); setIsMenuOpen(false); }} // Close mobile menu when logging out
-                className={`${mobileNavLinkClasses} ${logoutButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
-              >
-                <LogOut size={20} />
-                <span>Logout</span>
-              </button>
-            </li>
-          )}
+            )}
         </ul>
+        </div>
       </div>
     </nav>
   );
