@@ -111,27 +111,32 @@ const ProjectCards = () => {
           opacity: 1, 
           y: 0,
           transition: {
-            ...springConfig,
-            delay: 0.2
+            duration: 0.5,
+            ease: "easeOut"
           }
         } : {}}
       >
-        <h2 className="inline-block text-2xl md:text-xl lg:text-2xl font-bold text-gray-800 relative pb-2">
-          {title}
+        <div className="inline-block relative">
+          <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
+            {title}
+          </h2>
           {!prefersReducedMotion && (
-            <motion.span 
+            <motion.div
               initial={{ scaleX: 0 }}
               animate={inView ? { 
                 scaleX: 1,
                 transition: {
-                  ...springConfig,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
                   delay: 0.3
                 }
               } : {}}
-              className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 origin-left"
+               className="absolute -bottom-2 left-0 right-0 mx-auto h-1.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
+              style={{ width: '70%' }}
             />
           )}
-        </h2>
+        </div>
       </motion.div>
     );
   };

@@ -1,20 +1,10 @@
 "use client";
-
 import { useTranslation } from "@/TranslationContext";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Wallet, TrendingUp, ShieldCheck } from "lucide-react";
 import TranslatedButton from "./TranslatedButton";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Spring animation configuration
-const springConfig = {
-  type: "spring",
-  stiffness: 100,
-  damping: 15,
-  mass: 0.5,
-  restDelta: 0.001
-};
 
 const CompanyInfo = () => {
   const { t } = useTranslation();
@@ -23,7 +13,6 @@ const CompanyInfo = () => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
-    // Set prefers-reduced-motion only after component mounts (client-side)
     setPrefersReducedMotion(
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
     );
@@ -65,32 +54,43 @@ const CompanyInfo = () => {
   return (
     <section 
       id="company-info"
-      className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100"
+      className="w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-white"
     >
-      <div className="max-w-7xl mx-auto">
-        {/* Title with animated underline */}
+      <div className="max-w-7xl mx-auto relative">
+        {/* Floating decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-100 opacity-20 blur-xl"></div>
+          <div className="absolute bottom-40 right-20 w-48 h-48 rounded-full bg-blue-200 opacity-15 blur-xl"></div>
+        </div>
+
+        {/* Title with working modern underline */}
         <motion.div 
-          className="relative w-full mb-12 text-center"
+          className="text-center mb-16 relative"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="inline-block text-2xl font-bold text-gray-900 relative pb-2">
-            {t.title}
+          <div className="inline-block relative">
+            <h1 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
+              {t.title}
+            </h1>
             {!prefersReducedMotion && (
-              <motion.span 
+              <motion.div
                 initial={{ scaleX: 0 }}
                 animate={isVisible ? { 
                   scaleX: 1,
                   transition: {
-                    ...springConfig,
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
                     delay: 0.3
                   }
                 } : {}}
-                className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 origin-left"
+                className="absolute -bottom-1 left-0 right-0 mx-auto h-1.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
+                style={{ width: '70%' }}
               />
             )}
-          </h1>
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -98,7 +98,7 @@ const CompanyInfo = () => {
             {features.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }} // Alternate left/right starting positions
+                initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.2 }}
                 transition={{ 
