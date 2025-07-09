@@ -139,7 +139,13 @@
     InspireWalletPartnerBanks: "Inspire Wallet Partner Banks",
     OpeningaPhilippineBankAccountfornonresidents: "Opening a Philippine Bank Account for non-residents",
     BuyingRealEstatewithUSDT: "Buying Real Estate with USDT",
-    MicroInvestments: "Micro Investments"
+    MicroInvestments: "Micro Investments",
+    // New keys for agent-home/page.js
+    welcomeAgent: "Welcome, Agent!",
+    businessLinesDesc: "Access your business lines, resources, and more.",
+    viewDetails: "View Details",
+    availableResources: "Available Resources",
+    viewPDF: "View PDF"
 
   },
   ja: {
@@ -276,7 +282,13 @@
     InspireWalletPartnerBanks: "Inspireウォレット提携銀行",
     OpeningaPhilippineBankAccountfornonresidents: "非居住者向けフィリピン銀行口座の開設",
     BuyingRealEstatewithUSDT: "USDTで不動産を購入",
-    MicroInvestments: "マイクロ投資"
+    MicroInvestment: "マイクロ投資",
+    // New keys for agent-home/page.js
+    welcomeAgent: "エージェントの皆様へようこそ！",
+    businessLinesDesc: "事業部門やリソースにアクセスできます。",
+    viewDetails: "詳細を見る",
+    availableResources: "利用可能なリソース",
+    viewPDF: "PDFを見る"
   },
   ko: {
     title: "비즈니스 서비스",
@@ -409,7 +421,13 @@
     InspireWalletPartnerBanks: "Inspire 월렛 제휴 은행",
     OpeningaPhilippineBankAccountfornonresidents: "비거주자를 위한 필리핀 은행 계좌 개설",
     BuyingRealEstatewithUSDT: "USDT로 부동산 구매",
-    MicroInvestment: "마이크로 투자"
+    MicroInvestment: "마이크로 투자",
+    // New keys for agent-home/page.js
+    welcomeAgent: "에이전트님 환영합니다!",
+    businessLinesDesc: "비즈니스 라인과 리소스에 접근하세요.",
+    viewDetails: "자세히 보기",
+    availableResources: "이용 가능한 리소스",
+    viewPDF: "PDF를 보기"
   },
 
 
@@ -546,7 +564,13 @@
     InspireWalletPartnerBanks: "Inspire钱包合作银行",
     OpeningaPhilippineBankAccountfornonresidents: "非居民菲律宾银行账户开户",
     BuyingRealEstatewithUSDT: "使用USDT购买房地产",
-    MicroInvestments: "微型投资"
+    MicroInvestments: "微型投资",
+    // New keys for agent-home/page.js
+    welcomeAgent: "欢迎，代理人！",
+    businessLinesDesc: "访问您的业务领域和资源。",
+    viewDetails: "查看详情",
+    availableResources: "可用资源",
+    viewPDF: "查看PDF"
   }
 };
 

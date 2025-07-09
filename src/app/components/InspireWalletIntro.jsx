@@ -12,14 +12,14 @@ export default function InspireWalletIntro({ darkMode = false }) {
   return (
     <section
       id="IW"
-      className={`relative w-full ${darkMode ? 'bg-gray-900' : 'bg-white'} py-16 px-4 md:px-16 flex flex-col md:flex-row items-center gap-8 overflow-hidden`}
+      className={`relative w-full ${darkMode ? 'bg-neutral-900' : 'bg-white'} py-16 px-4 md:px-16 flex flex-col md:flex-row items-center gap-8 overflow-hidden`}
     >
-      {/* Decorative Shapes - Enhanced with subtle animations for a dynamic background */}
-      <div className="absolute -left-32 -top-32 w-64 h-64 rounded-full bg-blue-500 opacity-15 blur-3xl animate-pulse"></div>
-      <div className="absolute -right-32 bottom-0 w-96 h-96 rounded-full bg-purple-500 opacity-15 blur-3xl animate-pulse delay-1000"></div>
-      <div className="absolute left-1/4 top-1/2 w-32 h-32 bg-indigo-400 rounded-lg rotate-45 opacity-25 blur-xl animate-spin-slow"></div>
+      {/* Decorative Shapes - Subtle blue accent only */}
+      <div className="absolute -left-32 -top-32 w-64 h-64 rounded-full bg-blue-100 opacity-10 blur-3xl" />
+      <div className="absolute -right-32 bottom-0 w-96 h-96 rounded-full bg-blue-100 opacity-10 blur-3xl delay-1000" />
+      <div className="absolute left-1/4 top-1/2 w-32 h-32 bg-blue-50 rounded-lg rotate-45 opacity-10 blur-xl" />
 
-      {/* Video Section - Designed to be prominent and visually engaging */}
+      {/* Video Section */}
       <motion.div
         className="relative w-full md:w-1/2"
         initial={{ opacity: 0, x: -100 }} // Animation from left on scroll into view
@@ -28,15 +28,15 @@ export default function InspireWalletIntro({ darkMode = false }) {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {/* Floating shape behind the video for depth */}
-        <div className={`absolute -z-10 -left-8 -top-8 w-full h-full rounded-3xl ${darkMode ? 'bg-gray-800' : 'bg-gray-100'} rotate-3 shadow-lg`}></div>
+        <div className={`absolute -z-10 -left-8 -top-8 w-full h-full rounded-3xl ${darkMode ? 'bg-neutral-800' : 'bg-neutral-100'} rotate-3 shadow-lg`} />
 
         {/* Decorative circle shape with a gentle bounce animation */}
-        <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-400 rounded-full opacity-30 animate-bounce-slow"></div>
+        <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-100 rounded-full opacity-10" />
 
         {/* Main container for the video with enhanced styling and hover effect */}
-        <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 transform hover:scale-105 transition-transform duration-300 ease-in-out">
+        <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-neutral-200 transform hover:scale-105 transition-transform duration-300 ease-in-out">
           {/* The video element: auto-plays, loops, is muted, and plays inline for mobile compatibility */}
-          <video autoPlay loop muted playsInline className="w-full h-full object-contain"> {/* Changed object-cover to object-contain */}
+          <video autoPlay loop muted playsInline className="w-full h-full object-contain">
             {/* Source for the video. Ensure this path is correct in your project. */}
             <source src="/videos/inspirewallet.mp4" type="video/mp4" />
             Your browser does not support the video tag.
@@ -44,7 +44,7 @@ export default function InspireWalletIntro({ darkMode = false }) {
         </div>
       </motion.div>
 
-      {/* Text Section - Designed for readability and impact */}
+      {/* Text Section */}
       <motion.div
         className="relative w-full md:w-1/2 flex flex-col justify-center"
         initial={{ opacity: 0, x: 100 }} // Animation from right on scroll into view
@@ -52,16 +52,16 @@ export default function InspireWalletIntro({ darkMode = false }) {
         viewport={{ once: false, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }} // Slightly delayed for sequential animation
       >
-        {/* Decorative vertical bar with a fade-in animation */}
-        <div className={`absolute -left-8 top-0 w-4 h-16 ${darkMode ? 'bg-blue-400' : 'bg-blue-600'} rounded-full animate-fade-in-up`}></div>
+        {/* Decorative vertical bar with a fade-in animation (subtle blue accent) */}
+        <div className={`absolute -left-8 top-0 w-4 h-16 bg-blue-100 rounded-full`} />
 
-        <h2 className={`relative text-3xl md:text-4xl font-extrabold ${darkMode ? 'text-white' : 'text-gray-900'} mb-6`}>
+        <h2 className={`relative text-3xl md:text-4xl font-extrabold text-black mb-6`}>
           {introWalletTitle}
           {/* Underline shape with a stretch animation */}
-          <span className={`absolute left-0 -bottom-2 w-16 h-1 ${darkMode ? 'bg-blue-400' : 'bg-blue-600'} rounded-full animate-stretch`}></span>
+          <span className={`absolute left-0 -bottom-2 w-16 h-1 bg-blue-200 rounded-full`} />
         </h2>
 
-        <p className={`text-lg md:text-xl ${darkMode ? 'text-gray-300' : 'text-gray-700'} leading-relaxed mb-8 pl-6 border-l-2 ${darkMode ? 'border-blue-400/30' : 'border-blue-600/30'}`}>
+        <p className={`text-lg md:text-xl text-gray-900 leading-relaxed mb-8 pl-6 border-l-2 border-blue-100`}>
           {introWalletDesc}
         </p>
 

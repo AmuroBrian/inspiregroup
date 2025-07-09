@@ -5,10 +5,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"; // Import useRouter
 import { useTranslation } from "@/TranslationContext";
-import { Home, Info, Mail, UserPlus, Key } from "lucide-react";
+import { Home, Info, Mail, UserPlus, Key, LogOut } from "lucide-react";
 import { v4 as uuidv4 } from "uuid"; // For generating UUID for agent code
 import { db } from "../../../script/firebaseConfig"; // Adjust path as per your project structure
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { AgentCodeEntry } from "./AgentHubCode/AgentCodeEntry";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,6 +25,7 @@ const Header = () => {
   const [error, setError] = useState("");
   const [isHydrated, setIsHydrated] = useState(false); // Likely not needed here, but kept for direct migration
   const [isScrolled, setIsScrolled] = useState(false); // For scroll effect, if you still want it for the header
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
 
   const [formData, setFormData] = useState({
     lastName: "",
@@ -36,6 +38,11 @@ const Header = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsHydrated(true); // Hydration check
+      
+      // Check login state from localStorage
+      const loginStatus = localStorage.getItem("isLoggedIn");
+      setIsLoggedIn(loginStatus === "true");
+      
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 50);
       };
@@ -67,6 +74,7 @@ const Header = () => {
 
         // Store login state
         localStorage.setItem("isLoggedIn", "true");
+        setIsLoggedIn(true);
 
         // Navigate to agent-home
         router.push("/agent-home");
@@ -106,6 +114,13 @@ const Header = () => {
     setFormData({ lastName: "", firstName: "", birthdate: "", address: "" });
   };
 
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    router.push("/");
+  };
+
   // Common Tailwind CSS classes
   const commonLinkClasses = "relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group";
   const mobileNavLinkClasses = "text-lg cursor-pointer transition-colors duration-300 flex items-center space-x-2";
@@ -114,6 +129,7 @@ const Header = () => {
   const buttonBaseClasses = "inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md";
   const registerButtonClasses = `${buttonBaseClasses} bg-blue-500 text-white hover:bg-blue-600 hover:shadow-lg`;
   const loginButtonClasses = `${buttonBaseClasses} bg-gray-200 text-gray-800 hover:bg-gray-300 hover:shadow-lg`;
+  const logoutButtonClasses = `${buttonBaseClasses} bg-red-500 text-white hover:bg-red-600 hover:shadow-lg`;
 
   return (
     <nav
@@ -177,19 +193,8 @@ const Header = () => {
               </li>
             </>
           )}
-          {/* Changed these to buttons that open modals */}
-          <li>
-            <button onClick={() => setIsRegisterOpen(true)} className={registerButtonClasses}>
-              <UserPlus size={18} />
-              <span>{t.register || "Register"}</span>
-            </button>
-          </li>
-          <li>
-            <button onClick={() => setIsLoginOpen(true)} className={loginButtonClasses}>
-              <Key size={18} />
-              <span>{t.login || "Login"}</span>
-            </button>
-          </li>
+          {/* AgentCodeEntry handles login/register/logout UI */}
+          <AgentCodeEntry />
         </ul>
 
         {/* Mobile Menu Toggle */}
@@ -265,147 +270,41 @@ const Header = () => {
               </li>
             </>
           )}
-          {/* Changed these to buttons that open modals in mobile */}
-          <li>
-            <button
-              onClick={() => { setIsRegisterOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
-              className={`${mobileNavLinkClasses} ${registerButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
-            >
-              <UserPlus size={20} />
-              <span>{t.register || "Register"}</span>
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
-              className={`${mobileNavLinkClasses} ${loginButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
-            >
-              <Key size={20} />
-              <span>{t.login || "Login"}</span>
-            </button>
-          </li>
+          {/* Conditionally show login/register or logout buttons in mobile */}
+          {!isLoggedIn ? (
+            <>
+              <li>
+                <button
+                  onClick={() => { setIsRegisterOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
+                  className={`${mobileNavLinkClasses} ${registerButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+                >
+                  <UserPlus size={20} />
+                  <span>{t.register || "Register"}</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }} // Close mobile menu when opening modal
+                  className={`${mobileNavLinkClasses} ${loginButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+                >
+                  <Key size={20} />
+                  <span>{t.login || "Login"}</span>
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <button
+                onClick={() => { handleLogout(); setIsMenuOpen(false); }} // Close mobile menu when logging out
+                className={`${mobileNavLinkClasses} ${logoutButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
+              >
+                <LogOut size={20} />
+                <span>Logout</span>
+              </button>
+            </li>
+          )}
         </ul>
       </div>
-
-      {/* Login Modal (Moved from AgentCodeEntry) */}
-      {isLoginOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-4 z-50"> {/* Added z-50 to ensure it's above other elements */}
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg">
-            <h2 className="text-2xl font-bold text-center mb-4">
-              Enter Agent Code
-            </h2>
-            <input
-              type="password"
-              value={agentCode}
-              onChange={(e) => setAgentCode(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="Enter your agent code"
-            />
-            {error && <p className="text-red-500 mt-2">{error}</p>}
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={closeLoginModal}
-                className="w-full sm:w-auto flex-1 px-4 py-2 bg-gray-400 text-white rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setAgentCode("")}
-                className="w-full sm:w-auto flex-1 px-4 py-2 bg-red-400 text-white rounded"
-              >
-                Clear
-              </button>
-              <button
-                onClick={handleLogin}
-                className="w-full sm:w-auto flex-1 px-4 py-2 bg-green-400 text-white rounded"
-              >
-                Login
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Register Modal (Moved from AgentCodeEntry) */}
-      {isRegisterOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-4 z-50"> {/* Added z-50 */}
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg">
-            <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
-
-            <input
-              type="text"
-              value={formData.lastName}
-              onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
-              }
-              className="w-full p-2 border border-gray-300 rounded mb-3"
-              placeholder="Last Name"
-            />
-
-            <input
-              type="text"
-              value={formData.firstName}
-              onChange={(e) =>
-                setFormData({ ...formData, firstName: e.target.value })
-              }
-              className="w-full p-2 border border-gray-300 rounded mb-3"
-              placeholder="First Name"
-            />
-
-            {/* Birthdate Label and Input */}
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Birthdate:
-            </label>
-            <input
-              type="date"
-              value={formData.birthdate}
-              onChange={(e) =>
-                setFormData({ ...formData, birthdate: e.target.value })
-              }
-              className="w-full p-2 border border-gray-300 rounded mb-3"
-            />
-
-            <input
-              type="text"
-              value={formData.address}
-              onChange={(e) =>
-                setFormData({ ...formData, address: e.target.value })
-              }
-              className="w-full p-2 border border-gray-300 rounded mb-3"
-              placeholder="Address"
-            />
-
-            {/* Buttons Layout */}
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={closeRegisterModal}
-                className="w-full sm:w-auto flex-1 px-4 py-2 bg-gray-400 text-white rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() =>
-                  setFormData({
-                    lastName: "",
-                    firstName: "",
-                    birthdate: "",
-                    address: "",
-                  })
-                }
-                className="w-full sm:w-auto flex-1 px-4 py-2 bg-red-400 text-white rounded"
-              >
-                Clear
-              </button>
-              <button
-                onClick={handleRegisterSubmit}
-                className="w-full sm:w-auto flex-1 px-4 py-2 bg-green-400 text-white rounded"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };

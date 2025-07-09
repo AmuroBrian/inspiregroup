@@ -1,9 +1,35 @@
 // components/HeroSection.jsx
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@/TranslationContext";
 import Link from "next/link"; // Link is imported but not used. Consider removing if not needed.
 import { motion, useAnimation, useInView } from "framer-motion";
+
+// Typing animation component
+function TypingAnimation({ text, inView, speed = 40, className = "" }) {
+  const [displayed, setDisplayed] = useState("");
+  const index = useRef(0);
+  useEffect(() => {
+    let timeout;
+    if (inView) {
+      setDisplayed("");
+      index.current = 0;
+      const type = () => {
+        if (index.current <= text.length) {
+          setDisplayed(text.slice(0, index.current));
+          index.current++;
+          timeout = setTimeout(type, speed);
+        }
+      };
+      type();
+    } else {
+      setDisplayed("");
+      index.current = 0;
+    }
+    return () => clearTimeout(timeout);
+  }, [text, inView, speed]);
+  return <span className={className}>{displayed}<span className="animate-pulse">|</span></span>;
+}
 
 export default function HeroSection() {
   const { t } = useTranslation();
@@ -90,8 +116,17 @@ export default function HeroSection() {
               className="text-white/90 mt-4 sm:mt-6 text-xs sm:text-sm md:text-base max-w-5xl leading-relaxed mx-auto sm:mx-0"
               variants={itemVariants}
             >
-              {t.heroDescription ||
-                "Empowering your financial journey with secure, smart, and seamless digital solutions."}
+              <motion.span
+                variants={itemVariants}
+                initial="hidden"
+                animate={controls}
+                style={{ display: 'inline-block' }}
+              >
+                <TypingAnimation
+                  text={t.heroDescription || "Empowering your financial journey with secure, smart, and seamless digital solutions."}
+                  inView={isInView}
+                />
+              </motion.span>
             </motion.p>
 
             <motion.div
