@@ -276,7 +276,7 @@ const Header = () => {
               <li>
                 <Link
                   href="/agent-home"
-                  onClick={() => { handleLogout(); setIsMenuOpen(false); }} // Close mobile menu when logging out
+                  onClick={() => setIsMenuOpen(false)} // Just close menu, do not logout
                   className={`${mobileNavLinkClasses} text-blue-700 hover:text-blue-900`}
                 >
                   <span>{t.agentSite || "Agent Site"}</span>

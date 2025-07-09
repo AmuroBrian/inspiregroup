@@ -83,7 +83,7 @@ export const CompanyOverview = () => {
         >
           <div className="inline-block relative">
             <h1 className="text-4xl md:text-6xl font-bold text-blue-900 mb-6">
-              {t.overview}
+              {t.companyOverviewTitle}
             </h1>
             {!prefersReducedMotion && (
               <motion.div
@@ -167,10 +167,10 @@ export const CompanyOverview = () => {
               <FaUsers size={20} />
             </div>
             <h2 className="text-2xl font-bold text-blue-800 mb-6">
-              Expert Team
+              {t.expertTeamTitle}
             </h2>
             <p className="text-blue-900/90 leading-relaxed">
-              Our team brings together top talent with diverse expertise in finance and technology.
+              {t.expertTeamDesc}
             </p>
             <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-blue-100 opacity-20 group-hover:opacity-30 transition-opacity"></div>
           </motion.div>
@@ -188,10 +188,10 @@ export const CompanyOverview = () => {
               <FaChartPie size={20} />
             </div>
             <h2 className="text-2xl font-bold text-blue-800 mb-6">
-              Proven Performance
+              {t.provenPerformanceTitle}
             </h2>
             <p className="text-blue-900/90 leading-relaxed">
-              Consistent track record of delivering superior results for our clients.
+              {t.provenPerformanceDesc}
             </p>
             <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-blue-100 opacity-20 group-hover:opacity-30 transition-opacity"></div>
           </motion.div>
@@ -209,10 +209,10 @@ export const CompanyOverview = () => {
               <FaHandshake size={20} />
             </div>
             <h2 className="text-2xl font-bold text-blue-800 mb-6">
-              Strategic Partnerships
+              {t.strategicPartnershipsTitle}
             </h2>
             <p className="text-blue-900/90 leading-relaxed">
-              Strong network of industry partners to enhance our service offerings.
+              {t.strategicPartnershipsDesc}
             </p>
             <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-blue-100 opacity-20 group-hover:opacity-30 transition-opacity"></div>
           </motion.div>
@@ -230,10 +230,10 @@ export const CompanyOverview = () => {
               <FaBuilding size={20} />
             </div>
             <h2 className="text-2xl font-bold text-blue-800 mb-6">
-              Global Presence
+              {t.globalPresenceTitle}
             </h2>
             <p className="text-blue-900/90 leading-relaxed">
-              Serving clients worldwide with localized expertise and global insights.
+              {t.globalPresenceDesc}
             </p>
             <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-blue-100 opacity-20 group-hover:opacity-30 transition-opacity"></div>
           </motion.div>

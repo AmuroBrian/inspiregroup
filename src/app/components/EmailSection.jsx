@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Globe, Phone, Mail, Facebook, Instagram, Youtube, ArrowRight, Smartphone, PhoneCall } from "lucide-react";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
+import { useTranslation } from "@/TranslationContext";
 
 const EmailSection = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const EmailSection = () => {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
+
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +55,7 @@ const EmailSection = () => {
   const contactItems = [
     {
       icon: <Globe className="mr-2 text-blue-400" size={20} />,
-      label: "Website:",
+      label: t.emailSectionWebsite,
       content: (
         <>
           <a 
@@ -83,19 +86,19 @@ const EmailSection = () => {
     },
     {
       icon: <PhoneCall className="mr-2 text-blue-400" size={20} />,
-      label: "Telephone:",
+      label: t.emailSectionTelephone,
       content: (
         <div className="space-y-2">
           <div className="flex items-center">
             <Phone className="mr-2 text-blue-400" size={16} />
             <span>
-              Landline: <a href="tel:+63285385054" className="hover:text-blue-300 transition-colors">(02) 8538-5054</a> | <a href="tel:+6327750605" className="hover:text-blue-300 transition-colors">(02) 7750-605</a>
+              {t.emailSectionLandline}: <a href="tel:+63285385054" className="hover:text-blue-300 transition-colors">(02) 8538-5054</a> | <a href="tel:+6327750605" className="hover:text-blue-300 transition-colors">(02) 7750-605</a>
             </span>
           </div>
           <div className="flex items-center">
             <Smartphone className="mr-2 text-blue-400" size={16} />
             <span>
-              Mobile: <a href="tel:+639946529009" className="hover:text-blue-300 transition-colors">+63 994 652 9009</a>
+              {t.emailSectionMobile}: <a href="tel:+639946529009" className="hover:text-blue-300 transition-colors">+63 994 652 9009</a>
             </span>
           </div>
         </div>
@@ -103,7 +106,7 @@ const EmailSection = () => {
     },
     {
       icon: <Mail className="mr-2 text-blue-400" size={20} />,
-      label: "Email:",
+      label: t.emailSectionEmailLabel,
       content: (
         <a 
           href="mailto:info@inspireholdings.ph" 
@@ -118,7 +121,7 @@ const EmailSection = () => {
     },
     {
       icon: <Facebook className="mr-2 text-blue-400" size={20} />,
-      label: "Facebook:",
+      label: t.emailSectionFacebook,
       content: (
         <a 
           href="https://facebook.com/InspireNextGlobalInc" 
@@ -135,7 +138,7 @@ const EmailSection = () => {
     },
     {
       icon: <Instagram className="mr-2 text-blue-400" size={20} />,
-      label: "Instagram:",
+      label: t.emailSectionInstagram,
       content: (
         <a 
           href="https://instagram.com/inspire.next.global.inc" 
@@ -152,7 +155,7 @@ const EmailSection = () => {
     },
     {
       icon: <Youtube className="mr-2 text-blue-400" size={20} />,
-      label: "YouTube:",
+      label: t.emailSectionYouTube,
       content: (
         <a 
           href="https://www.youtube.com/channel/UCUGE-qPvLqYmZhQ25aLXm6A" 
@@ -189,10 +192,10 @@ const EmailSection = () => {
         >
           <div className="relative pb-6 mb-6 border-b border-gray-200">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center">
-              Let's Start a Conversation
+              {t.emailSectionTitle}
             </h2>
             <p className="text-center text-gray-600 mt-2 text-sm md:text-base">
-              Have questions or want to discuss a project? We're here to help.
+              {t.emailSectionDesc}
             </p>
           </div>
 
@@ -201,15 +204,15 @@ const EmailSection = () => {
               success ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
             }`}>
               {success
-                ? "Thank you! Your message has been sent successfully."
-                : "We encountered an error. Please try again or contact us directly."}
+                ? t.emailSectionSuccess
+                : t.emailSectionError}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
             <div className="space-y-2">
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Your Name
+                {t.emailSectionName}
               </label>
               <input
                 id="name"
@@ -225,7 +228,7 @@ const EmailSection = () => {
 
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Your Email
+                {t.emailSectionEmail}
               </label>
               <input
                 id="email"
@@ -241,7 +244,7 @@ const EmailSection = () => {
 
             <div className="space-y-2">
               <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                Your Message
+                {t.emailSectionMessage}
               </label>
               <textarea
                 id="message"
@@ -266,11 +269,11 @@ const EmailSection = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Sending...
+                  {t.emailSectionSending}
                 </>
               ) : (
                 <>
-                  Send Message
+                  {t.emailSectionSend}
                   <span className="ml-2 group-hover:translate-x-1 transition-transform">
                     <ArrowRight size={16} className="md:size-[18px]" />
                   </span>
@@ -290,10 +293,10 @@ const EmailSection = () => {
         >
           <div className="pb-4 md:pb-6 mb-4 md:mb-6 border-b border-gray-700">
             <h2 className="text-2xl md:text-3xl font-bold text-white text-center">
-              Connect With Us
+              {t.emailSectionConnect}
             </h2>
             <p className="text-center text-gray-400 mt-2 text-sm md:text-base">
-              We're always happy to hear from you. Choose your preferred method.
+              {t.emailSectionConnectDesc}
             </p>
           </div>
           
@@ -317,9 +320,9 @@ const EmailSection = () => {
           </div>
 
           <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-700">
-            <h3 className="text-lg md:text-xl font-semibold text-white mb-2 md:mb-4">Business Hours</h3>
-            <p className="text-gray-400 text-sm md:text-base">Monday - Friday: 9:30 AM - 6:30 PM</p>
-            <p className="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Closed on Saturday, Sundays and Public Holidays</p>
+            <h3 className="text-lg md:text-xl font-semibold text-white mb-2 md:mb-4">{t.emailSectionBusinessHours}</h3>
+            <p className="text-gray-400 text-sm md:text-base">{t.emailSectionBusinessDays}</p>
+            <p className="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">{t.emailSectionBusinessClosed}</p>
           </div>
         </motion.div>
       </div>
