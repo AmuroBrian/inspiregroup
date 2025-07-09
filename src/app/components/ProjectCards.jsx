@@ -31,13 +31,13 @@ const ProjectCards = () => {
     {
       id: 2,
       title: t.missionVision,
-      image: "/images/Dart.jpeg",
+      image: "/images/MV.png",
       link: "/missionvision",
     },
     {
       id: 3,
       title: t.messageExec,
-      image: "/images/Denmark.jpeg",
+      image: "/images/MessageE.png",
       link: "/messageexec",
     },
     {

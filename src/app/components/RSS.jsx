@@ -212,7 +212,7 @@ export default function NewsFeed() {
   return (
     <section 
       id="news-feed"
-      className="relative w-full min-h-screen bg-gradient-to-br from-blue-50 to-white py-16 px-4 sm:px-6 lg:px-8"
+      className="relative w-full min-h-fit bg-gradient-to-br from-blue-50 to-white py-16 px-4 sm:px-6 lg:px-8"
       aria-busy={isLoading}
       aria-live="polite"
     >
