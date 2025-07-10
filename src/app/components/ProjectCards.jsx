@@ -209,7 +209,7 @@ const ProjectCards = () => {
           {/* Remove padding and use object-cover to fill container */}
           <Image
             src={image}
-            alt={title}
+            alt={title || "Project image"}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -316,7 +316,7 @@ const ProjectCards = () => {
         
         <Image
           src={image}
-          alt={title}
+          alt={title || "Project image"}
           fill
           className="object-contain p-2" // Prevents edge bleeding
           sizes="(max-width: 768px) 100vw, 50vw"

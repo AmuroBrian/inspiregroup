@@ -251,7 +251,7 @@ const Section = ({ title, name, children }) => (
 
 const SectionImage = ({ src, alt }) => (
   <div className="flex justify-center mt-10">
-    <img src={src} alt={alt} className="w-full h-auto" />
+    <img src={src} alt={alt || "Section image"} className="w-full h-auto" />
   </div>
 );
 

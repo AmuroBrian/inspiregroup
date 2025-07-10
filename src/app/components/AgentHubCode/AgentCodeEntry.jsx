@@ -29,6 +29,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
   });
   const [registerError, setRegisterError] = useState("");
   const [registerSuccess, setRegisterSuccess] = useState({ show: false, code: "" });
+  const [loginSuccess, setLoginSuccess] = useState({ show: false });
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const router = useRouter();
   const { t } = useTranslation();
@@ -45,7 +46,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
       const q = query(collection(db, "agents"), where("code", "==", agentCode));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
-        alert("Login Successful!");
+        setLoginSuccess({ show: true });
         setAgentCode("");
         setError("");
         closeLoginModal();
@@ -97,11 +98,11 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
         code: generatedCode,
         createdAt: new Date(),
       });
-      alert(`Registration Successful! Your Agent Code: ${generatedCode}`);
+      setRegisterSuccess({ show: true, code: generatedCode });
       closeRegisterModal();
     } catch (err) {
       console.error("Registration error", err);
-      alert("Failed to register. Please try again.");
+      setRegisterError("Failed to register. Please try again.");
     }
   };
 
@@ -378,7 +379,7 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
 
       {/* Registration Complete Modal */}
       {registerSuccess.show && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-[scaleIn_0.2s]">
             <div className="mx-auto w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center mb-4 shadow-lg">
               <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -388,18 +389,10 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.registrationCompleteTitle || "Registration Complete!"}</h2>
             <p className="text-gray-700 mb-4">{t.registrationCompleteSubtitle || "Congratulations! Your agent code is:"}</p>
             <div className="text-2xl font-mono font-bold text-blue-600 bg-blue-50 rounded-lg px-4 py-2 mb-2 inline-block">{registerSuccess.code}</div>
-            <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="flex items-center justify-center gap-2 mb-4">
               <svg className="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
-              <span className="text-yellow-700 text-sm font-semibold">{t.registrationAgeNote || "You must be 18 years or older to register. Please keep your agent code safe; you’ll need it to log in."}</span>
+              <span className="text-yellow-700 text-sm font-semibold">{t.registrationAgeNote || "You must be 18 years or older to register. Please remember and copy your agent code manually - you'll need it to log in."}</span>
             </div>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(registerSuccess.code);
-              }}
-              className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-            >
-              {t.copyCode || "Copy Code"}
-            </button>
             <div>
               <button
                 onClick={() => setRegisterSuccess({ show: false, code: "" })}
@@ -408,6 +401,31 @@ export const AgentCodeEntry = ({ isMenuOpen }) => {
                 {t.goToLogin || "Go to Login"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Login Success Modal */}
+      {loginSuccess.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-[scaleIn_0.2s]">
+            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-4 shadow-lg">
+              <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.loginSuccessTitle || "Login Successful!"}</h2>
+            <p className="text-gray-700 mb-4">{t.loginSuccessSubtitle || "Welcome back! You have successfully logged in to your agent dashboard."}</p>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <svg className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span className="text-green-700 text-sm font-semibold">{t.loginSuccessNote || "You will be redirected to your agent dashboard."}</span>
+            </div>
+            <button
+              onClick={() => setLoginSuccess({ show: false })}
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            >
+              {t.continue || "Continue"}
+            </button>
           </div>
         </div>
       )}

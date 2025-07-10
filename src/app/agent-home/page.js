@@ -82,7 +82,7 @@ export default function CompanyInfo() {
           >
             <Image
               src={image.src}
-              alt={image.name}
+              alt={image.name || "Document image"}
               layout="fill"
               objectFit="cover" // Changed to cover for better filling
               priority={index === 0}
