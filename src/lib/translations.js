@@ -179,10 +179,10 @@ emailSectionFacebook: "Facebook:",
 emailSectionInstagram: "Instagram:",
 emailSectionYouTube: "YouTube:",
 
-agentHomeTitle: "Business Lines",
+agentHomeTitle: "BUSINESS LINES",
 agentHomeSubtitle: "Access your business resources and documents below.",
 agentHomeClickImage: "Click the image to view details",
-agentHomeAvailablePDFs: "Available PDFs",
+agentHomeAvailablePDFs: "AVAILABLE PDFs",
 
     // AgentCodeEntry translations
     agentLoginTitle: "Agent Login",
