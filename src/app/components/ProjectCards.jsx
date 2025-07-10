@@ -564,6 +564,7 @@ const ProjectCards = () => {
         </motion.div>
 
         <SectionTitle title={t.aboutT} />
+        <div id="about-section">
         <motion.div 
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
           initial={prefersReducedMotion ? false : { opacity: 0 }}
@@ -580,6 +581,7 @@ const ProjectCards = () => {
             <AnimatedCard key={card.id} {...card} index={index} />
           ))}
         </motion.div>
+        </div>
       </motion.div>
     </motion.div>
   );
