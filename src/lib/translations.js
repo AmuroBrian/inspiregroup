@@ -36,7 +36,7 @@
     privateBanking: "Private Banking",
     travelProtection: "Travel Protection",
     businessLines: "BUSINESS LINES",
-    about: "About",
+    aboutT: "ABOUT",
 
     herosub: "Welcome to Inspire Holdings Group – A legacy of strong trust and proven excellence. This is where your future moves to the next level.",
     heroDescription: "Empowering your financial journey with secure, smart, and seamless digital solutions.",
@@ -55,7 +55,7 @@
 
     compM: "Welcome to Inspire Holdings!",
     compMone: "Message from our President",
-    compMtwo: "I am Melody Santos, privileged to serve as President of this esteemed organization. My journey began in 1993 as a civil servant,during which I was fortunate to garner the support and mentorship of many prominent business magnates. This paved the way for my foray into the financial sector in 1999.",
+    compMtwo: "I am Patrick Dela Cruz Perez, privileged to serve as President of this esteemed organization. My journey began in 1993 as a civil servant,during which I was fortunate to garner the support and mentorship of many prominent business magnates. This paved the way for my foray into the financial sector in 1999.",
     compMthree: " In 2005, I founded a modest finance company, which has since evolved significantly. By 2012, we were deeply entrenched in the financial industry, partnering with leading corporations. With unwavering support from our esteemed partners, we embarked on the journey toward public listing in 2023, culminating in a successful launch in 2024.",
     compMfour: "Our vision is ambitious: to position the Philippines as the foremost economy in Asia by 2027. At Inspire Holdings, we are committed to empowering our business partners, driving innovation, and achieving extraordinary growth together. Thank you for your trust and continued support.",
     compMfift: " Message from our Executive Vice President",

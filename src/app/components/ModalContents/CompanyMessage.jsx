@@ -156,7 +156,7 @@ export const CompanyMessage = () => {
                 className="text-blue-700 text-sm sm:text-base font-semibold text-right mt-4 sm:mt-6"
                 variants={itemVariants}
               >
-                — Melody Santos
+                — Patrick Dela Cruz Perez
               </motion.p>
             </motion.div>
 
@@ -193,7 +193,7 @@ export const CompanyMessage = () => {
                 className="text-blue-700 text-sm sm:text-base font-semibold text-right mt-4 sm:mt-6"
                 variants={itemVariants}
               >
-                — Rhia Alberto
+                — EVP Andrei Bergano
               </motion.p>
             </motion.div>
           </div>
