@@ -4,7 +4,6 @@ import { useTranslation } from "@/TranslationContext";
 import { FiChevronLeft, FiChevronRight, FiExternalLink } from "react-icons/fi";
 import { motion } from "framer-motion";
 
-// Constants
 const SPRING_CONFIG = {
   type: "spring",
   stiffness: 300,
@@ -29,7 +28,6 @@ export default function NewsFeed() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const { translateDynamicText } = useTranslation();
 
-  // Memoized visible items calculation
   const visibleCount = useMemo(() => {
     if (windowWidth < BREAKPOINTS.mobile) return 1;
     if (windowWidth < BREAKPOINTS.tablet) return 2;
@@ -40,7 +38,6 @@ export default function NewsFeed() {
     feedItems.slice(currentStartIndex, currentStartIndex + visibleCount)
   ), [feedItems, currentStartIndex, visibleCount]);
 
-  // Intersection Observer setup
   useEffect(() => {
     setPrefersReducedMotion(
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -59,7 +56,6 @@ export default function NewsFeed() {
     };
   }, []);
 
-  // Fetch and parse RSS feed
   const fetchFeed = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -80,7 +76,6 @@ export default function NewsFeed() {
         const description = item.getElementsByTagName("description")[0]?.textContent || "";
         const pubDate = item.getElementsByTagName("pubDate")[0]?.textContent;
         
-        // Sanitize description
         const cleanDescription = description
           .replace(/<[^>]+>/g, " ")
           .replace(/\s+/g, " ")
@@ -95,10 +90,8 @@ export default function NewsFeed() {
         };
       });
 
-      // Filter out items without required fields
       const validItems = items.filter(item => item.title && item.link);
 
-      // Translate items
       const translatedItems = await Promise.all(
         validItems.map(async (item) => ({
           ...item,
@@ -120,10 +113,11 @@ export default function NewsFeed() {
     fetchFeed();
   }, [fetchFeed]);
 
-  // Window resize handler
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
+      // Reset to first page when screen size changes
+      setCurrentStartIndex(0);
     };
 
     setWindowWidth(window.innerWidth);
@@ -131,27 +125,20 @@ export default function NewsFeed() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Navigation handlers
   const nextPage = useCallback(() => {
     setCurrentStartIndex(prevIndex => {
       const nextIndex = prevIndex + visibleCount;
-      if (nextIndex >= feedItems.length) return 0;
-      return nextIndex;
+      return nextIndex >= feedItems.length ? 0 : nextIndex;
     });
   }, [visibleCount, feedItems.length]);
 
   const prevPage = useCallback(() => {
     setCurrentStartIndex(prevIndex => {
       const prevIndexNew = prevIndex - visibleCount;
-      if (prevIndexNew < 0) {
-        const lastPageStart = Math.max(0, feedItems.length - (feedItems.length % visibleCount || visibleCount));
-        return lastPageStart;
-      }
-      return prevIndexNew;
+      return prevIndexNew < 0 ? Math.max(0, feedItems.length - visibleCount) : prevIndexNew;
     });
   }, [visibleCount, feedItems.length]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "ArrowRight") nextPage();
@@ -162,7 +149,6 @@ export default function NewsFeed() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [nextPage, prevPage]);
 
-  // Auto-rotation of items
   useEffect(() => {
     if (feedItems.length === 0 || isLoading || error) return;
 
@@ -173,7 +159,6 @@ export default function NewsFeed() {
     return () => clearInterval(interval);
   }, [feedItems.length, isLoading, error, nextPage]);
 
-  // Skeleton loader
   const renderSkeletons = useCallback(() => (
     Array(visibleCount).fill(0).map((_, index) => (
       <div key={`skeleton-${index}`} className="p-6 border border-blue-100 rounded-2xl shadow-sm bg-white flex flex-col h-full animate-pulse">
@@ -186,28 +171,45 @@ export default function NewsFeed() {
     ))
   ), [visibleCount]);
 
-  // Pagination dots
   const paginationDots = useMemo(() => {
     if (isLoading || error || feedItems.length === 0) return null;
     
-    const pageCount = Math.ceil(feedItems.length / visibleCount);
-    return Array(pageCount).fill(0).map((_, index) => {
-      const isActive = currentStartIndex >= index * visibleCount && 
-                     currentStartIndex < (index + 1) * visibleCount;
-      
+    const totalPages = Math.ceil(feedItems.length / visibleCount);
+    const currentPage = Math.floor(currentStartIndex / visibleCount);
+    const maxDots = 5;
+    
+    let startPage, endPage;
+    if (totalPages <= maxDots) {
+      startPage = 0;
+      endPage = totalPages - 1;
+    } else {
+      const halfMax = Math.floor(maxDots / 2);
+      if (currentPage <= halfMax) {
+        startPage = 0;
+        endPage = maxDots - 1;
+      } else if (currentPage >= totalPages - 1 - halfMax) {
+        startPage = totalPages - maxDots;
+        endPage = totalPages - 1;
+      } else {
+        startPage = currentPage - halfMax;
+        endPage = currentPage + halfMax;
+      }
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => {
+      const pageIndex = startPage + i;
       return (
         <button
-          key={`dot-${index}`}
-          onClick={() => setCurrentStartIndex(index * visibleCount)}
-          className={`w-3 h-3 rounded-full transition-colors ${
-            isActive ? "bg-blue-600" : "bg-blue-200 hover:bg-blue-400"
+          key={`dot-${pageIndex}`}
+          onClick={() => setCurrentStartIndex(pageIndex * visibleCount)}
+          className={`${windowWidth < BREAKPOINTS.mobile ? 'w-4 h-4' : 'w-3 h-3'} mx-1 rounded-full transition-all ${
+            currentPage === pageIndex ? "bg-blue-600 scale-125" : "bg-blue-200 hover:bg-blue-400"
           }`}
-          aria-label={`Go to page ${index + 1}`}
-          aria-current={isActive ? "true" : "false"}
+          aria-label={`Go to page ${pageIndex + 1}`}
         />
       );
     });
-  }, [isLoading, error, feedItems.length, visibleCount, currentStartIndex]);
+  }, [isLoading, error, feedItems.length, visibleCount, currentStartIndex, windowWidth]);
 
   return (
     <section 
@@ -217,13 +219,11 @@ export default function NewsFeed() {
       aria-live="polite"
     >
       <div className="max-w-7xl mx-auto relative">
-        {/* Floating decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-100 opacity-20 blur-xl"></div>
           <div className="absolute bottom-40 right-20 w-48 h-48 rounded-full bg-blue-200 opacity-15 blur-xl"></div>
         </div>
 
-        {/* Title with modern underline */}
         <motion.div 
           className="relative w-full mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -346,14 +346,15 @@ export default function NewsFeed() {
           </div>
         )}
 
-        {/* Pagination indicators */}
         {!isLoading && !error && feedItems.length > visibleCount && (
           <motion.div 
-            className="flex justify-center mt-10 space-x-3"
+            className="flex justify-center mt-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            {paginationDots}
+            <div className="flex items-center space-x-2">
+              {paginationDots}
+            </div>
           </motion.div>
         )}
       </div>
