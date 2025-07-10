@@ -98,7 +98,7 @@ const EmailSection = () => {
           <div className="flex items-center">
             <Smartphone className="mr-2 text-blue-400" size={16} />
             <span>
-              {t.emailSectionMobile}: <a href="tel:+639946529009" className="hover:text-blue-300 transition-colors">+63 994 652 9009</a>
+              {t.emailSectionMobile}: <a href="tel:+639202260942 / +639992232797" className="hover:text-blue-300 transition-colors">+639202260942 / +639992232797</a>
             </span>
           </div>
         </div>

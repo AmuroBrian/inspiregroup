@@ -35,7 +35,7 @@ const CompanyInfo = () => {
       icon: Wallet,
       title: t.inspireWallet,
       desc: t.inspireDesc,
-      link: "/images/InspireWallet.jpg",
+      link: "/images/InspireWalletQR.png",
     },
     {
       icon: TrendingUp,
