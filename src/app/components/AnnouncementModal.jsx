@@ -16,17 +16,23 @@ export default function AnnouncementModal() {
 
   return (
     isOpen && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4"> {/* Increased opacity, added padding */}
         <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -50 }}
-          className="bg-white p-6 rounded-2xl shadow-xl w-full m-10 md:w-[80%] text-center"
+          initial={{ opacity: 0, scale: 0.8 }} // Initial state: slightly smaller and invisible
+          animate={{ opacity: 1, scale: 1 }} // Animates to full size and visible
+          exit={{ opacity: 0, scale: 0.8 }} // Exit animation: fades out and shrinks
+          transition={{ duration: 0.3, ease: "easeOut" }} // Smooth transition
+          className="relative bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md mx-auto border-4 border-blue-200/50 overflow-hidden" // Enhanced styling
         >
-          <h2 className="text-xl font-bold">
+          {/* Decorative Shapes inside the modal */}
+          <div className="absolute -top-10 -left-10 w-24 h-24 rounded-full bg-blue-400 opacity-10 blur-xl"></div>
+          <div className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-purple-400 opacity-10 blur-xl"></div>
+
+          <h2 className="text-2xl font-extrabold text-gray-900 mb-4 text-center"> {/* Larger, bolder title */}
             Important Notice: Disclosure Guidelines
+            <span className="block w-16 h-1 bg-blue-600 rounded-full mx-auto mt-2"></span> {/* Underline for title */}
           </h2>
-          <p className="mt-2 text-left md:text-center md:p-2">
+          <p className="mt-4 text-base text-gray-700 leading-relaxed text-center"> {/* Adjusted text size and color */}
             For security reasons and to prevent unauthorized use, company
             licenses and financial statements are disclosed only to contracted
             clients and registered agents. Additionally, some information is
@@ -36,12 +42,15 @@ export default function AnnouncementModal() {
             cooperation in protecting personal and corporate information and
             preventing misuse.
           </p>
-          <button
-            className="mt-4 w-full bg-blue-700 text-white hover:bg-white hover:border-solid hover:border-2 hover:border-blue-700 hover:text-black p-3 rounded-lg font-bold"
+          <motion.button
+            className="mt-8 w-full bg-blue-600 text-white py-3 rounded-full font-semibold text-lg transition-all duration-300 ease-in-out
+                       hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50"
             onClick={() => setIsOpen(false)}
+            whileHover={{ scale: 1.02 }} // Slight scale on hover
+            whileTap={{ scale: 0.98 }} // Slight scale on tap
           >
             OK
-          </button>
+          </motion.button>
         </motion.div>
       </div>
     )
