@@ -26,7 +26,7 @@ export default function NewsFeed() {
   const [error, setError] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const { translateDynamicText } = useTranslation();
+  const { translateDynamicText, t, isClient } = useTranslation();
 
   const visibleCount = useMemo(() => {
     if (windowWidth < BREAKPOINTS.mobile) return 1;
@@ -232,7 +232,7 @@ export default function NewsFeed() {
         >
           <div className="inline-block relative">
             <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
-              WORLD'S LATEST TECH NEWS
+              {t.worldLatestTechNews || "WORLD'S LATEST TECH NEWS"}
             </h2>
             {!prefersReducedMotion && (
               <motion.div

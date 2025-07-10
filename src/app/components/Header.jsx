@@ -16,7 +16,7 @@ const Header = () => {
   const pathname = usePathname();
   const router = useRouter(); // Initialize useRouter
   const isHomePage = pathname === "/";
-  const { t } = useTranslation();
+  const { t, isClient } = useTranslation();
 
   // State for Login/Register modals (moved from AgentCodeEntry)
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -155,7 +155,7 @@ const Header = () => {
               className="h-10 md:h-12 object-contain"
             />
             <span className="text-2xl md:text-3xl font-extrabold whitespace-nowrap text-gray-800">
-              INSPIRE GROUP
+              {t.inspireGroup || "INSPIRE GROUP"}
             </span>
           </Link>
         </div>
@@ -167,10 +167,10 @@ const Header = () => {
               href={isHomePage ? "#hero" : "/"}
               onClick={isHomePage ? (e) => scrollToSection(e, "hero") : null}
               className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
-              aria-label={t.home}
+              aria-label={isClient ? t.home : "Home"}
             >
               <Home size={18} />
-              <span>{t.home}</span>
+              <span>{isClient ? t.home : "Home"}</span>
               <span className={underlineAnimation}></span>
             </Link>
           </li>
@@ -181,10 +181,10 @@ const Header = () => {
                 <a
                   onClick={(e) => scrollToSection(e, "about")}
                   className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
-                  aria-label={t.about}
+                  aria-label={isClient ? t.about : "About"}
                 >
                   <Info size={18} />
-                  <span>{t.about}</span>
+                  <span>{isClient ? t.about : "About"}</span>
                   <span className={underlineAnimation}></span>
                 </a>
               </li>
@@ -193,10 +193,10 @@ const Header = () => {
                 <a
                   onClick={(e) => scrollToSection(e, "contacts")}
                   className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
-                  aria-label={t.contact}
+                  aria-label={isClient ? t.contact : "Contact"}
                 >
                   <Mail size={18} />
-                  <span>{t.contact}</span>
+                  <span>{isClient ? t.contact : "Contact"}</span>
                   <span className={underlineAnimation}></span>
                 </a>
               </li>
@@ -211,9 +211,9 @@ const Header = () => {
                 <Link
                   href="/agent-home"
                   className={`${commonLinkClasses} text-blue-700 hover:text-blue-900`}
-                  aria-label={t.agentSite || "Agent Site"}
+                  aria-label={isClient ? (t.agentSite || "Agent Site") : "Agent Site"}
                 >
-                  <span>{t.agentSite || "Agent Site"}</span>
+                  <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
                   <span className={underlineAnimation}></span>
                 </Link>
               </li>
@@ -245,7 +245,7 @@ const Header = () => {
               className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
             >
               <Home size={20} />
-              <span>{t.home}</span>
+              <span>{isClient ? t.home : "Home"}</span>
             </Link>
           </li>
 
@@ -257,7 +257,7 @@ const Header = () => {
                   className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
                 >
                   <Info size={20} />
-                  <span>{t.about}</span>
+                  <span>{isClient ? t.about : "About"}</span>
                 </a>
               </li>
 
@@ -267,7 +267,7 @@ const Header = () => {
                   className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
                 >
                   <Mail size={20} />
-                  <span>{t.contact}</span>
+                  <span>{isClient ? t.contact : "Contact"}</span>
                 </a>
               </li>
             </>
@@ -281,7 +281,7 @@ const Header = () => {
                     className={`${mobileNavLinkClasses} ${registerButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
                   >
                     <UserPlus size={20} />
-                    <span>{t.register || "Register"}</span>
+                    <span>{isClient ? (t.register || "Register") : "Register"}</span>
                   </button>
                 </li>
                 <li>
@@ -290,7 +290,7 @@ const Header = () => {
                     className={`${mobileNavLinkClasses} ${loginButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
                   >
                     <Key size={20} />
-                    <span>{t.login || "Login"}</span>
+                    <span>{isClient ? (t.login || "Login") : "Login"}</span>
                   </button>
                 </li>
               </>
@@ -301,7 +301,7 @@ const Header = () => {
                   onClick={() => setIsMenuOpen(false)} // Just close menu, do not logout
                   className={`${mobileNavLinkClasses} text-blue-700 hover:text-blue-900`}
                 >
-                  <span>{t.agentSite || "Agent Site"}</span>
+                  <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
                 </Link>
               </li>
             )}

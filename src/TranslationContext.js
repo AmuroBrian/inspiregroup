@@ -1,14 +1,18 @@
 "use client";
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import translations from "@/lib/translations";
 import { useLanguageStore } from "@/storage/languageStore";
-
-
 
 export const TranslationContext = createContext();
 
 export const TranslationProvider = ({ children }) => {
   const { language, setLanguage } = useLanguageStore();
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on the client side before rendering translated content
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const translateDynamicText = async (text) => {
     if (!text) return "";
@@ -24,12 +28,17 @@ export const TranslationProvider = ({ children }) => {
     }
   };
 
+  // During SSR, always use English translations to prevent hydration mismatch
+  const currentLanguage = isClient ? language : "en";
+  const currentTranslations = translations[currentLanguage] || translations.en;
+
   return (
     <TranslationContext.Provider value={{ 
-      language, 
+      language: currentLanguage, 
       setLanguage, 
-      t: translations[language], 
-      translateDynamicText 
+      t: currentTranslations, 
+      translateDynamicText,
+      isClient 
     }}>
       {children}
     </TranslationContext.Provider>
