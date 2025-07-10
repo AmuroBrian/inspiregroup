@@ -240,6 +240,19 @@ export default function CompanyInfo() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mt-20 relative">
+      {/* Welcome Message */}
+      <div className="w-full flex justify-center mb-8">
+        <div className="relative flex items-center gap-4 px-10 py-5 rounded-2xl shadow-2xl border border-blue-200 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600 animate-fade-in">
+          <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/30 shadow-md">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm0 2c-2.67 0-8 1.337-8 4v2a1 1 0 001 1h14a1 1 0 001-1v-2c0-2.663-5.33-4-8-4z" />
+            </svg>
+          </span>
+          <span className="text-2xl sm:text-3xl font-extrabold text-white drop-shadow-lg tracking-wide">
+            {t.welcomeInspireAgent || "Welcome Inspire Agent"}
+          </span>
+        </div>
+      </div>
       {/* Header Section with animated underline */}
       <header className="text-center mb-8 sm:mb-12 max-w-4xl px-4 relative flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
@@ -266,7 +279,7 @@ export default function CompanyInfo() {
           </div>
         </div>
         <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mt-8 text-center">
-          Access your business resources and documents below.
+          {t.agentHomeSubtitle || "Access your business resources and documents below."}
         </p>
       </header>
 
@@ -322,7 +335,7 @@ export default function CompanyInfo() {
                 <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-xl">
                   <div className="bg-white/90 backdrop-blur-sm px-4 py-2 sm:px-6 sm:py-3 rounded-full shadow-lg">
                     <span className="text-blue-800 font-semibold text-sm sm:text-lg flex items-center">
-                      View {image.name}
+                      {t.view || "View"} {image.name}
                       <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                       </svg>
@@ -418,7 +431,7 @@ export default function CompanyInfo() {
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">
                   {pdf.name.replace(".pdf", "")}
                 </h3>
-                <p className="text-gray-500 text-xs sm:text-sm mb-3 sm:mb-4">PDF Document</p>
+                <p className="text-gray-500 text-xs sm:text-sm mb-3 sm:mb-4">{t.pdfDocument || "PDF Document"}</p>
                 <a
                   href={pdf.link}
                   target="_blank"
@@ -426,7 +439,7 @@ export default function CompanyInfo() {
                   className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                   aria-label={`View ${pdf.name}`}
                 >
-                  View Document
+                  {t.viewDocument || "View Document"}
                   <svg className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                   </svg>

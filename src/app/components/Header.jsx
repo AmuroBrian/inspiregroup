@@ -155,7 +155,7 @@ const Header = () => {
               className="h-10 md:h-12 object-contain"
             />
             <span className="text-2xl md:text-3xl font-extrabold whitespace-nowrap text-gray-800">
-              INSPIRE GROUP
+              {t.inspireGroup || "INSPIRE GROUP"}
             </span>
           </Link>
         </div>
