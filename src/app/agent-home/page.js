@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/TranslationContext";
+import { motion } from "framer-motion"; // <-- Add this import
 
 // Constants
 const IMAGES = [
@@ -92,6 +93,8 @@ export default function CompanyInfo() {
     width: CAROUSEL_ITEM_WIDTH_DESKTOP,
     height: CAROUSEL_ITEM_HEIGHT_DESKTOP
   });
+  const [isTitleVisible, setIsTitleVisible] = useState(false);
+  const [isPDFUnderlineVisible, setIsPDFUnderlineVisible] = useState(false); // <-- Add this state
   const carouselRef = useRef(null);
   const router = useRouter();
   const { t } = useTranslation();
@@ -157,6 +160,10 @@ export default function CompanyInfo() {
 
     // Initialize auto-slide
     resetAutoSlide();
+
+    // Animate underline after mount
+    setTimeout(() => setIsTitleVisible(true), 300);
+    setTimeout(() => setIsPDFUnderlineVisible(true), 600); // Animate PDF underline
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -232,16 +239,34 @@ export default function CompanyInfo() {
   if (!isClient) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mt-20">
-      {/* Header Section */}
-      <header className="text-center mb-8 sm:mb-12 max-w-4xl px-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
-            {t.agentHomeTitle || "Company Information"}
-          </span>
-        </h1>
-        <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-          {t.agentHomeSubtitle || "Access key documents and investment opportunities for our partners."}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mt-20 relative">
+      {/* Header Section with animated underline */}
+      <header className="text-center mb-8 sm:mb-12 max-w-4xl px-4 relative flex flex-col items-center">
+        <div className="flex flex-col items-center w-full">
+          <div className="flex flex-col items-center w-full">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight text-center">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
+                {t.agentHomeTitle || "Company Information"}
+              </span>
+            </h1>
+            <div className="relative flex justify-center w-full">
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={isTitleVisible ? { scaleX: 1 } : {}}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
+                  delay: 0.3
+                }}
+                className="h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
+                style={{ width: '70%', originX: 0 }}
+              />
+            </div>
+          </div>
+        </div>
+        <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mt-8 text-center">
+          Access your business resources and documents below.
         </p>
       </header>
 
@@ -348,10 +373,33 @@ export default function CompanyInfo() {
       {/* PDF List Section */}
       <section className="w-full max-w-6xl px-4 mb-12">
         <div className="text-center mb-8 sm:mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-            {t.agentHomeAvailablePDFs || "Available Documents"}
-          </h2>
-          <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-blue-500 to-blue-700 mx-auto rounded-full" />
+          <div className="flex flex-col items-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 relative z-10">
+              {t.agentHomeAvailablePDFs || "Available Documents"}
+            </h2>
+            <div className="relative flex justify-center w-full">
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={isPDFUnderlineVisible ? { scaleX: 1 } : {}}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
+                  delay: 0.3
+                }}
+                className="h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
+                style={{
+                  width: "160px",
+                  maxWidth: "100%",
+                  originX: 0,
+                  marginTop: "0.25rem",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  display: "block"
+                }}
+              />
+            </div>
+          </div>
           <p className="text-gray-600 mt-3 sm:mt-4 text-sm sm:text-base max-w-2xl mx-auto">
             {t.agentHomePDFDescription || "Explore our comprehensive library of documents and resources."}
           </p>
