@@ -221,7 +221,7 @@ const EmailSection = () => {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full p-3 md:p-4 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all hover:border-gray-300"
-                placeholder="Shelah Reynaldo"
+                placeholder="Full Name"
                 required
               />
             </div>
@@ -237,7 +237,7 @@ const EmailSection = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full p-3 md:p-4 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all hover:border-gray-300"
-                placeholder="she@example.com"
+                placeholder="name@example.com"
                 required
               />
             </div>
