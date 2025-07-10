@@ -155,7 +155,7 @@ const Header = () => {
               className="h-10 md:h-12 object-contain"
             />
             <span className="text-2xl md:text-3xl font-extrabold whitespace-nowrap text-gray-800">
-              {t.inspireGroup || "INSPIRE GROUP"}
+              INSPIRE GROUP
             </span>
           </Link>
         </div>
@@ -179,7 +179,7 @@ const Header = () => {
             <>
               <li className="group">
                 <a
-                  onClick={(e) => scrollToSection(e, "about")}
+                  onClick={(e) => scrollToSection(e, "about-section")}
                   className={`${commonLinkClasses} text-gray-800 hover:text-blue-600`}
                   aria-label={isClient ? t.about : "About"}
                 >
@@ -253,7 +253,7 @@ const Header = () => {
             <>
               <li>
                 <a
-                  onClick={(e) => scrollToSection(e, "about")}
+                  onClick={(e) => scrollToSection(e, "about-section")}
                   className={`${mobileNavLinkClasses} text-gray-800 hover:text-blue-600`}
                 >
                   <Info size={20} />
@@ -281,7 +281,7 @@ const Header = () => {
                     className={`${mobileNavLinkClasses} ${registerButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
                   >
                     <UserPlus size={20} />
-                    <span>{isClient ? (t.register || "Register") : "Register"}</span>
+                    <span>{t.register || "Register"}</span>
                   </button>
                 </li>
                 <li>
@@ -290,7 +290,7 @@ const Header = () => {
                     className={`${mobileNavLinkClasses} ${loginButtonClasses.replace('shadow-md', 'shadow-sm')} px-6 py-2 w-full justify-center`}
                   >
                     <Key size={20} />
-                    <span>{isClient ? (t.login || "Login") : "Login"}</span>
+                    <span>{t.login || "Login"}</span>
                   </button>
                 </li>
               </>
@@ -301,7 +301,7 @@ const Header = () => {
                   onClick={() => setIsMenuOpen(false)} // Just close menu, do not logout
                   className={`${mobileNavLinkClasses} text-blue-700 hover:text-blue-900`}
                 >
-                  <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
+                  <span>{t.agentSite || "Agent Site"}</span>
                 </Link>
               </li>
             )}
