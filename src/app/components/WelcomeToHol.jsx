@@ -50,7 +50,7 @@ export default function WelcomeToHol({ darkMode = false }) {
         <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-100 rounded-full opacity-10" />
         <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-neutral-200 transform hover:scale-105 transition-transform duration-300 ease-in-out">
           <video
-            src="/videos/Col.mp4"
+            src="/videos/cp.mp4"
             autoPlay
             loop
             controls
