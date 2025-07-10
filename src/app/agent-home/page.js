@@ -12,9 +12,9 @@ const images = [
 
 const pdfFiles = [
   { name: "Commission.pdf", link: "/docs/Commission.pdf" },
-  { name: "MicroInvestment.pdf", link: "/docs/Micro-Investment.pdf" },
-  { name: "PrivateBanker.pdf", link: "/docs/PrivateBanker.pdf" },
-  { name: "Travel.pdf", link: "/docs/travel.pdf" }, // Changed to .pdf for consistency
+  { name: "Financial Products.pdf", link: "/docs/FinancialProductsNew.pdf" },
+  { name: "Private Banker.pdf", link: "/docs/PrivateBankerNew.pdf" },
+  { name: "Travel Protection.pdf", link: "/docs/TravelProtectionNew.pdf" }, // Changed to .pdf for consistency
 ];
 
 export default function CompanyInfo() {
