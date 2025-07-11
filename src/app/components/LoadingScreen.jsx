@@ -16,23 +16,19 @@ export default function LoadingScreen() {
 
   return (
     <div className="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
-      <div className="relative w-full h-full flex items-center justify-center p-4">
-        <div className="relative w-full h-full max-w-[200px] max-h-[100px] sm:max-w-[400px] sm:max-h-[200px] md:max-w-[600px] md:max-h-[300px] lg:max-w-[800px] lg:max-h-[400px] mx-auto">
-          <Image
-            src="/images/inspiregroup.png"
-            alt="Loading..."
-            fill
-            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 70vw, 800px"
-            className="object-contain"
-            priority
-            quality={100}
-          />
-          {/* Shine element */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div
-              className="absolute top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/70 to-transparent shine-animation"
-            />
-          </div>
+      <div className="relative w-[200px] h-[100px] sm:w-[400px] sm:h-[200px] md:w-[600px] md:h-[300px] lg:w-[800px] lg:h-[400px]">
+        <Image
+          src="/images/InspireGroup.png"
+          alt="Loading..."
+          fill
+          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 70vw, 800px"
+          className="object-contain"
+          priority
+          quality={100}
+        />
+        {/* Shine element */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/70 to-transparent shine-animation" />
         </div>
       </div>
     </div>
