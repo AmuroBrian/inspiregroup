@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState, useContext } from "react";
-import { app, db, storage } from "../../../script/firebaseConfig";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import React, { useState, useContext, useEffect } from "react";
+// Corrected import: All Firebase services (db, storage, authReadyPromise) are now imported
+// from InspireWalletFirebaseConfig.js
+import { db, storage, authReadyPromise } from "../../../script/InspireWalletFirebaseConfig";
+
+import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { TranslationContext } from "../../TranslationContext";
 
@@ -14,23 +17,37 @@ export default function FinanceForm() {
     const [govIdImage, setGovIdImage] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isAuthReady, setIsAuthReady] = useState(false); // State for auth readiness
+
+    // Effect to wait for Firebase authentication to be ready
+    useEffect(() => {
+        const checkAuth = async () => {
+            await authReadyPromise; // Wait for the promise from InspireWalletFirebaseConfig to resolve
+            setIsAuthReady(true); // Set auth as ready
+            console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready.");
+        };
+        checkAuth();
+    }, []); // Run only once on component mount
 
     // Field mapping with translation keys
+    // Updated 'firstName' to 'userName', 'emailAddress' to 'userEmail',
+    // 'personalMobileNumber' to 'mobileNumber', and added 'preferredBank'.
     const fieldMapping = [
         { key: "lastName", label: t.lastName || "Last Name" },
-        { key: "firstName", label: t.firstName || "First Name" },
+        { key: "userName", label: t.userName || "Username" },
         { key: "middleName", label: t.middleName || "Middle Name" },
         { key: "birthdate", label: t.birthdate || "Birthdate" },
         { key: "gender", label: t.gender || "Gender" },
         { key: "civilStatus", label: t.civilStatus || "Civil Status" },
         { key: "address", label: t.address || "Address" },
-        { key: "personalMobileNumber", label: t.personalMobileNumber || "Personal Mobile Number" },
+        { key: "mobileNumber", label: t.mobileNumber || "Mobile Number" }, // Changed from personalMobileNumber
         { key: "landlineNumber", label: t.landlineNumber || "Landline Number" },
-        { key: "emailAddress", label: t.emailAddress || "Email Address" },
+        { key: "userEmail", label: t.userEmail || "Email Address" }, // Changed from emailAddress
         { key: "citizenship", label: t.citizenship || "Citizenship" },
         { key: "passportNumber", label: t.passportNumber || "Passport Number" },
         { key: "sourceOfFund", label: t.sourceOfFund || "Source of Fund" },
-        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome || "Gross Monthly Income" }
+        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome || "Gross Monthly Income" },
+        { key: "preferredBank", label: t.preferredBank || "Preferred Bank" } // Added preferredBank
     ];
 
     const handleChange = (e) => {
@@ -39,7 +56,6 @@ export default function FinanceForm() {
             [e.target.name]: e.target.value,
         });
     };
-
 
     const handleFileChange = (e, type) => {
         if (type === "passport") {
@@ -50,11 +66,11 @@ export default function FinanceForm() {
     };
 
     const uploadFile = async (file, path) => {
+        // 'storage' now refers directly to the storage from InspireWalletFirebaseConfig.js
         const storageRef = ref(storage, path);
         await uploadBytes(storageRef, file);
         return await getDownloadURL(storageRef);
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,14 +82,19 @@ export default function FinanceForm() {
             let passportUrl = "";
             let govIdUrl = "";
             if (passportImage) {
-                passportUrl = await uploadFile(passportImage, `gs://inspire-group-38fb3.firebasestorage.app/passport/${newSubmissionId}-passport.jpg`);
+                // Path for passport image within the 'inspire-wallet' storage bucket
+                // Ensure your Firebase Storage rules allow writes to this path (e.g., /ids/passport/...)
+                passportUrl = await uploadFile(passportImage, `ids/passport/${newSubmissionId}-passport.jpg`);
             }
 
             if (govIdImage) {
-                govIdUrl = await uploadFile(govIdImage, `gs://inspire-group-38fb3.firebasestorage.app/govId/${newSubmissionId}-govId.jpg`);
+                // Path for government ID image within the 'inspire-wallet' storage bucket
+                // Ensure your Firebase Storage rules allow writes to this path (e.g., /ids/governmentid/...)
+                govIdUrl = await uploadFile(govIdImage, `ids/governmentid/${newSubmissionId}-govId.jpg`);
             }
 
-            await addDoc(collection(db, "financeForms"), {
+            // 'db' now refers to the Firestore from InspireWalletFirebaseConfig.js
+            await addDoc(collection(db, "bankApplications"), {
                 type: "Financial Service",
                 ...formData,
                 submissionId: newSubmissionId,
@@ -85,7 +106,8 @@ export default function FinanceForm() {
             setSubmitted(true);
         } catch (error) {
             console.error("Error adding document: ", error);
-            alert("There is something wrong with the Server");
+            // Replaced alert with a console log as per instructions to avoid alert()
+            console.error("There was an error submitting your form. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -146,8 +168,9 @@ export default function FinanceForm() {
                     <div className="col-span-1 md:col-span-2 flex flex-col items-center mt-2">
                         <button
                             type="submit"
-                            className={`w-full md:w-1/2 py-3 rounded-xl font-bold text-lg shadow-md transition-all duration-300 ${submitted ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white"}`}
-                            disabled={submitted || loading}
+                            className={`w-full md:w-1/2 py-3 rounded-xl font-bold text-lg shadow-md transition-all duration-300
+                                ${submitted || loading || !isAuthReady ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white"}`}
+                            disabled={submitted || loading || !isAuthReady}
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center gap-2">
@@ -157,7 +180,7 @@ export default function FinanceForm() {
                                     </svg>
                                     {t.submitting || "Submitting..."}
                                 </span>
-                            ) : submitted ? (t.submitted || "Submitted") : (t.submit || "Submit")}
+                            ) : submitted ? (t.submitted || "Submitted") : (isAuthReady ? (t.submit || "Submit") : "Loading Authentication...")}
                         </button>
                     </div>
                 </form>
