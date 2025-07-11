@@ -1,8 +1,9 @@
 // script/InspireGroupFirebaseConfig.js
+"use client"; // This directive ensures the module runs only on the client-side
 
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -20,7 +21,7 @@ const firebaseConfig = {
 };
 
 // Define a unique name for this secondary app instance
-const SECONDARY_APP_NAME = 'inspireGroupApp'; 
+const SECONDARY_APP_NAME = 'inspireGroupApp';
 
 // Initialize the SECONDARY Firebase app (inspire-group-38fb3) with a unique name
 let app; // Renamed to 'app' for consistency within this file, but it's the named app
@@ -34,8 +35,17 @@ if (!getApps().some(existingApp => existingApp.name === SECONDARY_APP_NAME)) {
 export const db = getFirestore(app); // This 'db' refers to the Firestore of 'inspireGroupApp'
 export const storage = getStorage(app); // This 'storage' refers to the Storage of 'inspireGroupApp'
 
-// Optional: Initialize Analytics for the SECONDARY app if you are using it
-export const analytics = getAnalytics(app); // This 'analytics' refers to the Analytics of 'inspireGroupApp'
+// Initialize Analytics only in browser environment and if supported
+export let analytics = null;
+if (typeof window !== 'undefined') {
+  isSupported().then(supported => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  }).catch(err => {
+    console.warn('Firebase Analytics not supported:', err);
+  });
+}
 
 // You can also export the app instance itself if needed
 export { app };
