@@ -20,6 +20,29 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Loading screen shine animation */
+@keyframes shine {
+  0% {
+    left: -60%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+.shine-animation {
+  animation: shine 2s linear infinite;
+  left: 0;
+}
+
 /* Custom modal animations and styles */
 @keyframes modalFadeIn {
   from {
