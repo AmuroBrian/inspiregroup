@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Universal Box-Sizing for consistent layout calculation */
+/* This is crucial for responsive design, ensuring padding and border are included in element's width/height */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -14,11 +22,44 @@
   }
 }
 
+/* Aggressive Reset for HTML and Body to control layout */
+html {
+  -webkit-text-size-adjust: 100%; /* Prevent text zoom on orientation change */
+  scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+  width: 100vw; /* Ensure html element takes full viewport width */
+  overflow-x: hidden; /* Crucial: Hide horizontal scrollbar on the root element */
+}
+
 body {
+  margin: 0; /* Remove default browser margin */
+  padding: 0; /* Remove default browser padding */
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
+  width: 100vw; /* Ensure body takes full viewport width */
+  overflow-x: hidden; /* Redundant but safe to include here too */
+  -webkit-font-smoothing: antialiased; /* Better font rendering */
+  -moz-osx-font-smoothing: grayscale; /* Better font rendering */
 }
+
+/* Force images, videos, and iframes to be fully responsive */
+/* This is a very common cause of horizontal scroll issues */
+img,
+video,
+iframe {
+  max-width: 100%; /* Ensures they never exceed their parent's width */
+  height: auto;    /* Maintains their aspect ratio */
+  display: block;  /* Prevents extra space below images sometimes */
+  border: none;    /* Remove default borders on iframes/images */
+}
+
+/* Prevent text content from causing overflow */
+p, h1, h2, h3, h4, h5, h6, span, div {
+  word-wrap: break-word; /* Ensures long words break to fit container */
+  overflow-wrap: break-word; /* Modern equivalent */
+}
+
 
 /* Loading screen shine animation */
 @keyframes shine {

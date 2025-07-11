@@ -72,7 +72,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden py-16 sm:py-20 md:py-24 lg:py-0"
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden py-0"
       ref={ref}
     >
       {/* Background Video */}
