@@ -9,7 +9,6 @@ export const CompanyOrgChart = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  // Animation variants - consistent with CompanyOverview
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -59,13 +58,13 @@ export const CompanyOrgChart = () => {
         animate={isVisible ? "visible" : "hidden"}
         variants={containerVariants}
       >
-        {/* Floating decorative elements - consistent with CompanyOverview */}
+        {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-100 opacity-20 blur-xl"></div>
           <div className="absolute bottom-40 right-20 w-48 h-48 rounded-full bg-blue-200 opacity-15 blur-xl"></div>
         </div>
 
-        {/* Centered Title Section with modern underline - now matching CompanyOverview */}
+        {/* Title Section */}
         <motion.div 
           className="text-center mb-16 relative"
           variants={itemVariants}
@@ -93,15 +92,14 @@ export const CompanyOrgChart = () => {
           </div>
         </motion.div>
 
-        {/* Main Content Card - updated styling to match CompanyOverview */}
+        {/* Main Content */}
         <motion.div 
           className="bg-white p-8 rounded-3xl shadow-xl relative overflow-hidden mb-16"
           variants={itemVariants}
         >
-          {/* Decorative Accent Bar */}
           <div className="absolute top-0 left-0 w-full h-2 rounded-t-3xl" />
 
-          {/* Department List */}
+          {/* Department List with exact specified sequence */}
           <motion.div 
             className="w-full bg-blue-50/60 rounded-2xl p-6 shadow-sm border border-blue-100 mb-8"
             variants={itemVariants}
@@ -115,8 +113,19 @@ export const CompanyOrgChart = () => {
               {t.orgone}
             </h2>
             <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[t.orgtwo, t.orgtwo, t.orgthree, t.orgfive, t.orgsix, 
-                t.orgseven, t.orgeight, t.orgnine, t.orgten, t.orgeleven, t.orgtwelve].map((item, index) => (
+              {[
+                t.orgtwo,    // OFFICE OF THE PRESIDENT
+                t.orgthree,  // EXECUTIVE VICE PRESIDENT
+                t.orgfour,   // SECRETARIAL DEPARTMENT
+                t.orgfive,   // ACCOUNTANT AUDIT DEPARTMENT
+                t.orgsix,    // ADMINISTRATIVE DEPARTMENT
+                t.orgseven,  // HUMAN RESOURCE DEPARTMENT
+                t.orgeight, // IT SOLUTION DEPARTMENT
+                t.orgnine,   // MARKETING DEPARTMENT
+                t.orgten,    // OUTSOURCING MANAGEMENT DEPARTMENT
+                t.orgeleven, // SECURITY DEPARTMENT
+                t.orgtwelve  // INVESTIGATION DEPARTMENT
+              ].map((item, index) => (
                 <motion.li 
                   key={index}
                   className="flex items-center text-lg font-medium text-blue-900 bg-blue-100/60 rounded-lg px-3 py-2"
