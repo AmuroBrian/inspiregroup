@@ -61,10 +61,7 @@ const Header = () => {
 
   return (
     <>
-      <nav
-        className="fixed top-0 left-0 w-full z-50 bg-white shadow-md h-[68px]"
-        aria-label="Main Navigation"
-      >
+      <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md h-[68px]">
         <div className="container mx-auto flex justify-between items-center h-full px-6 md:px-8">
           {/* Logo */}
           <div className="flex items-center">
@@ -88,11 +85,9 @@ const Header = () => {
                   href={isHomePage ? "#hero" : "/"}
                   onClick={isHomePage ? (e) => scrollToSection(e, "hero") : null}
                   className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-gray-800 hover:text-blue-600"
-                  aria-label={isClient ? t.home : "Home"}
                 >
                   <Home size={18} />
                   <span>{isClient ? t.home : "Home"}</span>
-                  <span className="absolute bottom-0 left-1/2 w-0 h-[3px] bg-blue-500 rounded-full transition-all duration-300 transform -translate-x-1/2 group-hover:w-[calc(100%-1rem)] group-focus:w-[calc(100%-1rem)]"></span>
                 </Link>
               </li>
 
@@ -102,11 +97,9 @@ const Header = () => {
                     <a
                       onClick={(e) => scrollToSection(e, "about-section")}
                       className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-gray-800 hover:text-blue-600"
-                      aria-label={isClient ? t.about : "About"}
                     >
                       <Info size={18} />
                       <span>{isClient ? t.about : "About"}</span>
-                      <span className="absolute bottom-0 left-1/2 w-0 h-[3px] bg-blue-500 rounded-full transition-all duration-300 transform -translate-x-1/2 group-hover:w-[calc(100%-1rem)] group-focus:w-[calc(100%-1rem)]"></span>
                     </a>
                   </li>
 
@@ -114,53 +107,59 @@ const Header = () => {
                     <a
                       onClick={(e) => scrollToSection(e, "contacts")}
                       className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-gray-800 hover:text-blue-600"
-                      aria-label={isClient ? t.contact : "Contact"}
                     >
                       <Mail size={18} />
                       <span>{isClient ? t.contact : "Contact"}</span>
-                      <span className="absolute bottom-0 left-1/2 w-0 h-[3px] bg-blue-500 rounded-full transition-all duration-300 transform -translate-x-1/2 group-hover:w-[calc(100%-1rem)] group-focus:w-[calc(100%-1rem)]"></span>
                     </a>
                   </li>
                 </>
               )}
             </ul>
 
-            {/* Desktop Agent Code Entry */}
-            <div className="ml-4">
+            {/* Desktop Auth Buttons */}
+            <div className="ml-4 flex items-center space-x-2">
               {!isLoggedIn ? (
-                <AgentCodeEntry ref={agentCodeEntryRef} className="hidden md:block" />
+                <>
+                  <button
+                    onClick={() => agentCodeEntryRef.current?.openRegister()}
+                    className="inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md bg-blue-500 text-white hover:bg-blue-600 hover:shadow-lg"
+                  >
+                    <UserPlus size={18} />
+                    <span>{t.register || "Register"}</span>
+                  </button>
+                  <button
+                    onClick={() => agentCodeEntryRef.current?.openLogin()}
+                    className="inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md bg-gray-200 text-gray-800 hover:bg-gray-300 hover:shadow-lg"
+                  >
+                    <Key size={18} />
+                    <span>{t.login || "Login"}</span>
+                  </button>
+                </>
               ) : (
-                <ul className="flex items-center space-x-4 lg:space-x-6">
-                  <li className="group">
-                    <Link
-                      href="/agent-home"
-                      className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-blue-700 hover:text-blue-900"
-                      aria-label={isClient ? (t.agentSite || "Agent Site") : "Agent Site"}
-                    >
-                      <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
-                      <span className="absolute bottom-0 left-1/2 w-0 h-[3px] bg-blue-500 rounded-full transition-all duration-300 transform -translate-x-1/2 group-hover:w-[calc(100%-1rem)] group-focus:w-[calc(100%-1rem)]"></span>
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={handleLogout}
-                      className="inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md bg-red-500 text-white hover:bg-red-600 hover:shadow-lg"
-                      aria-label="Logout"
-                    >
-                      <LogOut size={18} />
-                      <span>Logout</span>
-                    </button>
-                  </li>
-                </ul>
+                <>
+                  <Link
+                    href="/agent-home"
+                    className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-blue-700 hover:text-blue-900"
+                  >
+                    <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md bg-red-500 text-white hover:bg-red-600 hover:shadow-lg"
+                  >
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </button>
+                </>
               )}
             </div>
           </div>
 
           {/* Mobile Navigation Toggle */}
-          <div className="md:hidden flex items-center z-50">
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mr-5"
+              className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label="Toggle menu"
             >
               <svg
@@ -171,19 +170,9 @@ const Header = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 {isMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
             </button>
@@ -191,7 +180,7 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu */}
       <div
         className={`md:hidden fixed top-[68px] left-0 w-full bg-white z-40 transition-all duration-300 ease-in-out overflow-hidden ${
           isMenuOpen ? "max-h-screen shadow-md" : "max-h-0"
@@ -202,7 +191,7 @@ const Header = () => {
             <Link
               href={isHomePage ? "#hero" : "/"}
               onClick={isHomePage ? (e) => scrollToSection(e, "hero") : () => setIsMenuOpen(false)}
-              className="w-full text-lg cursor-pointer transition-colors duration-300 flex items-center justify-center space-x-2 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-md"
+              className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-gray-800 hover:text-blue-600"
             >
               <Home size={20} />
               <span>{isClient ? t.home : "Home"}</span>
@@ -214,17 +203,16 @@ const Header = () => {
               <li className="w-full">
                 <a
                   onClick={(e) => scrollToSection(e, "about-section")}
-                  className="w-full text-lg cursor-pointer transition-colors duration-300 flex items-center justify-center space-x-2 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-md"
+                  className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-gray-800 hover:text-blue-600"
                 >
                   <Info size={20} />
                   <span>{isClient ? t.about : "About"}</span>
                 </a>
               </li>
-
               <li className="w-full">
                 <a
                   onClick={(e) => scrollToSection(e, "contacts")}
-                  className="w-full text-lg cursor-pointer transition-colors duration-300 flex items-center justify-center space-x-2 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-md"
+                  className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-gray-800 hover:text-blue-600"
                 >
                   <Mail size={20} />
                   <span>{isClient ? t.contact : "Contact"}</span>
@@ -235,10 +223,13 @@ const Header = () => {
 
           {!isLoggedIn ? (
             <>
-              <li className="w-full px-4 pt-2">
+              <li className="w-full px-4">
                 <button
-                  onClick={() => { agentCodeEntryRef.current?.openRegister(); setIsMenuOpen(false); }}
-                  className="w-full text-lg cursor-pointer transition-colors duration-300 flex items-center justify-center space-x-2 px-6 py-3 bg-blue-500 text-white hover:bg-blue-600 rounded-full font-semibold text-sm shadow-sm"
+                  onClick={() => {
+                    agentCodeEntryRef.current?.openRegister();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full text-lg flex items-center justify-center space-x-2 px-6 py-3 bg-blue-500 text-white hover:bg-blue-600 rounded-full font-semibold text-sm shadow-sm"
                 >
                   <UserPlus size={20} />
                   <span>{t.register || "Register"}</span>
@@ -246,8 +237,11 @@ const Header = () => {
               </li>
               <li className="w-full px-4">
                 <button
-                  onClick={() => { agentCodeEntryRef.current?.openLogin(); setIsMenuOpen(false); }}
-                  className="w-full text-lg cursor-pointer transition-colors duration-300 flex items-center justify-center space-x-2 px-6 py-3 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-full font-semibold text-sm shadow-sm"
+                  onClick={() => {
+                    agentCodeEntryRef.current?.openLogin();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full text-lg flex items-center justify-center space-x-2 px-6 py-3 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-full font-semibold text-sm shadow-sm"
                 >
                   <Key size={20} />
                   <span>{t.login || "Login"}</span>
@@ -260,15 +254,18 @@ const Header = () => {
                 <Link
                   href="/agent-home"
                   onClick={() => setIsMenuOpen(false)}
-                  className="w-full text-lg cursor-pointer transition-colors duration-300 flex items-center justify-center space-x-2 text-blue-700 hover:text-blue-900 px-4 py-2 rounded-md"
+                  className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-blue-700 hover:text-blue-900"
                 >
                   <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
                 </Link>
               </li>
-              <li className="w-full px-4 pt-2">
+              <li className="w-full px-4">
                 <button
-                  onClick={() => { handleLogout(); setIsMenuOpen(false); }}
-                  className="w-full text-lg cursor-pointer transition-colors duration-300 flex items-center justify-center space-x-2 px-6 py-3 bg-red-500 text-white hover:bg-red-600 rounded-full font-semibold text-sm shadow-sm"
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full text-lg flex items-center justify-center space-x-2 px-6 py-3 bg-red-500 text-white hover:bg-red-600 rounded-full font-semibold text-sm shadow-sm"
                 >
                   <LogOut size={20} />
                   <span>Logout</span>
@@ -279,8 +276,8 @@ const Header = () => {
         </ul>
       </div>
 
-      {/* Render AgentCodeEntry for modals */}
-      <AgentCodeEntry ref={agentCodeEntryRef} className="hidden" />
+      {/* Agent Code Entry Modals */}
+      <AgentCodeEntry ref={agentCodeEntryRef} />
     </>
   );
 };
