@@ -63,7 +63,7 @@ export const CompanyOverview = () => {
   }, []);
 
   return (
-    <div id="company-overview" className="min-h-screen bg-gradient-to-br mt-10 from-blue-50 to-white py-16 px-4 md:px-8">
+    <div id="company-overview" className="min-h-screen bg-gradient-to-br mt-8 from-blue-50 to-white py-16 px-4 md:px-8">
       <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
