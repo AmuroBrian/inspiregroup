@@ -304,7 +304,7 @@ export default function CompanyInfo() {
   if (!isClient) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mt-20 relative">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mt-10 relative">
       {/* Welcome Message */}
       <div className="w-full flex justify-center mb-8">
         <div className="relative flex items-center gap-4 px-10 py-5 rounded-2xl shadow-2xl border border-blue-200 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600 animate-fade-in">

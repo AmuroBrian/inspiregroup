@@ -22,17 +22,8 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Agent Site Button (only if logged in) */}
-      {isLoggedIn && (
-        <div className="w-full flex justify-center mt-4 mb-6 z-50">
-          <a
-            href="/agent-home"
-            className="inline-block px-6 py-2 bg-blue-600 text-white font-bold rounded-full shadow hover:bg-blue-700 transition text-lg"
-          >
-            Agent Site
-          </a>
-        </div>
-      )}
+      
+     
       <AnnouncementModal />
       <HeroSection />
        <WelcomeToHol />
