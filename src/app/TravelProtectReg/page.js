@@ -139,7 +139,7 @@ export default function FinanceForm() {
     };
 
     return (
-        <div className="min-h-screen mt-8 flex items-center justify-center bg-gradient-to-br from-blue-50 to-white py-10 px-2 sm:px-6">
+        <div className="min-h-screen mt-20 flex items-center justify-center bg-white py-10 px-2 sm:px-6">
             <div className="w-full max-w-3xl bg-white/90 rounded-3xl shadow-2xl border border-blue-100 p-6 sm:p-10 relative">
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center justify-center">
                     <div className="bg-gradient-to-r from-blue-500 to-blue-700 rounded-full p-4 shadow-lg">
