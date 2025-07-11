@@ -52,7 +52,7 @@ export const CompanyOrgChart = () => {
   }, []);
 
   return (
-    <div id="org-chart" className="min-h-screen mt-10 bg-gradient-to-br from-blue-50 to-white py-16 px-4 md:px-8">
+    <div id="org-chart" className="min-h-screen mt-8 bg-gradient-to-br from-blue-50 to-white py-16 px-4 md:px-8">
       <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
