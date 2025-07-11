@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useContext, useEffect } from "react";
-// Corrected import: All Firebase services (db, storage, authReadyPromise) are now imported
+// Corrected import: All Firebase services (db, storage, authReadyPromise, auth) are now imported
 // from InspireWalletFirebaseConfig.js
-import { db, storage, authReadyPromise } from "../../../script/InspireWalletFirebaseConfig";
+import { db, storage, authReadyPromise, auth } from "../../../script/InspireWalletFirebaseConfig";
 
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -18,43 +18,59 @@ export default function FinanceForm() {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isAuthReady, setIsAuthReady] = useState(false); // State for auth readiness
+    const [currentUserId, setCurrentUserId] = useState(null); // State to store the authenticated user's ID
 
     // Effect to wait for Firebase authentication to be ready
     useEffect(() => {
         const checkAuth = async () => {
-            await authReadyPromise; // Wait for the promise from InspireWalletFirebaseConfig to resolve
+            const user = await authReadyPromise; // Wait for the promise from InspireWalletFirebaseConfig to resolve
             setIsAuthReady(true); // Set auth as ready
-            console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready.");
+            if (user) {
+                setCurrentUserId(user.uid); // Store the user ID if authenticated
+                console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready. User ID:", user.uid);
+            } else {
+                console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready, but no user is signed in.");
+            }
         };
         checkAuth();
     }, []); // Run only once on component mount
 
-    // Field mapping with translation keys
-    // Updated 'firstName' to 'userName', 'emailAddress' to 'userEmail',
-    // 'personalMobileNumber' to 'mobileNumber', and added 'preferredBank'.
+    // Field mapping with translation keys for Travel Applications
+    // Removed 'lastName' and 'middleName' as requested.
     const fieldMapping = [
-        { key: "lastName", label: t.lastName || "Last Name" },
         { key: "userName", label: t.userName || "Username" },
-        { key: "middleName", label: t.middleName || "Middle Name" },
-        { key: "birthdate", label: t.birthdate || "Birthdate" },
-        { key: "gender", label: t.gender || "Gender" },
-        { key: "civilStatus", label: t.civilStatus || "Civil Status" },
-        { key: "address", label: t.address || "Address" },
-        { key: "mobileNumber", label: t.mobileNumber || "Mobile Number" }, // Changed from personalMobileNumber
-        { key: "landlineNumber", label: t.landlineNumber || "Landline Number" },
-        { key: "userEmail", label: t.userEmail || "Email Address" }, // Changed from emailAddress
+        { key: "userEmail", label: t.userEmail || "Email Address", type: "email" },
+        { key: "mobileNumber", label: t.mobileNumber || "Mobile Number", type: "tel" },
+        { key: "landlineNumber", label: t.landlineNumber || "Landline Number", type: "tel" },
+        { key: "birthdate", label: t.birthdate || "Birthdate", type: "date" },
+        { key: "gender", label: t.gender || "Gender", type: "select", options: ["Male", "Female", "Other"] },
+        { key: "civilStatus", label: t.civilStatus || "Civil Status", type: "select", options: ["Single", "Married", "Divorced", "Widowed"] },
         { key: "citizenship", label: t.citizenship || "Citizenship" },
         { key: "passportNumber", label: t.passportNumber || "Passport Number" },
+        { key: "homeAddress", label: t.homeAddress || "Home Address" },
+        { key: "destinationAddress", label: t.destinationAddress || "Destination Address" },
+        { key: "purposeOfTravel", label: t.purposeOfTravel || "Purpose of Travel" },
+        { key: "airline", label: t.airline || "Airline" },
+        { key: "checkInDate", label: t.checkInDate || "Check-in Date", type: "date" },
+        { key: "departureTime", label: t.departureTime || "Departure Time", type: "time" },
+        { key: "arrivalTime", label: t.arrivalTime || "Arrival Time", type: "time" },
+        { key: "stayDuration", label: t.stayDuration || "Stay Duration (days)", type: "number" },
         { key: "sourceOfFund", label: t.sourceOfFund || "Source of Fund" },
-        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome || "Gross Monthly Income" },
-        { key: "preferredBank", label: t.preferredBank || "Preferred Bank" } // Added preferredBank
+        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome || "Gross Monthly Income", type: "number" },
+        { key: "cashOnHand", label: t.cashOnHand || "Cash on Hand", type: "number" },
+        { key: "userTimeDepositAmount", label: t.userTimeDepositAmount || "Time Deposit Amount", type: "number" },
+        { key: "preferredBank", label: t.preferredBank || "Preferred Bank" },
+        { key: "isDiscountedRate", label: t.isDiscountedRate || "Apply for Discounted Rate?", type: "checkbox" },
+        { key: "notes", label: t.notes || "Additional Notes", type: "textarea" },
+        { key: "protectionFee", label: t.protectionFee || "Protection Fee", type: "number" }
     ];
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value, type, checked } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
     };
 
     const handleFileChange = (e, type) => {
@@ -75,38 +91,47 @@ export default function FinanceForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const newSubmissionId = "SMBFS-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+        if (!currentUserId) {
+            console.error("Authentication not ready or user not signed in. Cannot submit form.");
+            setLoading(false);
+            // Consider showing a user-friendly message in the UI
+            return;
+        }
+
+        const newSubmissionId = "SMBTR-" + Math.random().toString(36).substr(2, 9).toUpperCase(); // Changed prefix for Travel
         setSubmissionId(newSubmissionId);
 
         try {
-            let passportUrl = "";
-            let govIdUrl = "";
+            let passportPhotoUrl = "";
+            let governmentIdUrl = "";
+
             if (passportImage) {
                 // Path for passport image within the 'inspire-wallet' storage bucket
-                // Ensure your Firebase Storage rules allow writes to this path (e.g., /ids/passport/...)
-                passportUrl = await uploadFile(passportImage, `ids/passport/${newSubmissionId}-passport.jpg`);
+                passportPhotoUrl = await uploadFile(passportImage, `travel_ids/${currentUserId}/${newSubmissionId}-passport.jpg`);
             }
 
             if (govIdImage) {
                 // Path for government ID image within the 'inspire-wallet' storage bucket
-                // Ensure your Firebase Storage rules allow writes to this path (e.g., /ids/governmentid/...)
-                govIdUrl = await uploadFile(govIdImage, `ids/governmentid/${newSubmissionId}-govId.jpg`);
+                governmentIdUrl = await uploadFile(govIdImage, `travel_ids/${currentUserId}/${newSubmissionId}-govId.jpg`);
             }
 
             // 'db' now refers to the Firestore from InspireWalletFirebaseConfig.js
-            await addDoc(collection(db, "bankApplications"), {
-                type: "Financial Service",
+            await addDoc(collection(db, "travelApplications"), {
+                applicationType: "Travel Service",
+                userId: currentUserId,
+                status: "Pending",
                 ...formData,
                 submissionId: newSubmissionId,
-                passportUrl,
-                govIdUrl,
+                passportPhotoUrl,
+                governmentIdUrl,
                 submittedAt: new Date(),
+                // approvedAt, approvedBy, processedAt are typically set by admin, not by user form submission
             });
 
             setSubmitted(true);
         } catch (error) {
             console.error("Error adding document: ", error);
-            // Replaced alert with a console log as per instructions to avoid alert()
             console.error("There was an error submitting your form. Please try again.");
         } finally {
             setLoading(false);
@@ -114,7 +139,7 @@ export default function FinanceForm() {
     };
 
     return (
-        <div className="min-h-screen mt-8 flex items-center justify-center bg-gradient-to-br from-blue-50 to-white py-10 px-2 sm:px-6">
+        <div className="min-h-screen mt-20 flex items-center justify-center bg-white py-10 px-2 sm:px-6"> {/* Changed background to white */}
             <div className="w-full max-w-3xl bg-white/90 rounded-3xl shadow-2xl border border-blue-100 p-6 sm:p-10 relative">
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center justify-center">
                     <div className="bg-gradient-to-r from-blue-500 to-blue-700 rounded-full p-4 shadow-lg">
@@ -124,40 +149,38 @@ export default function FinanceForm() {
                     </div>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-blue-800 mb-2 mt-8 tracking-tight">
-                    {t.financialServiceApplication || "Financial Service Application"}
+                    {t.travelServiceApplication || "Travel Service Application"}
                 </h2>
                 <p className="text-center text-gray-500 mb-8">
-                    {t.financialFormDescription || "Please fill out the form below to apply for our financial services. All fields are required."}
+                    {t.travelFormDescription || "Please fill out the form below to apply for our travel services. All fields are required."}
                 </p>
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                     {fieldMapping.map((field, index) => (
                         <div key={index} className="col-span-1">
                             <label className="block font-semibold text-gray-700 mb-1">{field.label}</label>
-                            {field.key === "birthdate" ? (
-                                <input type="date" name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required onChange={handleChange} />
-                            ) : field.key === "gender" ? (
-                                <select name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required onChange={handleChange}>
-                                    <option value="">{t.selectGender || "Select Gender"}</option>
-                                    <option value="Male">{t.male || "Male"}</option>
-                                    <option value="Female">{t.female || "Female"}</option>
-                                    <option value="Other">{t.other || "Other"}</option>
+                            {field.type === "date" ? (
+                                <input type="date" name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange} />
+                            ) : field.type === "time" ? (
+                                <input type="time" name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange} />
+                            ) : field.type === "select" ? (
+                                <select name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange}>
+                                    <option value="">{`Select ${field.label}`}</option>
+                                    {field.options.map(option => (
+                                        <option key={option} value={option}>{option}</option>
+                                    ))}
                                 </select>
-                            ) : field.key === "civilStatus" ? (
-                                <select name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required onChange={handleChange}>
-                                    <option value="">{t.selectCivilStatus || "Select Civil Status"}</option>
-                                    <option value="Single">{t.single || "Single"}</option>
-                                    <option value="Married">{t.married || "Married"}</option>
-                                    <option value="Divorced">{t.divorced || "Divorced"}</option>
-                                    <option value="Widowed">{t.widowed || "Widowed"}</option>
-                                </select>
+                            ) : field.type === "checkbox" ? (
+                                <input type="checkbox" name={field.key} className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onChange={handleChange} />
+                            ) : field.type === "textarea" ? (
+                                <textarea name={field.key} placeholder={field.label} rows="3" className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange}></textarea>
                             ) : (
-                                <input type={field.key.includes("Number") ? "number" : field.key.includes("Email") ? "email" : "text"} name={field.key} placeholder={field.label} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required onChange={handleChange} />
+                                <input type={field.type || "text"} name={field.key} placeholder={field.label} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange} />
                             )}
                         </div>
                     ))}
                     {/* Upload Passport */}
                     <div className="col-span-1">
-                        <label className="block font-semibold text-gray-700 mb-1">{t.uploadPassport || "Upload Passport"}</label>
+                        <label className="block font-semibold text-gray-700 mb-1">{t.uploadPassport || "Upload Passport Photo"}</label>
                         <input type="file" accept="image/*" className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" onChange={(e) => handleFileChange(e, "passport")} required />
                     </div>
                     {/* Upload Government ID */}
