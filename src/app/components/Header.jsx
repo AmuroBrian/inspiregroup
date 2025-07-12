@@ -14,6 +14,7 @@ const Header = () => {
   const isHomePage = pathname === "/";
   const { t, isClient } = useTranslation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const menuRef = useRef(null);
 
   const agentCodeEntryRef = useRef();
 
@@ -39,8 +40,19 @@ const Header = () => {
       }
     };
 
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target) && 
+          !event.target.closest('button[aria-label="Toggle menu"]')) {
+        setIsMenuOpen(false);
+      }
+    };
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const scrollToSection = (e, id) => {
@@ -159,11 +171,12 @@ const Header = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
               aria-label="Toggle menu"
+              aria-expanded={isMenuOpen}
             >
               <svg
-                className="w-8 h-8 text-gray-800"
+                className="w-8 h-8 text-gray-800 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -182,98 +195,111 @@ const Header = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed top-[68px] left-0 w-full bg-white z-40 transition-all duration-300 ease-in-out overflow-hidden ${
-          isMenuOpen ? "max-h-screen shadow-md" : "max-h-0"
+        ref={menuRef}
+        className={`md:hidden fixed inset-0 z-40 transition-all duration-300 ease-in-out ${
+          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
+        style={{
+          backdropFilter: isMenuOpen ? "blur(5px)" : "none",
+          backgroundColor: isMenuOpen ? "rgba(0,0,0,0.3)" : "transparent"
+        }}
       >
-        <ul className="flex flex-col items-center space-y-4 py-4 px-4">
-          <li className="w-full">
-            <Link
-              href={isHomePage ? "#hero" : "/"}
-              onClick={isHomePage ? (e) => scrollToSection(e, "hero") : () => setIsMenuOpen(false)}
-              className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-gray-800 hover:text-blue-600"
-            >
-              <Home size={20} />
-              <span>{isClient ? t.home : "Home"}</span>
-            </Link>
-          </li>
+        <div
+          className={`absolute top-[68px] left-0 right-0 mx-auto w-full max-w-md bg-white shadow-xl rounded-b-lg transition-all duration-300 transform ${
+            isMenuOpen ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
+          <ul className="flex flex-col items-center py-6 px-6 space-y-4">
+            <li className="w-full">
+              <Link
+                href={isHomePage ? "#hero" : "/"}
+                onClick={isHomePage ? (e) => scrollToSection(e, "hero") : () => setIsMenuOpen(false)}
+                className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-gray-800 hover:bg-gray-100 transition-colors duration-200"
+              >
+                <Home size={22} className="text-blue-500" />
+                <span className="text-lg font-medium">{isClient ? t.home : "Home"}</span>
+              </Link>
+            </li>
 
-          {isHomePage && (
-            <>
-              <li className="w-full">
-                <a
-                  onClick={(e) => scrollToSection(e, "about-section")}
-                  className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-gray-800 hover:text-blue-600"
-                >
-                  <Info size={20} />
-                  <span>{isClient ? t.about : "About"}</span>
-                </a>
-              </li>
-              <li className="w-full">
-                <a
-                  onClick={(e) => scrollToSection(e, "contacts")}
-                  className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-gray-800 hover:text-blue-600"
-                >
-                  <Mail size={20} />
-                  <span>{isClient ? t.contact : "Contact"}</span>
-                </a>
-              </li>
-            </>
-          )}
+            {isHomePage && (
+              <>
+                <li className="w-full">
+                  <a
+                    onClick={(e) => scrollToSection(e, "about-section")}
+                    className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-gray-800 hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+                  >
+                    <Info size={22} className="text-blue-500" />
+                    <span className="text-lg font-medium">{isClient ? t.about : "About"}</span>
+                  </a>
+                </li>
+                <li className="w-full">
+                  <a
+                    onClick={(e) => scrollToSection(e, "contacts")}
+                    className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-gray-800 hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+                  >
+                    <Mail size={22} className="text-blue-500" />
+                    <span className="text-lg font-medium">{isClient ? t.contact : "Contact"}</span>
+                  </a>
+                </li>
+              </>
+            )}
 
-          {!isLoggedIn ? (
-            <>
-              <li className="w-full px-4">
-                <button
-                  onClick={() => {
-                    agentCodeEntryRef.current?.openRegister();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full text-lg flex items-center justify-center space-x-2 px-6 py-3 bg-blue-500 text-white hover:bg-blue-600 rounded-full font-semibold text-sm shadow-sm"
-                >
-                  <UserPlus size={20} />
-                  <span>{t.register || "Register"}</span>
-                </button>
-              </li>
-              <li className="w-full px-4">
-                <button
-                  onClick={() => {
-                    agentCodeEntryRef.current?.openLogin();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full text-lg flex items-center justify-center space-x-2 px-6 py-3 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-full font-semibold text-sm shadow-sm"
-                >
-                  <Key size={20} />
-                  <span>{t.login || "Login"}</span>
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="w-full">
-                <Link
-                  href="/agent-home"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-full text-lg flex items-center justify-center space-x-2 px-4 py-2 rounded-md text-blue-700 hover:text-blue-900"
-                >
-                  <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
-                </Link>
-              </li>
-              <li className="w-full px-4">
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full text-lg flex items-center justify-center space-x-2 px-6 py-3 bg-red-500 text-white hover:bg-red-600 rounded-full font-semibold text-sm shadow-sm"
-                >
-                  <LogOut size={20} />
-                  <span>Logout</span>
-                </button>
-              </li>
-            </>
-          )}
-        </ul>
+            <div className="w-full border-t border-gray-200 my-2"></div>
+
+            {!isLoggedIn ? (
+              <>
+                <li className="w-full">
+                  <button
+                    onClick={() => {
+                      agentCodeEntryRef.current?.openRegister();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-200"
+                  >
+                    <UserPlus size={22} className="text-blue-600" />
+                    <span className="text-lg font-medium">{t.register || "Register"}</span>
+                  </button>
+                </li>
+                <li className="w-full">
+                  <button
+                    onClick={() => {
+                      agentCodeEntryRef.current?.openLogin();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg bg-gray-50 text-gray-800 hover:bg-gray-100 transition-colors duration-200"
+                  >
+                    <Key size={22} className="text-gray-600" />
+                    <span className="text-lg font-medium">{t.login || "Login"}</span>
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="w-full">
+                  <Link
+                    href="/agent-home"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-blue-700 hover:bg-blue-50 transition-colors duration-200"
+                  >
+                    <span className="text-lg font-medium">{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
+                  </Link>
+                </li>
+                <li className="w-full">
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors duration-200"
+                  >
+                    <LogOut size={22} className="text-red-600" />
+                    <span className="text-lg font-medium">Logout</span>
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
 
       {/* Agent Code Entry Modals */}
