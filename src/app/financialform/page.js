@@ -149,10 +149,10 @@ export default function FinanceForm() {
                     </div>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-blue-800 mb-2 mt-8 tracking-tight">
-                    {t.travelServiceApplication || "Travel Service Application"}
+                    {t.travelServiceApplication || "Finance Service Application"}
                 </h2>
                 <p className="text-center text-gray-500 mb-8">
-                    {t.travelFormDescription || "Please fill out the form below to apply for our travel services. All fields are required."}
+                    {t.travelFormDescription || "Please fill out the form below to apply for our Financial services. All fields are required."}
                 </p>
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                     {fieldMapping.map((field, index) => (

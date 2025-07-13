@@ -9,7 +9,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { TranslationContext } from "../../TranslationContext";
 
-export default function FinanceForm() {
+export default function TravelApplicationForm() {
     const { t } = useContext(TranslationContext);
     const [formData, setFormData] = useState({});
     const [submissionId, setSubmissionId] = useState("");
@@ -27,16 +27,15 @@ export default function FinanceForm() {
             setIsAuthReady(true); // Set auth as ready
             if (user) {
                 setCurrentUserId(user.uid); // Store the user ID if authenticated
-                console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready. User ID:", user.uid);
+                console.log("TravelApplicationForm: Firebase Authentication for Inspire Wallet is ready. User ID:", user.uid);
             } else {
-                console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready, but no user is signed in.");
+                console.log("TravelApplicationForm: Firebase Authentication for Inspire Wallet is ready, but no user is signed in.");
             }
         };
         checkAuth();
     }, []); // Run only once on component mount
 
     // Field mapping with translation keys for Travel Applications
-    // Removed 'lastName' and 'middleName' as requested.
     const fieldMapping = [
         { key: "userName", label: t.userName || "Full Name" },
         { key: "userEmail", label: t.userEmail || "Email Address", type: "email" },
@@ -143,8 +142,9 @@ export default function FinanceForm() {
             <div className="w-full max-w-3xl bg-white/90 rounded-3xl shadow-2xl border border-blue-100 p-6 sm:p-10 relative">
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center justify-center">
                     <div className="bg-gradient-to-r from-blue-500 to-blue-700 rounded-full p-4 shadow-lg">
+                        {/* Travel Icon (e.g., plane, globe) */}
                         <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm0 2c-2.67 0-8 1.337-8 4v2a1 1 0 001 1h14a1 1 0 001-1v-2c0-2.663-5.33-4-8-4z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
                     </div>
                 </div>
@@ -214,7 +214,7 @@ export default function FinanceForm() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                             <p className="font-semibold text-lg text-blue-800 mb-1">{t.thankYouSubmission || "Thank you for your submission!"}</p>
-                            <p className="text-gray-700 mb-2">{t.applicationReceived || "Your application has been received. Please save your Submission ID for your records:"}</p>
+                            <p className="text-gray-700 mb-2">{t.applicationReceived || "Your travel application has been received. Please save your Submission ID for your records:"}</p>
                             <div className="text-2xl font-bold text-blue-700 tracking-wider mb-2">{submissionId}</div>
                         </div>
                     </div>
