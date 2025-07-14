@@ -1,3 +1,5 @@
+
+
  const translations = {
   en: {
     title: "FINANCIAL & TRAVEL SOLUTIONS",
@@ -275,6 +277,9 @@ agentHomeClickImage: "Click the image to view details",
     philippineAirlines: "Philippine Airlines",
     airAsia: "AirAsia",
     uploading: "Uploading...",
+    investorTutorial: "Tutorial for Investor",
+    agentTutorial: "Tutorial for Agent",
+    registrationTutorials: "Registration Tutorials",
   },
   ja: {
     title: "ビジネスサービス",
@@ -545,6 +550,9 @@ pdfDocument: "PDFドキュメント",
     philippineAirlines: "フィリピン航空",
     airAsia: "エアアジア",
     uploading: "アップロード中...",
+    investorTutorial: "投資家向けチュートリアル",
+    agentTutorial: "エージェント向けチュートリアル",
+    registrationTutorials: "登録チュートリアル",
   },
 
   ko: {
@@ -814,6 +822,9 @@ pdfDocument: "PDF 문서",
     philippineAirlines: "필리핀 항공",
     airAsia: "에어아시아",
     uploading: "업로드 중...",
+    investorTutorial: "투자자 튜토리얼",
+    agentTutorial: "에이전트 튜토리얼",
+    registrationTutorials: "등록 튜토리얼",
   },
 
 
@@ -1086,6 +1097,9 @@ agentHomeClickImage: "点击图片查看详情",
     philippineAirlines: "菲律宾航空",
     airAsia: "亚洲航空",
     uploading: "上传中...",
+    investorTutorial: "投资者教程",
+    agentTutorial: "代理教程",
+    registrationTutorials: "注册教程",
   }
 };
 

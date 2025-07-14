@@ -5,7 +5,7 @@ import { useTranslation } from "@/TranslationContext";
 // import { useLanguageStore } from "@/storage/languageStore";
 
 const Footer = () => {
-  const { language, setLanguage, t } = useTranslation();
+  const { t } = useTranslation(); // Removed language, setLanguage as they are no longer used here
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -41,30 +41,24 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Section 3: Language Selector */}
-          <div className="md:col-start-3">
-            <h3 className="text-lg font-semibold text-white mb-3">{t.language || "Language"}</h3>
-            <div className="flex flex-wrap justify-center md:justify-start gap-3">
-              {[
-                { code: "en", label: t.english || "English" },
-                { code: "ja", label: t.japanese || "日本語" },
-                { code: "ko", label: t.korean || "한국어" },
-                { code: "zh", label: t.chinese || "简体中文" },
-              ].map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => setLanguage(lang.code)}
-                  className={`text-sm px-4 py-2 rounded-full transition-all duration-200 ease-in-out
-                    ${
-                      language === lang.code
-                        ? "bg-blue-600 text-white shadow-md"
-                        : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
-                    }`}
-                >
-                  {lang.label}
-                </button>
-              ))}
-            </div>
+          {/* Section 2: Placeholder for links or other info (previously Section 2, now gap filled by Section 1 and Scroll to Top) */}
+          {/* You might want to add more content here or adjust the grid layout if Section 2 was truly missing */}
+          <div>
+            {/* Example: Quick Links */}
+            {/* <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a></li>
+            </ul> */}
+          </div>
+
+          {/* Section 3: This space is now implicitly available as the language selector is moved */}
+          {/* You can add contact info, social media links, etc. here if you wish */}
+          <div>
+            {/* Example: Contact Info */}
+            {/* <h3 className="text-lg font-semibold text-white mb-3">Contact Us</h3>
+            <p className="text-sm text-gray-400">123 Main Street, City, Country</p>
+            <p className="text-sm text-gray-400">info@inspiregroup.com</p> */}
           </div>
         </div>
 
