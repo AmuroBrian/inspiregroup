@@ -2,7 +2,7 @@
 import { useTranslation } from "@/TranslationContext";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Wallet, TrendingUp, ShieldCheck } from "lucide-react";
+import { Wallet, TrendingUp, ShieldCheck, Download, FileText, Shield } from "lucide-react";
 import TranslatedButton from "./TranslatedButton";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -36,18 +36,33 @@ const CompanyInfo = () => {
       title: t.inspireWallet,
       desc: t.inspireDesc,
       link: "/images/InspireWalletQR.png",
+      buttonLabel: t.download,
+      buttonIcon: Download,
+      buttonClass: "bg-white text-[#09555C] hover:bg-gray-100",
+      footerText: t.scanQR,
+      action: (link) => router.push(link)
     },
     {
       icon: TrendingUp,
       title: t.financialProducts,
       desc: t.financialDesc,
       link: "/financialform",
+      buttonLabel: t.form,
+      buttonIcon: FileText,
+      buttonClass: "bg-emerald-500 text-white hover:bg-emerald-600",
+      footerText: t.scanQR2,
+      action: (link) => router.push(link)
     },
     {
       icon: ShieldCheck,
       title: t.travelProtection,
       desc: t.travelDesc,
       link: "/TravelProtectReg",
+      buttonLabel: t.form,
+      buttonIcon: Shield,
+      buttonClass: "bg-blue-500 text-white hover:bg-blue-600",
+      footerText: t.scanQR2,
+      action: (link) => router.push(link)
     },
   ];
 
@@ -135,14 +150,19 @@ const CompanyInfo = () => {
                   
                   <div className="mt-8 w-full">
                     <TranslatedButton
-                      label={t.download}
-                      onClick={() => router.push(item.link)}
-                      className="w-full bg-white text-[#09555C] hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg transition-colors"
+                      label={
+                        <div className="flex items-center justify-center gap-2">
+                          <item.buttonIcon size={18} />
+                          {item.buttonLabel}
+                        </div>
+                      }
+                      onClick={() => item.action(item.link)}
+                      className={`w-full font-semibold py-3 px-6 rounded-lg transition-colors ${item.buttonClass} min-h-[48px] flex items-center justify-center`}
                     />
                   </div>
                   
                   <p className="mt-4 text-white/70 text-xs">
-                    {t.scanQR}
+                    {item.footerText}
                   </p>
                 </div>
               </motion.div>

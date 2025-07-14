@@ -1,68 +1,50 @@
 "use client";
 
 import React, { useState, useContext, useEffect } from "react";
-// Corrected import: All Firebase services (db, storage, authReadyPromise, auth) are now imported
-// from InspireWalletFirebaseConfig.js
-import { db, storage, authReadyPromise, auth } from "../../../script/InspireWalletFirebaseConfig";
+import { db, authReadyPromise, auth } from "../../../script/InspireWalletFirebaseConfig"; // Removed 'storage' as no file uploads are defined in the form
 
 import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// Removed ref, uploadBytes, getDownloadURL as no file uploads are defined in the form
 import { TranslationContext } from "../../TranslationContext";
 
 export default function FinanceForm() {
     const { t } = useContext(TranslationContext);
     const [formData, setFormData] = useState({});
     const [submissionId, setSubmissionId] = useState("");
-    const [passportImage, setPassportImage] = useState(null);
-    const [govIdImage, setGovIdImage] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [isAuthReady, setIsAuthReady] = useState(false); // State for auth readiness
-    const [currentUserId, setCurrentUserId] = useState(null); // State to store the authenticated user's ID
+    const [isAuthReady, setIsAuthReady] = useState(false);
+    const [currentUserId, setCurrentUserId] = useState(null);
 
-    // Effect to wait for Firebase authentication to be ready
     useEffect(() => {
         const checkAuth = async () => {
-            const user = await authReadyPromise; // Wait for the promise from InspireWalletFirebaseConfig to resolve
-            setIsAuthReady(true); // Set auth as ready
+            const user = await authReadyPromise;
+            setIsAuthReady(true);
             if (user) {
-                setCurrentUserId(user.uid); // Store the user ID if authenticated
+                setCurrentUserId(user.uid);
                 console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready. User ID:", user.uid);
             } else {
                 console.log("FinanceForm: Firebase Authentication for Inspire Wallet is ready, but no user is signed in.");
             }
         };
         checkAuth();
-    }, []); // Run only once on component mount
+    }, []);
 
-    // Field mapping with translation keys for Travel Applications
-    // Removed 'lastName' and 'middleName' as requested.
+    // Field mapping for Finance Service Applications with added fields
     const fieldMapping = [
-        { key: "userName", label: t.userName || "Username" },
+        { key: "userName", label: t.userName || "Full Name" },
         { key: "userEmail", label: t.userEmail || "Email Address", type: "email" },
         { key: "mobileNumber", label: t.mobileNumber || "Mobile Number", type: "tel" },
-        { key: "landlineNumber", label: t.landlineNumber || "Landline Number", type: "tel" },
+        { key: "landlineNumber", label: t.landlineNumber || "Landline Number", type: "tel", optional: true },
         { key: "birthdate", label: t.birthdate || "Birthdate", type: "date" },
         { key: "gender", label: t.gender || "Gender", type: "select", options: ["Male", "Female", "Other"] },
         { key: "civilStatus", label: t.civilStatus || "Civil Status", type: "select", options: ["Single", "Married", "Divorced", "Widowed"] },
         { key: "citizenship", label: t.citizenship || "Citizenship" },
-        { key: "passportNumber", label: t.passportNumber || "Passport Number" },
-        { key: "homeAddress", label: t.homeAddress || "Home Address" },
-        { key: "destinationAddress", label: t.destinationAddress || "Destination Address" },
-        { key: "purposeOfTravel", label: t.purposeOfTravel || "Purpose of Travel" },
-        { key: "airline", label: t.airline || "Airline" },
-        { key: "checkInDate", label: t.checkInDate || "Check-in Date", type: "date" },
-        { key: "departureTime", label: t.departureTime || "Departure Time", type: "time" },
-        { key: "arrivalTime", label: t.arrivalTime || "Arrival Time", type: "time" },
-        { key: "stayDuration", label: t.stayDuration || "Stay Duration (days)", type: "number" },
-        { key: "sourceOfFund", label: t.sourceOfFund || "Source of Fund" },
-        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome || "Gross Monthly Income", type: "number" },
-        { key: "cashOnHand", label: t.cashOnHand || "Cash on Hand", type: "number" },
-        { key: "userTimeDepositAmount", label: t.userTimeDepositAmount || "Time Deposit Amount", type: "number" },
-        { key: "preferredBank", label: t.preferredBank || "Preferred Bank" },
-        { key: "isDiscountedRate", label: t.isDiscountedRate || "Apply for Discounted Rate?", type: "checkbox" },
-        { key: "notes", label: t.notes || "Additional Notes", type: "textarea" },
-        { key: "protectionFee", label: t.protectionFee || "Protection Fee", type: "number" }
+        { key: "address", label: t.address || "Current Address", type: "textarea" }, // Changed to textarea for address
+        { key: "sourceOfFund", label: t.sourceOfFund || "Source of Fund", type: "text" }, // Added Source of Fund
+        { key: "preferredBank", label: t.preferredBank || "Preferred Bank", type: "text" }, // Added Preferred Bank
+        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome || "Gross Monthly Income", type: "text" }, // Added grossMonthlyIncome
+        { key: "notes", label: t.notes || "Additional Notes", type: "textarea", optional: true }, // Added Notes, made optional
     ];
 
     const handleChange = (e) => {
@@ -73,21 +55,6 @@ export default function FinanceForm() {
         }));
     };
 
-    const handleFileChange = (e, type) => {
-        if (type === "passport") {
-            setPassportImage(e.target.files[0]);
-        } else if (type === "govId") {
-            setGovIdImage(e.target.files[0]);
-        }
-    };
-
-    const uploadFile = async (file, path) => {
-        // 'storage' now refers directly to the storage from InspireWalletFirebaseConfig.js
-        const storageRef = ref(storage, path);
-        await uploadBytes(storageRef, file);
-        return await getDownloadURL(storageRef);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -95,38 +62,22 @@ export default function FinanceForm() {
         if (!currentUserId) {
             console.error("Authentication not ready or user not signed in. Cannot submit form.");
             setLoading(false);
-            // Consider showing a user-friendly message in the UI
             return;
         }
 
-        const newSubmissionId = "SMBTR-" + Math.random().toString(36).substr(2, 9).toUpperCase(); // Changed prefix for Travel
+        const newSubmissionId = "SMBBK-" + Math.random().toString(36).substr(2, 9).toUpperCase();
         setSubmissionId(newSubmissionId);
 
         try {
-            let passportPhotoUrl = "";
-            let governmentIdUrl = "";
-
-            if (passportImage) {
-                // Path for passport image within the 'inspire-wallet' storage bucket
-                passportPhotoUrl = await uploadFile(passportImage, `travel_ids/${currentUserId}/${newSubmissionId}-passport.jpg`);
-            }
-
-            if (govIdImage) {
-                // Path for government ID image within the 'inspire-wallet' storage bucket
-                governmentIdUrl = await uploadFile(govIdImage, `travel_ids/${currentUserId}/${newSubmissionId}-govId.jpg`);
-            }
-
-            // 'db' now refers to the Firestore from InspireWalletFirebaseConfig.js
-            await addDoc(collection(db, "travelApplications"), {
-                applicationType: "Travel Service",
+            await addDoc(collection(db, "bankApplications"), {
+                applicationType: "Bank Service",
                 userId: currentUserId,
                 status: "Pending",
                 ...formData,
                 submissionId: newSubmissionId,
-                passportPhotoUrl,
-                governmentIdUrl,
                 submittedAt: new Date(),
-                // approvedAt, approvedBy, processedAt are typically set by admin, not by user form submission
+                processedAt: null, // Added processedAt with null value
+                // approvedAt, approvedBy are typically set by admin, not by user form submission
             });
 
             setSubmitted(true);
@@ -139,7 +90,7 @@ export default function FinanceForm() {
     };
 
     return (
-        <div className="min-h-screen mt-20 flex items-center justify-center bg-white py-10 px-2 sm:px-6"> {/* Changed background to white */}
+        <div className="min-h-screen mt-20 flex items-center justify-center bg-white py-10 px-2 sm:px-6">
             <div className="w-full max-w-3xl bg-white/90 rounded-3xl shadow-2xl border border-blue-100 p-6 sm:p-10 relative">
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center justify-center">
                     <div className="bg-gradient-to-r from-blue-500 to-blue-700 rounded-full p-4 shadow-lg">
@@ -149,19 +100,20 @@ export default function FinanceForm() {
                     </div>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-blue-800 mb-2 mt-8 tracking-tight">
-                    {t.travelServiceApplication || "Travel Service Application"}
+                    {t.financeServiceApplication || "Financial Service Application"}
                 </h2>
                 <p className="text-center text-gray-500 mb-8">
-                    {t.travelFormDescription || "Please fill out the form below to apply for our travel services. All fields are required."}
+                    {t.financeFormDescription || "Please fill out the form below to apply for our Financial services. All required fields are marked."}
                 </p>
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                     {fieldMapping.map((field, index) => (
                         <div key={index} className="col-span-1">
-                            <label className="block font-semibold text-gray-700 mb-1">{field.label}</label>
+                            <label className="block font-semibold text-gray-700 mb-1">
+                                {field.label}
+                                {!field.optional && <span className="text-red-500">*</span>}
+                            </label>
                             {field.type === "date" ? (
                                 <input type="date" name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange} />
-                            ) : field.type === "time" ? (
-                                <input type="time" name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange} />
                             ) : field.type === "select" ? (
                                 <select name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange}>
                                     <option value="">{`Select ${field.label}`}</option>
@@ -169,8 +121,6 @@ export default function FinanceForm() {
                                         <option key={option} value={option}>{option}</option>
                                     ))}
                                 </select>
-                            ) : field.type === "checkbox" ? (
-                                <input type="checkbox" name={field.key} className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onChange={handleChange} />
                             ) : field.type === "textarea" ? (
                                 <textarea name={field.key} placeholder={field.label} rows="3" className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange}></textarea>
                             ) : (
@@ -178,16 +128,6 @@ export default function FinanceForm() {
                             )}
                         </div>
                     ))}
-                    {/* Upload Passport */}
-                    <div className="col-span-1">
-                        <label className="block font-semibold text-gray-700 mb-1">{t.uploadPassport || "Upload Passport Photo"}</label>
-                        <input type="file" accept="image/*" className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" onChange={(e) => handleFileChange(e, "passport")} required />
-                    </div>
-                    {/* Upload Government ID */}
-                    <div className="col-span-1">
-                        <label className="block font-semibold text-gray-700 mb-1">{t.uploadGovernmentID || "Upload Government ID"}</label>
-                        <input type="file" accept="image/*" className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" onChange={(e) => handleFileChange(e, "govId")} required />
-                    </div>
                     <div className="col-span-1 md:col-span-2 flex flex-col items-center mt-2">
                         <button
                             type="submit"
