@@ -65,16 +65,40 @@ export default function InspireWalletIntro({ darkMode = false }) {
           {introWalletDesc}
         </p>
 
-        {/* Call to Action Button with interactive hover and tap effects
-        <motion.button
-          className={`px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 ease-in-out
-            ${darkMode ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg' : 'bg-blue-500 text-white hover:bg-blue-600 shadow-lg'}
-            focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50`}
-          whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Learn More
-        </motion.button> */}
+        {/* PDF Viewer Buttons */}
+        {/* Removed the <h3> tag for "Registration Tutorials" as requested */}
+
+        <h3 className={`text-lg md:text-xl font-semibold text-gray-800 mb-4`}>
+          {t.registrationTutorials || "Registration Tutorials"}
+        </h3>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          
+          <motion.a
+            href="/docs/investor.pdf" // Placeholder URL for Investor Tutorial PDF
+            target="_blank" // Opens in a new tab
+            rel="noopener noreferrer" // Security best practice for target="_blank"
+            className={`px-8 py-3 rounded-full text-lg font-semibold text-center transition-all duration-300 ease-in-out
+              ${darkMode ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg' : 'bg-blue-500 text-white hover:bg-blue-600 shadow-lg'}
+              focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 flex items-center justify-center`}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {t.investorTutorial || "Tutorial for Investor"}
+          </motion.a>
+
+          <motion.a
+            href="/docs/agent.pdf" // Placeholder URL for Agent Tutorial PDF
+            target="_blank" // Opens in a new tab
+            rel="noopener noreferrer" // Security best practice for target="_blank"
+            className={`px-8 py-3 rounded-full text-lg font-semibold text-center transition-all duration-300 ease-in-out
+              ${darkMode ? 'bg-blue-800 text-white hover:bg-blue-900 shadow-lg' : 'bg-blue-800 text-white hover:bg-blue-900 shadow-lg'}
+              focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center`}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {t.agentTutorial || "Tutorial for Agent"}
+          </motion.a>
+        </div>
       </motion.div>
     </section>
   );
