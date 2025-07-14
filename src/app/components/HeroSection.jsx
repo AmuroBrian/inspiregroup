@@ -9,57 +9,37 @@ function TypingAnimation({
   inView,
   speed = 30,
   className = "",
-  loop = false,
-  loopDelay = 2000,
   cursorColor = "white",
   cursorBlinkSpeed = 0.7,
   randomizeSpeed = false,
   onTypingComplete,
 }) {
   const [displayed, setDisplayed] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
   const index = useRef(0);
   const timeoutRef = useRef(null);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   const getTypingSpeed = () => {
-    const baseSpeed = isDeleting ? speed / 2 : speed;
     return randomizeSpeed
-      ? baseSpeed + (Math.random() * 20 - 10)
-      : baseSpeed;
+      ? speed + (Math.random() * 20 - 10)
+      : speed;
   };
 
   const type = useCallback(() => {
-    if (!isDeleting && index.current < text.length) {
+    if (index.current < text.length) {
       setDisplayed(text.substring(0, index.current + 1));
       index.current++;
       timeoutRef.current = setTimeout(type, getTypingSpeed());
-    } else if (isDeleting && index.current > 0) {
-      setDisplayed(text.substring(0, index.current - 1));
-      index.current--;
-      timeoutRef.current = setTimeout(type, getTypingSpeed());
     } else {
-      if (!isDeleting && index.current >= text.length) {
-        setIsTypingComplete(true);
-        onTypingComplete?.();
-
-        if (loop) {
-          setIsDeleting(true);
-          timeoutRef.current = setTimeout(type, loopDelay);
-        }
-      } else if (isDeleting && index.current <= 0) {
-        setIsDeleting(false);
-        setIsTypingComplete(false);
-        timeoutRef.current = setTimeout(type, loopDelay);
-      }
+      setIsTypingComplete(true);
+      onTypingComplete?.();
     }
-  }, [text, speed, loop, loopDelay, isDeleting, randomizeSpeed, onTypingComplete]);
+  }, [text, speed, randomizeSpeed, onTypingComplete]);
 
   const startTyping = useCallback(() => {
     clearTimeout(timeoutRef.current);
     index.current = 0;
     setIsTypingComplete(false);
-    setIsDeleting(false);
 
     if (text.length > 0) {
       setDisplayed(text.charAt(0));
@@ -79,7 +59,6 @@ function TypingAnimation({
       setDisplayed("");
       index.current = 0;
       setIsTypingComplete(false);
-      setIsDeleting(false);
     }
 
     return () => {
@@ -90,7 +69,7 @@ function TypingAnimation({
   return (
     <span className={`relative ${className}`}>
       {displayed}
-      {(inView && (!isTypingComplete || loop)) && (
+      {inView && !isTypingComplete && (
         <span
           className="inline-block w-[2px] h-5 ml-0.5 align-middle"
           style={{
@@ -170,7 +149,7 @@ export default function HeroSection() {
           animate={controls}
         >
           <motion.h1
-            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal leading-tight mb-6 text-left [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)]"
+            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-left [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)] font-sans"
             variants={itemVariants}
           >
             <TypingAnimation
@@ -178,8 +157,6 @@ export default function HeroSection() {
               inView={isInView}
               speed={60}
               className="inline"
-              loop={true}
-              loopDelay={1500}
               cursorColor="#ffffff"
               cursorBlinkSpeed={0.5}
               randomizeSpeed={false}
@@ -187,15 +164,13 @@ export default function HeroSection() {
           </motion.h1>
 
           <motion.p
-            className="text-white text-base sm:text-lg md:text-xl mb-10 leading-relaxed min-h-[72px] text-left max-w-4xl [text-shadow:_0_1px_3px_rgb(0_0_0_/_50%)]"
+            className="text-white text-base sm:text-lg md:text-xl mb-10 leading-relaxed min-h-[72px] text-left max-w-4xl [text-shadow:_0_1px_3px_rgb(0_0_0_/_50%)] font-sans font-light"
             variants={itemVariants}
           >
             <TypingAnimation
               text={t.heroDescription || "Empowering your financial journey with secure, smart solutions."}
               inView={isInView}
               speed={95}
-              loop={true}
-              loopDelay={2500}
               cursorColor="#ffffff"
               randomizeSpeed={false}
             />
@@ -208,7 +183,7 @@ export default function HeroSection() {
             {/* Primary 3D Gradient Button */}
             <motion.a
               href="#welcome-to-hol"
-              className="group relative px-8 py-4 text-base sm:text-lg font-semibold text-white bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl transition-all duration-300 w-fit shadow-2xl hover:shadow-3xl overflow-hidden"
+              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl transition-all duration-300 w-fit shadow-2xl hover:shadow-3xl overflow-hidden font-sans"
               whileHover={{ 
                 y: -4,
                 scale: 1.02,
@@ -232,7 +207,7 @@ export default function HeroSection() {
             {/* Secondary Glass Morphism Button */}
             <motion.a
               href="#IW"
-              className="group relative px-8 py-4 text-base sm:text-lg font-semibold text-white backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl transition-all duration-300 w-fit shadow-lg hover:shadow-xl overflow-hidden"
+              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl transition-all duration-300 w-fit shadow-lg hover:shadow-xl overflow-hidden font-sans"
               whileHover={{ 
                 y: -4,
                 scale: 1.02,
