@@ -20,16 +20,16 @@ const Header = () => {
 
   useEffect(() => {
     const handleLoginStatusChange = () => {
-      if (typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
         const loginStatus = localStorage.getItem("isLoggedIn");
         setIsLoggedIn(loginStatus === "true");
       }
-    };
+      };
 
     handleLoginStatusChange();
-    window.addEventListener("loginStatusChanged", handleLoginStatusChange);
-    return () => {
-      window.removeEventListener("loginStatusChanged", handleLoginStatusChange);
+      window.addEventListener("loginStatusChanged", handleLoginStatusChange);
+      return () => {
+        window.removeEventListener("loginStatusChanged", handleLoginStatusChange);
     };
   }, []);
 
@@ -75,57 +75,57 @@ const Header = () => {
     <>
       <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md h-[68px]">
         <div className="container mx-auto flex justify-between items-center h-full px-6 md:px-8">
-          {/* Logo */}
+        {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <img
-                src="/images/inspirelogo.png"
-                alt="Inspire Connect Logo"
+            <img
+              src="/images/inspirelogo.png"
+              alt="Inspire Connect Logo"
                 className="h-10 md:h-12 object-contain"
-              />
+            />
               <span className="text-2xl md:text-3xl font-extrabold text-gray-800">
-                {t.inspireGroup || "INSPIRE GROUP"}
-              </span>
-            </Link>
-          </div>
+              {t.inspireGroup || "INSPIRE GROUP"}
+            </span>
+          </Link>
+        </div>
 
-          {/* Desktop Navigation */}
+        {/* Desktop Navigation */}
           <div className="hidden md:flex items-center">
             <ul className="flex items-center space-x-4 lg:space-x-6">
-              <li className="group">
-                <Link
-                  href={isHomePage ? "#hero" : "/"}
-                  onClick={isHomePage ? (e) => scrollToSection(e, "hero") : null}
+          <li className="group">
+            <Link
+              href={isHomePage ? "#hero" : "/"}
+              onClick={isHomePage ? (e) => scrollToSection(e, "hero") : null}
                   className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-gray-800 hover:text-blue-600"
+            >
+              <Home size={18} />
+              <span>{isClient ? t.home : "Home"}</span>
+            </Link>
+          </li>
+
+          {isHomePage && (
+            <>
+              <li className="group">
+                <a
+                  onClick={(e) => scrollToSection(e, "about-section")}
+                      className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-gray-800 hover:text-blue-600"
                 >
-                  <Home size={18} />
-                  <span>{isClient ? t.home : "Home"}</span>
-                </Link>
+                  <Info size={18} />
+                  <span>{isClient ? t.about : "About"}</span>
+                </a>
               </li>
 
-              {isHomePage && (
-                <>
-                  <li className="group">
-                    <a
-                      onClick={(e) => scrollToSection(e, "about-section")}
+              <li className="group">
+                <a
+                  onClick={(e) => scrollToSection(e, "contacts")}
                       className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-gray-800 hover:text-blue-600"
-                    >
-                      <Info size={18} />
-                      <span>{isClient ? t.about : "About"}</span>
-                    </a>
-                  </li>
-
-                  <li className="group">
-                    <a
-                      onClick={(e) => scrollToSection(e, "contacts")}
-                      className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-gray-800 hover:text-blue-600"
-                    >
-                      <Mail size={18} />
-                      <span>{isClient ? t.contact : "Contact"}</span>
-                    </a>
-                  </li>
-                </>
-              )}
+                >
+                  <Mail size={18} />
+                  <span>{isClient ? t.contact : "Contact"}</span>
+                </a>
+              </li>
+            </>
+          )}
             </ul>
 
             {/* Desktop Auth Buttons */}
@@ -149,27 +149,27 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/agent-home"
+                <Link
+                  href="/agent-home"
                     className="relative font-medium tracking-wide text-sm flex items-center space-x-1 py-2 px-3 transition-colors duration-300 group text-blue-700 hover:text-blue-900"
-                  >
-                    <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
-                  </Link>
-                  <button
-                    onClick={handleLogout}
+                >
+                  <span>{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
+                </Link>
+                <button
+                  onClick={handleLogout}
                     className="inline-flex items-center justify-center space-x-1 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-md bg-red-500 text-white hover:bg-red-600 hover:shadow-lg"
-                  >
-                    <LogOut size={18} />
+                >
+                  <LogOut size={18} />
                     <span>Logout</span>
-                  </button>
-                </>
-              )}
+                </button>
+            </>
+          )}
             </div>
           </div>
 
           {/* Mobile Navigation Toggle */}
           <div className="md:hidden flex items-center">
-            <button
+              <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
               aria-label="Toggle menu"
@@ -188,7 +188,7 @@ const Header = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
-            </button>
+              </button>
           </div>
         </div>
       </nav>
@@ -211,45 +211,45 @@ const Header = () => {
         >
           <ul className="flex flex-col items-center py-6 px-6 space-y-4">
             <li className="w-full">
-              <Link
-                href={isHomePage ? "#hero" : "/"}
+                  <Link
+                    href={isHomePage ? "#hero" : "/"}
                 onClick={isHomePage ? (e) => scrollToSection(e, "hero") : () => setIsMenuOpen(false)}
                 className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-gray-800 hover:bg-gray-100 transition-colors duration-200"
-              >
+                  >
                 <Home size={22} className="text-blue-500" />
                 <span className="text-lg font-medium">{isClient ? t.home : "Home"}</span>
-              </Link>
-            </li>
+                  </Link>
+                </li>
 
-            {isHomePage && (
-              <>
+                {isHomePage && (
+                  <>
                 <li className="w-full">
-                  <a
+                      <a
                     onClick={(e) => scrollToSection(e, "about-section")}
                     className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-gray-800 hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
-                  >
+                      >
                     <Info size={22} className="text-blue-500" />
                     <span className="text-lg font-medium">{isClient ? t.about : "About"}</span>
-                  </a>
-                </li>
+                      </a>
+                    </li>
                 <li className="w-full">
-                  <a
+                      <a
                     onClick={(e) => scrollToSection(e, "contacts")}
                     className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-gray-800 hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
-                  >
+                      >
                     <Mail size={22} className="text-blue-500" />
                     <span className="text-lg font-medium">{isClient ? t.contact : "Contact"}</span>
-                  </a>
-                </li>
-              </>
-            )}
+                      </a>
+                    </li>
+                  </>
+                )}
 
             <div className="w-full border-t border-gray-200 my-2"></div>
 
-            {!isLoggedIn ? (
-              <>
+                {!isLoggedIn ? (
+                  <>
                 <li className="w-full">
-                  <button
+                      <button
                     onClick={() => {
                       agentCodeEntryRef.current?.openRegister();
                       setIsMenuOpen(false);
@@ -258,10 +258,10 @@ const Header = () => {
                   >
                     <UserPlus size={22} className="text-blue-600" />
                     <span className="text-lg font-medium">{t.register || "Register"}</span>
-                  </button>
-                </li>
+                      </button>
+                    </li>
                 <li className="w-full">
-                  <button
+                      <button
                     onClick={() => {
                       agentCodeEntryRef.current?.openLogin();
                       setIsMenuOpen(false);
@@ -270,22 +270,22 @@ const Header = () => {
                   >
                     <Key size={22} className="text-gray-600" />
                     <span className="text-lg font-medium">{t.login || "Login"}</span>
-                  </button>
-                </li>
-              </>
-            ) : (
-              <>
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <>
                 <li className="w-full">
-                  <Link
-                    href="/agent-home"
-                    onClick={() => setIsMenuOpen(false)}
+                      <Link
+                        href="/agent-home"
+                        onClick={() => setIsMenuOpen(false)}
                     className="w-full flex items-center justify-start space-x-4 px-6 py-3 rounded-lg text-blue-700 hover:bg-blue-50 transition-colors duration-200"
-                  >
+                      >
                     <span className="text-lg font-medium">{isClient ? (t.agentSite || "Agent Site") : "Agent Site"}</span>
-                  </Link>
-                </li>
+                      </Link>
+                    </li>
                 <li className="w-full">
-                  <button
+                      <button
                     onClick={() => {
                       handleLogout();
                       setIsMenuOpen(false);
@@ -294,12 +294,12 @@ const Header = () => {
                   >
                     <LogOut size={22} className="text-red-600" />
                     <span className="text-lg font-medium">Logout</span>
-                  </button>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
+                      </button>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
       </div>
 
       {/* Agent Code Entry Modals */}
