@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/TranslationContext";
 import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
+import Image from "next/image";
 
 export const CompanyMessage = () => {
   const { t } = useTranslation();
@@ -109,15 +110,19 @@ export const CompanyMessage = () => {
           className="bg-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden"
           variants={itemVariants}
         >
-          {/* Hero Image at the top inside container */}
+          {/* Hero Image at the top inside container - Updated with Next.js Image component */}
           <motion.div 
-            className="w-full mb-8 sm:mb-12"
+            className="w-full mb-8 sm:mb-12 relative aspect-video"
             variants={itemVariants}
           >
-            <img
-              src="/images/flag.jpeg"
+            <Image
+              src="/images/Flag.png"
               alt="Company Leadership"
-              className="w-full h-auto max-h-[400px] object-cover rounded-2xl shadow-lg border-4 border-blue-100 transform hover:scale-[1.01] transition-transform duration-300 ease-in-out"
+              fill
+              className="rounded-2xl shadow-lg border-4 border-blue-100 object-cover"
+              quality={100}
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
             />
           </motion.div>
 
@@ -193,7 +198,7 @@ export const CompanyMessage = () => {
                 className="text-blue-700 text-sm sm:text-base font-semibold text-right mt-4 sm:mt-6"
                 variants={itemVariants}
               >
-                — EVP Andrei Bergano
+                — EVP Melody Santos
               </motion.p>
             </motion.div>
           </div>
