@@ -141,7 +141,7 @@
 
 
     InspireWalletPartnerBanks: "Inspire Wallet Partner Banks",
-    OpeningaPhilippineBankAccountfornonresidents: "Opening a Philippine Bank Account for non-residents",
+    OpeningaPhilippineBankAccountfornonresidents: "Philippine Bank Account for Non-Residents",
     BuyingRealEstatewithUSDT: "Buying Real Estate with USDT",
     MicroInvestments: "Micro Investments",
     // New keys for agent-home/page.js
@@ -417,7 +417,7 @@ agentHomeClickImage: "Click the image to view details",
     InspireWalletPartnerBanks: "Inspireウォレット提携銀行",
     OpeningaPhilippineBankAccountfornonresidents: "非居住者向けフィリピン銀行口座の開設",
     BuyingRealEstatewithUSDT: "USDTで不動産を購入",
-    MicroInvestment: "マイクロ投資",
+    MicroInvestments: "マイクロ投資",
     // New keys for agent-home/page.js
     welcomeAgent: "エージェントの皆様へようこそ！",
     businessLinesDesc: "事業部門やリソースにアクセスできます。",
@@ -688,7 +688,7 @@ pdfDocument: "PDFドキュメント",
     InspireWalletPartnerBanks: "Inspire 월렛 제휴 은행",
     OpeningaPhilippineBankAccountfornonresidents: "비거주자를 위한 필리핀 은행 계좌 개설",
     BuyingRealEstatewithUSDT: "USDT로 부동산 구매",
-    MicroInvestment: "마이크로 투자",
+    MicroInvestments: "마이크로 투자",
     // New keys for agent-home/page.js
     welcomeAgent: "에이전트님 환영합니다!",
     businessLinesDesc: "비즈니스 라인과 리소스에 접근하세요.",
