@@ -20,9 +20,7 @@ function TypingAnimation({
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   const getTypingSpeed = () => {
-    return randomizeSpeed
-      ? speed + (Math.random() * 20 - 10)
-      : speed;
+    return randomizeSpeed ? speed + (Math.random() * 20 - 10) : speed;
   };
 
   const type = useCallback(() => {
@@ -67,7 +65,7 @@ function TypingAnimation({
   }, [inView, startTyping]);
 
   return (
-    <span className={`relative ${className}`}>
+    <span className={`relative ${className}`} style={{ fontFamily: "'Inter', sans-serif" }}>
       {displayed}
       {inView && !isTypingComplete && (
         <span
@@ -149,11 +147,14 @@ export default function HeroSection() {
           animate={controls}
         >
           <motion.h1
-            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-left [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)] font-sans"
+            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-left [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)] font-[Inter]"
             variants={itemVariants}
           >
             <TypingAnimation
-              text={t.herosub || "Welcome to Inspire Holdings Group – A legacy of strong trust and proven excellence. This is where your future moves to the next level."}
+              text={
+                t.herosub ||
+                "Welcome to Inspire Holdings Group – A legacy of strong trust and proven excellence. This is where your future moves to the next level."
+              }
               inView={isInView}
               speed={60}
               className="inline"
@@ -164,11 +165,14 @@ export default function HeroSection() {
           </motion.h1>
 
           <motion.p
-            className="text-white text-base sm:text-lg md:text-xl mb-10 leading-relaxed min-h-[72px] text-left max-w-4xl [text-shadow:_0_1px_3px_rgb(0_0_0_/_50%)] font-sans font-light"
+            className="text-white text-base sm:text-lg md:text-xl mb-10 leading-relaxed min-h-[72px] text-left max-w-4xl [text-shadow:_0_1px_3px_rgb(0_0_0_/_50%)] font-[Inter] font-light"
             variants={itemVariants}
           >
             <TypingAnimation
-              text={t.heroDescription || "Empowering your financial journey with secure, smart solutions."}
+              text={
+                t.heroDescription ||
+                "Empowering your financial journey with secure, smart solutions."
+              }
               inView={isInView}
               speed={95}
               cursorColor="#ffffff"
@@ -180,48 +184,66 @@ export default function HeroSection() {
             className="flex flex-col sm:flex-row gap-4 md:gap-6"
             variants={itemVariants}
           >
-            {/* Primary 3D Gradient Button */}
             <motion.a
               href="#welcome-to-hol"
-              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl transition-all duration-300 w-fit shadow-2xl hover:shadow-3xl overflow-hidden font-sans"
-              whileHover={{ 
+              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl transition-all duration-300 w-fit shadow-2xl hover:shadow-3xl overflow-hidden font-[Inter]"
+              whileHover={{
                 y: -4,
                 scale: 1.02,
-                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)"
+                boxShadow:
+                  "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
               }}
-              whileTap={{ 
+              whileTap={{
                 scale: 0.98,
-                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)"
+                boxShadow:
+                  "0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)",
               }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {t.getStarted || "Learn More"}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </span>
               <span className="absolute inset-0 bg-blue-700 rounded-xl transform translate-z-[-4px] group-hover:translate-z-[-6px] transition-transform duration-300"></span>
               <span className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             </motion.a>
 
-            {/* Secondary Glass Morphism Button */}
             <motion.a
               href="#IW"
-              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl transition-all duration-300 w-fit shadow-lg hover:shadow-xl overflow-hidden font-sans"
-              whileHover={{ 
+              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl transition-all duration-300 w-fit shadow-lg hover:shadow-xl overflow-hidden font-[Inter]"
+              whileHover={{
                 y: -4,
                 scale: 1.02,
-                backgroundColor: "rgba(255, 255, 255, 0.15)"
+                backgroundColor: "rgba(255, 255, 255, 0.15)",
               }}
-              whileTap={{ 
+              whileTap={{
                 scale: 0.98,
-                backgroundColor: "rgba(255, 255, 255, 0.05)"
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
               }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {t.learnMore || "Get Started"}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </span>
               <span className="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-all duration-300"></span>
