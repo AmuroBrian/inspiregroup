@@ -1,122 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"; // Import useMemo
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/TranslationContext";
 import { motion } from "framer-motion";
 
-// Constants (remain the same)
-const IMAGES = [
-  {
-    src: "/images/commision.png",
-    link: "/docs/Commission.pdf",
-    name: "Commission",
-    ariaLabel: "Commission document",
-  },
-  {
-    src: "/images/FinancialProductN.png",
-    link: "/docs/FinancialProductsNew.pdf",
-    name: "Financial Product",
-    ariaLabel: "Financial Product document",
-  },
-  {
-    src: "/images/PrivateBankerNewP.png",
-    link: "/docs/PrivateBankerNew.pdf",
-    name: "Private Banker",
-    ariaLabel: "Private Banker document",
-  },
-  {
-    src: "/images/TravelProtectionC.png",
-    link: "/docs/TravelProtectionNew.pdf",
-    name: "Travel Protection",
-    ariaLabel: "Travel Protection document",
-  },
-];
-
-const PDF_FILES = [
-  {
-    name: "Commission.pdf",
-    link: "/docs/Commission.pdf",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-8 h-8 text-blue-600"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "Financial Products.pdf",
-    link: "/docs/FinancialProductsNew.pdf",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-8 h-8 text-blue-600"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "Private Banker.pdf",
-    link: "/docs/PrivateBankerNew.pdf",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-8 h-8 text-blue-600"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "Travel Protection.pdf",
-    link: "/docs/TravelProtectionNew.pdf",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-8 h-8 text-blue-600"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-        />
-      </svg>
-    ),
-  },
-];
-
+// Constants for dimensions (these can remain outside as they don't depend on 't')
 const MIN_SWIPE_DISTANCE = 50;
 const CAROUSEL_ITEM_WIDTH_DESKTOP = 500;
 const CAROUSEL_ITEM_HEIGHT_DESKTOP = 350;
@@ -134,16 +24,134 @@ export default function CompanyInfo() {
   const [touchEnd, setTouchEnd] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
   const [dimensions, setDimensions] = useState({
-    width: CAROUSEL_ITEM_WIDTH_DESKTOP,
-    height: CAROUSEL_ITEM_HEIGHT_DESKTOP,
+    width: 0,
+    height: 0,
   });
   const [isTitleVisible, setIsTitleVisible] = useState(false);
   const [isPDFUnderlineVisible, setIsPDFUnderlineVisible] = useState(false);
   const carouselRef = useRef(null);
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t } = useTranslation(); // <--- This line must come first to define 't'
   const autoSlideIntervalRef = useRef(null);
   const [loggedInUserName, setLoggedInUserName] = useState("");
+
+  // Define your constants using useMemo AFTER 't' is defined
+  const IMAGES = useMemo(
+    () => [
+      {
+        src: "/images/commision.png",
+        link: "/docs/Commission.pdf",
+        name: t.Commission || "Commission", // Now 't' is defined
+        ariaLabel: "Commission document",
+      },
+      {
+        src: "/images/FinancialProductN.png",
+        link: "/docs/FinancialProductsNew.pdf",
+        name: t.FinancialProduct || "Financial Product",
+        ariaLabel: "Financial Product document",
+      },
+      {
+        src: "/images/PrivateBankerNewP.png",
+        link: "/docs/PrivateBankerNew.pdf",
+        name: t.Privatebanker || "Private Banker",
+        ariaLabel: "Private Banker document",
+      },
+      {
+        src: "/images/TravelProtectionC.png",
+        link: "/docs/TravelProtectionNew.pdf",
+        name: t.TravelProtection || "Travel Protection",
+        ariaLabel: "Travel Protection document",
+      },
+    ],
+    [t] // Depend on 't' so it re-renders if language changes
+  );
+
+  const PDF_FILES = useMemo(
+    () => [
+      {
+        name: t.Commission || "Commission",
+        link: "/docs/Commission.pdf",
+        icon: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-8 h-8 text-blue-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        ),
+      },
+      {
+        name: t.FinancialProduct || "Financial Products",
+        link: "/docs/FinancialProductsNew.pdf",
+        icon: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-8 h-8 text-blue-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+            />
+          </svg>
+        ),
+      },
+      {
+        name: t.Privatebanker || "Private Banker",
+        link: "/docs/PrivateBankerNew.pdf",
+        icon: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-8 h-8 text-blue-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+        ),
+      },
+      {
+        name: t.TravelProtection || "Travel Protection",
+        link: "/docs/TravelProtectionNew.pdf",
+        icon: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-8 h-8 text-blue-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            />
+          </svg>
+        ),
+      },
+    ],
+    [t] // Depend on 't' so it re-renders if language changes
+  );
+
 
   // Calculate responsive dimensions (remains the same)
   const calculateDimensions = useCallback(() => {
@@ -166,45 +174,39 @@ export default function CompanyInfo() {
     }
   }, []);
 
-  // ************ FIX STARTS HERE ************
-
   // resetAutoSlide MUST be defined before handlePrev, handleNext, goToSlide
   const resetAutoSlide = useCallback(() => {
     if (autoSlideIntervalRef.current) {
       clearInterval(autoSlideIntervalRef.current);
     }
-    // We pass handleNext directly here as it's defined below,
-    // but useCallback ensures stable reference.
     autoSlideIntervalRef.current = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % IMAGES.length);
     }, 5000);
-  }, [IMAGES.length]); // Depend on IMAGES.length for safety, though it's constant
+  }, [IMAGES.length]); // Depend on IMAGES.length
 
   // Memoized navigation handlers
   const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + IMAGES.length) % IMAGES.length);
-    resetAutoSlide(); // Now resetAutoSlide is defined
+    resetAutoSlide();
   }, [IMAGES.length, resetAutoSlide]);
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % IMAGES.length);
-    resetAutoSlide(); // Now resetAutoSlide is defined
+    resetAutoSlide();
   }, [IMAGES.length, resetAutoSlide]);
 
   const goToSlide = useCallback(
     (index) => {
       setCurrentIndex(index);
-      resetAutoSlide(); // Now resetAutoSlide is defined
+      resetAutoSlide();
     },
     [resetAutoSlide]
   );
 
-  // ************ FIX ENDS HERE ************
-
-
   useEffect(() => {
     setIsClient(true);
-    setWindowWidth(window.innerWidth);
+    // Initialize dimensions with a check for window
+    setWindowWidth(typeof window !== 'undefined' ? window.innerWidth : 0);
     setDimensions(calculateDimensions());
 
     const handleResize = () => {
@@ -212,10 +214,12 @@ export default function CompanyInfo() {
       setDimensions(calculateDimensions());
     };
 
-    window.addEventListener("resize", handleResize);
+    if (typeof window !== 'undefined') { // Add check before adding event listener
+      window.addEventListener("resize", handleResize);
+    }
 
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const storedUserName = localStorage.getItem("loggedInUserName");
+    const isLoggedIn = typeof localStorage !== 'undefined' ? localStorage.getItem("isLoggedIn") : null;
+    const storedUserName = typeof localStorage !== 'undefined' ? localStorage.getItem("loggedInUserName") : null;
 
     if (!isLoggedIn) {
       router.push("/");
@@ -223,19 +227,25 @@ export default function CompanyInfo() {
       setLoggedInUserName(storedUserName || "Agent");
     }
 
-    // Initialize auto-slide after all functions are defined
     resetAutoSlide();
 
     setTimeout(() => setIsTitleVisible(true), 300);
     setTimeout(() => setIsPDFUnderlineVisible(true), 600);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      if (typeof window !== 'undefined') { // Add check before removing event listener
+        window.removeEventListener("resize", handleResize);
+      }
       if (autoSlideIntervalRef.current) {
         clearInterval(autoSlideIntervalRef.current);
       }
     };
-  }, [router, resetAutoSlide, calculateDimensions]); // Add router to dependency array
+  }, [router, resetAutoSlide, calculateDimensions, IMAGES.length]); // IMAGES.length is a good dependency here
+
+  // ... (rest of your component code, touch/mouse handlers, getItemTransform, return statement)
+  // Your touch handlers, mouse handlers, getItemTransform, and the entire return JSX
+  // remain exactly as they were in your last provided code.
+  // I've omitted them here for brevity, but make sure they are present in your file.
 
   // Touch handlers for mobile (remain the same)
   const handleTouchStart = (e) => {
@@ -530,7 +540,7 @@ export default function CompanyInfo() {
                   {pdf.icon}
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">
-                  {pdf.name.replace(".pdf", "")}
+                  {pdf.name} {/* This name is already translated */}
                 </h3>
                 <p className="text-gray-500 text-xs sm:text-sm mb-3 sm:mb-4">
                   {t.pdfDocument || "PDF Document"}
