@@ -38,7 +38,7 @@ const Footer = () => {
 
           {/* Section 1: Branding and Copyright */}
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
-            <h3 className="text-4xl font-semibold text-white mb-4 tracking-tight leading-tight"> {/* Changed from font-extrabold to font-semibold */}
+            <h3 className="text-4xl font-semibold text-white mb-4 tracking-tight leading-tight">
               {t.inspireGroup || "Inspire Holdings Inc."}
             </h3>
             <p className="text-base text-blue-100 leading-relaxed mb-3">
@@ -55,7 +55,7 @@ const Footer = () => {
 
           {/* Section 2: Head Office and Satellite Offices */}
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
-            <h4 className="text-xl font-semibold text-white mb-6 flex items-center justify-center md:justify-start"> {/* Changed from font-bold to font-semibold */}
+            <h4 className="text-xl font-semibold text-white mb-6 flex items-center justify-center md:justify-start">
               <FontAwesomeIcon icon={faBuilding} className="mr-3 text-blue-300 text-2xl" />
               {t.ourOffices || "Our Offices"}
             </h4>
@@ -66,7 +66,7 @@ const Footer = () => {
                   {t.mainOffice || "Main Office (Philippines):"}
                 </p>
                 <p className="text-sm text-blue-200 pl-0 md:pl-6 leading-relaxed">
-                  6F Alliance Global Tower, 11th Avenue, corner 36th St, Taguig, Metro Manila
+                  {t.mainOfficeAddress || "6F Alliance Global Tower, 11th Avenue, corner 36th St, Taguig, Metro Manila"}
                 </p>
               </div>
               <div>
@@ -75,7 +75,7 @@ const Footer = () => {
                   {t.satelliteOfficeUSA || "Satellite Office (USA):"}
                 </p>
                 <p className="text-sm text-blue-200 pl-0 md:pl-6 leading-relaxed">
-                  1209 Mountain Road PL NE STE N Bernalillo County Albuquerque, NM, 87110, USA
+                  {t.usaOfficeAddress || "1209 Mountain Road PL NE STE N Bernalillo County Albuquerque, NM, 87110, USA"}
                 </p>
               </div>
               <div>
@@ -84,7 +84,7 @@ const Footer = () => {
                   {t.satelliteOfficeJapan || "Satellite Office (Japan):"}
                 </p>
                 <p className="text-sm text-blue-200 pl-0 md:pl-6 leading-relaxed">
-                  20th floor, Trust Tower Main Building, 1-8-3 Marunouchi, Chiyoda-ku, Tokyo 100-8283
+                  {t.japanOfficeAddress || "20th floor, Trust Tower Main Building, 1-8-3 Marunouchi, Chiyoda-ku, Tokyo 100-8283"}
                 </p>
               </div>
             </div>
