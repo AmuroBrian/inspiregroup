@@ -50,7 +50,7 @@ const ProjectCards = () => {
       id: 5,
       title: t.inspireWallet,
       image: "/images/InspireWalletNew.png",
-      link: "/docs/InspireWalletFeatures.pdf",
+      link: "/docs/INSPIREWALLETMANUAL.pdf",
     },
     {
       id: 6,

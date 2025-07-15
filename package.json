@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@google-cloud/translate": "^8.5.0",
     "@heroicons/react": "^2.2.0",
     "@vercel/functions": "^2.0.0",
@@ -17,7 +20,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "firebase": "^11.3.1",
-    "framer-motion": "^12.23.0",
+    "framer-motion": "^12.23.5",
     "i18next": "^24.2.2",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",

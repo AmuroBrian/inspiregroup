@@ -32,19 +32,19 @@ export default function FinanceForm() {
 
     // Field mapping for Finance Service Applications with added fields
     const fieldMapping = [
-        { key: "userName", label: t.userName || "Full Name" },
-        { key: "userEmail", label: t.userEmail || "Email Address", type: "email" },
-        { key: "mobileNumber", label: t.mobileNumber || "Mobile Number", type: "tel" },
-        { key: "landlineNumber", label: t.landlineNumber || "Landline Number", type: "tel", optional: true },
-        { key: "birthdate", label: t.birthdate || "Birthdate", type: "date" },
-        { key: "gender", label: t.gender || "Gender", type: "select", options: ["Male", "Female", "Other"] },
-        { key: "civilStatus", label: t.civilStatus || "Civil Status", type: "select", options: ["Single", "Married", "Divorced", "Widowed"] },
-        { key: "citizenship", label: t.citizenship || "Citizenship" },
-        { key: "address", label: t.address || "Current Address", type: "textarea" }, // Changed to textarea for address
-        { key: "sourceOfFund", label: t.sourceOfFund || "Source of Fund", type: "text" }, // Added Source of Fund
-        { key: "preferredBank", label: t.preferredBank || "Preferred Bank", type: "text" }, // Added Preferred Bank
-        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome || "Gross Monthly Income", type: "text" }, // Added grossMonthlyIncome
-        { key: "notes", label: t.notes || "Additional Notes", type: "textarea", optional: true }, // Added Notes, made optional
+        { key: "userName", label: t.userName },
+        { key: "userEmail", label: t.userEmail, type: "email" },
+        { key: "mobileNumber", label: t.mobileNumber, type: "tel" },
+        { key: "landlineNumber", label: t.landlineNumber, type: "tel", optional: true },
+        { key: "birthdate", label: t.birthdate, type: "date" },
+        { key: "gender", label: t.gender, type: "select", options: [t.male, t.female, t.other] },
+        { key: "civilStatus", label: t.civilStatus, type: "select", options: [t.single, t.married, t.divorced, t.widowed] },
+        { key: "citizenship", label: t.citizenship },
+        { key: "address", label: t.address, type: "textarea" }, // Changed to textarea for address
+        { key: "sourceOfFund", label: t.sourceOfFund, type: "text" },
+        { key: "preferredBank", label: t.preferredBank, type: "text" },
+        { key: "grossMonthlyIncome", label: t.grossMonthlyIncome, type: "text" },
+        { key: "notes", label: t.notes, type: "textarea", optional: true },
     ];
 
     const handleChange = (e) => {
@@ -100,10 +100,10 @@ export default function FinanceForm() {
                     </div>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-blue-800 mb-2 mt-8 tracking-tight">
-                    {t.financeServiceApplication || "Financial Service Application"}
+                    {t.financialServiceApplication || "Financial Service Application"}
                 </h2>
                 <p className="text-center text-gray-500 mb-8">
-                    {t.financeFormDescription || "Please fill out the form below to apply for our Financial services. All required fields are marked."}
+                    {t.financialFormDescription || "Please fill out the form below to apply for our financial services. All fields are required."}
                 </p>
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                     {fieldMapping.map((field, index) => (
@@ -116,7 +116,7 @@ export default function FinanceForm() {
                                 <input type="date" name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange} />
                             ) : field.type === "select" ? (
                                 <select name={field.key} className="w-full p-2.5 border border-blue-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition" required={!field.optional} onChange={handleChange}>
-                                    <option value="">{`Select ${field.label}`}</option>
+                                    <option value="">{t[`select${field.key.charAt(0).toUpperCase() + field.key.slice(1)}`] || field.label}</option>
                                     {field.options.map(option => (
                                         <option key={option} value={option}>{option}</option>
                                     ))}
@@ -141,9 +141,9 @@ export default function FinanceForm() {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
                                     </svg>
-                                    {t.submitting || "Submitting..."}
+                                    {t.submitting}
                                 </span>
-                            ) : submitted ? (t.submitted || "Submitted") : (isAuthReady ? (t.submit || "Submit") : "Loading Authentication...")}
+                            ) : submitted ? (t.submitted) : (isAuthReady ? (t.submit) : "Loading Authentication...")}
                         </button>
                     </div>
                 </form>
@@ -153,8 +153,8 @@ export default function FinanceForm() {
                             <svg className="mx-auto mb-2 w-10 h-10 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
-                            <p className="font-semibold text-lg text-blue-800 mb-1">{t.thankYouSubmission || "Thank you for your submission!"}</p>
-                            <p className="text-gray-700 mb-2">{t.applicationReceived || "Your application has been received. Please save your Submission ID for your records:"}</p>
+                            <p className="font-semibold text-lg text-blue-800 mb-1">{t.thankYouSubmission}</p>
+                            <p className="text-gray-700 mb-2">{t.applicationReceived}</p>
                             <div className="text-2xl font-bold text-blue-700 tracking-wider mb-2">{submissionId}</div>
                         </div>
                     </div>
