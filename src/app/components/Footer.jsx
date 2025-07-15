@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "@/TranslationContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt, faGlobe, faBuilding } from '@fortawesome/free-solid-svg-icons';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -21,34 +23,82 @@ const Footer = () => {
     });
   };
 
-  const currentYear = 2024;
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 border-t border-gray-700">
-      <div className="container mx-auto px-4 py-12">
-        {/* Changed grid to single column and always center text */}
-        <div className="flex flex-col items-center text-center">
-          {/* Section 1: Branding and Copyright - now centered */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold text-white mb-3">
+    <footer className="bg-gradient-to-r from-black to-blue-950 text-gray-200 border-t border-blue-900 shadow-2xl relative overflow-hidden">
+      {/* Background overlay for subtle texture/pattern */}
+      {/* Ensure you have bg-dots-pattern defined in your tailwind.config.js if you want this effect */}
+      {/* Consider adjusting opacity or color of dots if they clash with blue */}
+      <div className="absolute inset-0 bg-dots-pattern opacity-10" aria-hidden="true"></div> {/* Increased opacity slightly for visibility on dark blue */}
+
+      <div className="container mx-auto px-6 py-16 relative z-10">
+        {/* Main grid for footer sections */}
+        <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 lg:gap-x-20">
+
+          {/* Section 1: Branding and Copyright */}
+          <div className="flex flex-col items-center text-center md:items-start md:text-left">
+            <h3 className="text-4xl font-semibold text-white mb-4 tracking-tight leading-tight"> {/* Changed from font-extrabold to font-semibold */}
               {t.inspireGroup || "Inspire Holdings Inc."}
             </h3>
-            <p className="text-sm text-gray-400 leading-relaxed">
+            <p className="text-base text-blue-100 leading-relaxed mb-3">
               &copy; {currentYear} {t.inspireGroup || "Inspire Holdings Inc."}.{" "}
               {t.allRightsReserved || "All Rights Reserved."}
             </p>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-sm text-blue-200">
               {t.poweredBy || "Powered by"}{" "}
-              <span className="font-medium text-blue-400">
+              <span className="font-semibold text-blue-400 hover:text-blue-300 transition-colors duration-300 cursor-pointer">
                 {t.inspireGroup || "Inspire Group"}
               </span>
             </p>
           </div>
 
-          {/* Removed the empty grid columns since we want everything centered */}
+          {/* Section 2: Head Office and Satellite Offices */}
+          <div className="flex flex-col items-center text-center md:items-start md:text-left">
+            <h4 className="text-xl font-semibold text-white mb-6 flex items-center justify-center md:justify-start"> {/* Changed from font-bold to font-semibold */}
+              <FontAwesomeIcon icon={faBuilding} className="mr-3 text-blue-300 text-2xl" />
+              {t.ourOffices || "Our Offices"}
+            </h4>
+            <div className="space-y-6 w-full">
+              <div>
+                <p className="font-semibold text-blue-100 flex items-center justify-center md:justify-start mb-1">
+                  <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-3 text-red-300" />
+                  {t.mainOffice || "Main Office (Philippines):"}
+                </p>
+                <p className="text-sm text-blue-200 pl-0 md:pl-6 leading-relaxed">
+                  6F Alliance Global Tower, 11th Avenue, corner 36th St, Taguig, Metro Manila
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold text-blue-100 flex items-center justify-center md:justify-start mb-1">
+                  <FontAwesomeIcon icon={faGlobe} className="mr-3 text-green-300" />
+                  {t.satelliteOfficeUSA || "Satellite Office (USA):"}
+                </p>
+                <p className="text-sm text-blue-200 pl-0 md:pl-6 leading-relaxed">
+                  1209 Mountain Road PL NE STE N Bernalillo County Albuquerque, NM, 87110, USA
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold text-blue-100 flex items-center justify-center md:justify-start mb-1">
+                  <FontAwesomeIcon icon={faGlobe} className="mr-3 text-yellow-300" />
+                  {t.satelliteOfficeJapan || "Satellite Office (Japan):"}
+                </p>
+                <p className="text-sm text-blue-200 pl-0 md:pl-6 leading-relaxed">
+                  20th floor, Trust Tower Main Building, 1-8-3 Marunouchi, Chiyoda-ku, Tokyo 100-8283
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Scroll to top button remains unchanged */}
+        {/* Bottom Bar: Copyright and Scroll to top (Centered below content) */}
+        <div className="border-t border-blue-900 mt-16 pt-8 text-center text-blue-300 text-sm">
+          <p>
+            {t.footerNote || "Inspiring innovation, building futures."}
+          </p>
+        </div>
+
+        {/* Scroll to top button */}
         {showScrollTop && (
           <button
             onClick={scrollToTop}
