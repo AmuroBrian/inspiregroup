@@ -135,75 +135,74 @@ export default function HeroSection() {
       </motion.video>
 
       <motion.div
-        className="absolute inset-0 bg-black/5 flex items-center z-10"
+        className="absolute inset-0 bg-black/5 flex items-center z-10 px-4 sm:pl-6 md:pl-8 lg:pl-10 xl:pl-12"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
         <motion.div
-          className="w-full px-8 md:px-12 lg:px-16 xl:px-24 2xl:px-32"
+          className="w-full"
           variants={containerVariants}
           initial="hidden"
           animate={controls}
         >
-          <motion.h1
-            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-left [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)] font-[Inter]"
-            variants={itemVariants}
-          >
-            <TypingAnimation
-              text={
-                t.herosub ||
-                "Welcome to Inspire Holdings Group – A legacy of strong trust and proven excellence. This is where your future moves to the next level."
-              }
-              inView={isInView}
-              speed={60}
-              className="inline"
-              cursorColor="#ffffff"
-              cursorBlinkSpeed={0.5}
-              randomizeSpeed={false}
-            />
-          </motion.h1>
+          <div className="max-w-2xl mx-0">
+            <motion.h1
+              className="text-white text-xl xs:text-2xl sm:text-3xl md:text-4xl font-light leading-tight mb-4 text-left [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)] font-[Inter]"
+              variants={itemVariants}
+            >
+              <TypingAnimation
+                text={
+                  t.herosub ||
+                  "Welcome to Inspire Holdings Group – A legacy of strong trust and proven excellence. This is where your future moves to the next level."
+                }
+                inView={isInView}
+                speed={60}
+                className="inline"
+                cursorColor="#ffffff"
+                cursorBlinkSpeed={0.5}
+                randomizeSpeed={false}
+              />
+            </motion.h1>
 
-          <motion.p
-            className="text-white text-base sm:text-lg md:text-xl mb-10 leading-relaxed min-h-[72px] text-left max-w-4xl [text-shadow:_0_1px_3px_rgb(0_0_0_/_50%)] font-[Inter] font-light"
-            variants={itemVariants}
-          >
-            <TypingAnimation
-              text={
-                t.heroDescription ||
-                "Empowering your financial journey with secure, smart solutions."
-              }
-              inView={isInView}
-              speed={95}
-              cursorColor="#ffffff"
-              randomizeSpeed={false}
-            />
-          </motion.p>
+            <motion.p
+              className="text-white text-xs xs:text-sm sm:text-base mb-6 sm:mb-8 leading-relaxed min-h-[60px] text-left [text-shadow:_0_1px_3px_rgb(0_0_0_/_50%)] font-[Inter] font-light"
+              variants={itemVariants}
+            >
+              <TypingAnimation
+                text={
+                  t.heroDescription ||
+                  "Empowering your financial journey with secure, smart solutions."
+                }
+                inView={isInView}
+                speed={95}
+                cursorColor="#ffffff"
+                randomizeSpeed={false}
+              />
+            </motion.p>
+          </div>
 
+          {/* Buttons with consistent sizing and glow effects */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 md:gap-6"
+            className="flex flex-row gap-3 sm:gap-4 md:gap-6 mx-0 items-center"
             variants={itemVariants}
           >
             <motion.a
               href="#welcome-to-hol"
-              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl transition-all duration-300 w-fit shadow-2xl hover:shadow-3xl overflow-hidden font-[Inter]"
+              className="group relative px-4 py-3 text-sm sm:text-base font-medium text-white bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl transition-all duration-300 w-[180px] text-center shadow-[0_4px_20px_-5px_rgba(59,130,246,0.5)] hover:shadow-[0_4px_25px_-2px_rgba(59,130,246,0.6)] overflow-hidden font-[Inter] whitespace-nowrap"
               whileHover={{
                 y: -4,
                 scale: 1.02,
-                boxShadow:
-                  "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
               }}
               whileTap={{
                 scale: 0.98,
-                boxShadow:
-                  "0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)",
               }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                {t.getStarted || "Learn More"}
+                <span className="truncate">{t.getStarted || "Learn More"}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                  className="h-4 xs:h-5 w-4 xs:w-5 transition-transform group-hover:translate-x-1 flex-shrink-0"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -214,13 +213,13 @@ export default function HeroSection() {
                   />
                 </svg>
               </span>
-              <span className="absolute inset-0 bg-blue-700 rounded-xl transform translate-z-[-4px] group-hover:translate-z-[-6px] transition-transform duration-300"></span>
+              <span className="absolute inset-0 bg-blue-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               <span className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             </motion.a>
 
             <motion.a
               href="#IW"
-              className="group relative px-8 py-4 text-base sm:text-lg font-medium text-white backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl transition-all duration-300 w-fit shadow-lg hover:shadow-xl overflow-hidden font-[Inter]"
+              className="group relative px-4 py-3 text-sm sm:text-base font-medium text-white backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl transition-all duration-300 w-[180px] text-center shadow-[0_4px_20px_-5px_rgba(255,255,255,0.2)] hover:shadow-[0_4px_25px_-2px_rgba(255,255,255,0.3)] overflow-hidden font-[Inter] whitespace-nowrap"
               whileHover={{
                 y: -4,
                 scale: 1.02,
@@ -232,10 +231,10 @@ export default function HeroSection() {
               }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                {t.learnMore || "Get Started"}
+                <span className="truncate">{t.learnMore || "Get Started"}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                  className="h-4 xs:h-5 w-4 xs:w-5 transition-transform group-hover:translate-x-1 flex-shrink-0"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
