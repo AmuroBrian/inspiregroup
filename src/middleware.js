@@ -1,60 +1,83 @@
 import { NextResponse } from "next/server";
 
-export async function middleware(req) {
-    console.log("Middleware triggered 🚀");
+// Set of allowed country codes (ISO 3166-1 alpha-2)
+const ALLOWED_COUNTRIES = new Set(['JP', 'KR', 'KP', 'CN']);
+
+export async function middleware(request) {
+    console.log("🌐 Middleware triggered");
 
     const apiKey = process.env.IPINFO_API_KEY;
     if (!apiKey) {
-        console.error("❌ API key is missing!");
+        console.error("❌ IPINFO_API_KEY is missing from environment variables");
+        // Fail open - allow access if we can't check location
         return NextResponse.next();
     }
 
-    const ip = req.headers.get("x-forwarded-for") || req.ip || "8.8.8.8";
-    console.log("🔍 Detected IP:", ip);
+    // Get client IP with proper fallbacks
+    let ip = request.headers.get("x-forwarded-for") || request.ip || "";
+    ip = ip.split(",")[0].trim() || "8.8.8.8"; // Fallback to Google DNS IP
+    console.log("🔍 Client IP:", ip);
 
-    // 🚀 Skip API call on localhost (127.0.0.1, ::1, 192.168.x.x)
-    if (ip === "127.0.0.1" || ip.startsWith("192.168.") || ip === "::1") {
-        console.log("🛑 Skipping API call for localhost.");
+    // Skip geo check for local development and private networks
+    if (
+        ip === "127.0.0.1" || 
+        ip === "::1" || 
+        ip.startsWith("192.168.") || 
+        ip.startsWith("10.") ||
+        ip.startsWith("172.16.")
+    ) {
+        console.log("🏠 Skipping geo check for local/private IP");
         return NextResponse.next();
     }
 
     const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    console.log(`Fetching Geo Data from: ${apiUrl}`);
+    console.log("📡 Fetching geo data from:", apiUrl);
 
     try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        console.log("📊 Full Geo Data Response:", JSON.stringify(data, null, 2));
-        console.log("🌍 Detected Country:", data.country);
+        const response = await fetch(apiUrl, {
+            headers: { "Accept": "application/json" },
+            next: { revalidate: 0 } // Always fresh data
+        });
 
-        const country = data.country || "Unknown";
+        if (!response.ok) {
+            throw new Error(`API responded with ${response.status}`);
+        }
 
-        if (country === "PH") {
-            console.log(`🚫 Access denied for country: ${country}`);
-            // Return a 403 Forbidden response
-            return new NextResponse(null, {
-                status: 403,
+        const geoData = await response.json();
+        console.log("🌍 Geo data:", JSON.stringify(geoData, null, 2));
+
+        const countryCode = geoData.country || "Unknown";
+        console.log("📍 Detected country code:", countryCode);
+
+        if (!ALLOWED_COUNTRIES.has(countryCode)) {
+            console.log("🚫 Access denied for country:", countryCode);
+            return NextResponse.redirect(new URL('/not-legal', request.url), {
                 headers: {
-                    'Location': '/not-legal',
-                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
+                    'Cache-Control': 'no-store, no-cache, must-revalidate',
+                    'Pragma': 'no-cache'
                 }
             });
         }
 
-        console.log(`✅ Access granted for country: ${country}`);
+        console.log("✅ Access granted for country:", countryCode);
         return NextResponse.next();
     } catch (error) {
-        console.error("❌ Error fetching geo data:", error);
+        console.error("⚠️ Geo lookup error:", error);
+        // Fail open - allow access if geo check fails
         return NextResponse.next();
     }
 }
 
-// Apply middleware to all routes and resources
 export const config = {
     matcher: [
-        // Match all paths except the not-legal page
-        '/((?!not-legal).*)',
+        /*
+         * Match all request paths except for:
+         * - _next static files
+         * - API routes
+         * - static files
+         * - the not-legal page
+         * - favicon
+         */
+        '/((?!api|_next/static|_next/image|not-legal|favicon.ico).*)',
     ],
 };
