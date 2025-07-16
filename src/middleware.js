@@ -10,7 +10,7 @@ export async function middleware(request) {
 
     console.log(`🌐 [${request.method}] ${pathname} | Middleware triggered`);
 
-    // Skip middleware for API routes, static files, and special pages
+    // Skip middleware for essential resources and API routes
     if (pathname.startsWith('/api/') ||
         pathname.startsWith('/_next/') ||
         pathname.startsWith('/static/') ||
@@ -25,7 +25,7 @@ export async function middleware(request) {
     if (!apiKey) {
         console.error("❌ Critical: IPINFO_API_KEY is missing");
         return process.env.NODE_ENV === 'production'
-            ? NextResponse.rewrite(new URL('/404', WEBSITE_URL))
+            ? NextResponse.rewrite(new URL('/404', request.url))
             : NextResponse.next();
     }
 
@@ -55,20 +55,23 @@ export async function middleware(request) {
         const geoData = await response.json();
         const countryCode = geoData.country || 'Unknown';
 
+        console.log(`📍 Detected country: ${countryCode}`);
+
         if (!ALLOWED_COUNTRIES.has(countryCode)) {
             console.log(`🚫 Blocking access from ${countryCode}`);
-            return NextResponse.rewrite(new URL('/404', WEBSITE_URL));
+            // Use the current request URL as base for the rewrite
+            return NextResponse.rewrite(new URL('/404', request.url));
         }
 
-        // If country is allowed, check if the page exists
+        // For allowed countries, check if the requested page exists
         try {
-            const pageResponse = await fetch(new URL(pathname, WEBSITE_URL), {
+            const pageResponse = await fetch(new URL(pathname, request.url), {
                 method: 'HEAD'
             });
 
             if (pageResponse.status === 404) {
                 console.log(`❌ 404 Not Found: ${pathname}`);
-                return NextResponse.rewrite(new URL('/404', WEBSITE_URL));
+                return NextResponse.rewrite(new URL('/404', request.url));
             }
         } catch (error) {
             console.error('⚠️ Error checking page existence:', error);
@@ -78,8 +81,9 @@ export async function middleware(request) {
         return NextResponse.next();
     } catch (error) {
         console.error('⚠️ Geo lookup error:', error);
+        // Use request.url instead of WEBSITE_URL for local development
         return process.env.NODE_ENV === 'production'
-            ? NextResponse.rewrite(new URL('/404', WEBSITE_URL))
+            ? NextResponse.rewrite(new URL('/404', request.url))
             : NextResponse.next();
     }
 }
