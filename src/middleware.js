@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 // Allowed countries (Japan, South Korea, North Korea, China)
 const ALLOWED_COUNTRIES = new Set(['JP', 'KR', 'KP', 'CN']);
-const WEBSITE_URL = 'https://www.inspire-asset.com';
 
 export async function middleware(request) {
     const url = request.nextUrl;
@@ -10,7 +9,7 @@ export async function middleware(request) {
 
     console.log(`🌐 [${request.method}] ${pathname} | Middleware triggered`);
 
-    // Skip middleware for essential resources and API routes
+    // Skip middleware for essential resources, API routes, and the 404 page itself
     if (pathname.startsWith('/api/') ||
         pathname.startsWith('/_next/') ||
         pathname.startsWith('/static/') ||
@@ -25,7 +24,7 @@ export async function middleware(request) {
     if (!apiKey) {
         console.error("❌ Critical: IPINFO_API_KEY is missing");
         return process.env.NODE_ENV === 'production'
-            ? NextResponse.rewrite(new URL('/404', request.url))
+            ? NextResponse.redirect(new URL('/404', request.url))
             : NextResponse.next();
     }
 
@@ -59,31 +58,17 @@ export async function middleware(request) {
 
         if (!ALLOWED_COUNTRIES.has(countryCode)) {
             console.log(`🚫 Blocking access from ${countryCode}`);
-            // Use the current request URL as base for the rewrite
-            return NextResponse.rewrite(new URL('/404', request.url));
-        }
-
-        // For allowed countries, check if the requested page exists
-        try {
-            const pageResponse = await fetch(new URL(pathname, request.url), {
-                method: 'HEAD'
-            });
-
-            if (pageResponse.status === 404) {
-                console.log(`❌ 404 Not Found: ${pathname}`);
-                return NextResponse.rewrite(new URL('/404', request.url));
-            }
-        } catch (error) {
-            console.error('⚠️ Error checking page existence:', error);
+            // Redirect to 404 page instead of rewrite
+            return NextResponse.redirect(new URL('/404', request.url));
         }
 
         console.log(`✅ Allowing access from ${countryCode}`);
         return NextResponse.next();
     } catch (error) {
         console.error('⚠️ Geo lookup error:', error);
-        // Use request.url instead of WEBSITE_URL for local development
+        // Redirect to 404 page in production, allow in development
         return process.env.NODE_ENV === 'production'
-            ? NextResponse.rewrite(new URL('/404', request.url))
+            ? NextResponse.redirect(new URL('/404', request.url))
             : NextResponse.next();
     }
 }
