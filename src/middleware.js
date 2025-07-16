@@ -13,7 +13,7 @@ export async function middleware(request) {
     if (pathname.startsWith('/api/') ||
         pathname.startsWith('/_next/') ||
         pathname.startsWith('/static/') ||
-        pathname === '/404' ||
+        pathname === '/not-legal' ||
         pathname.includes('favicon.ico') ||
         pathname.includes('robots.txt')) {
         return NextResponse.next();
@@ -24,7 +24,7 @@ export async function middleware(request) {
     if (!apiKey) {
         console.error("❌ Critical: IPINFO_API_KEY is missing");
         return process.env.NODE_ENV === 'production'
-            ? NextResponse.redirect(new URL('/404', request.url))
+            ? NextResponse.redirect(new URL('/not-legal', request.url))
             : NextResponse.next();
     }
 
@@ -59,7 +59,7 @@ export async function middleware(request) {
         if (!ALLOWED_COUNTRIES.has(countryCode)) {
             console.log(`🚫 Blocking access from ${countryCode}`);
             // Redirect to 404 page instead of rewrite
-            return NextResponse.redirect(new URL('/404', request.url));
+            return NextResponse.redirect(new URL('/not-legal', request.url));
         }
 
         console.log(`✅ Allowing access from ${countryCode}`);
@@ -68,7 +68,7 @@ export async function middleware(request) {
         console.error('⚠️ Geo lookup error:', error);
         // Redirect to 404 page in production, allow in development
         return process.env.NODE_ENV === 'production'
-            ? NextResponse.redirect(new URL('/404', request.url))
+            ? NextResponse.redirect(new URL('/not-legal', request.url))
             : NextResponse.next();
     }
 }
