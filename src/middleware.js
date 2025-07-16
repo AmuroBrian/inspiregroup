@@ -1,70 +1,84 @@
 import { NextResponse } from "next/server";
 
-// Set of allowed country codes (ISO 3166-1 alpha-2)
+// Allowed countries (Japan, South Korea, North Korea, China)
 const ALLOWED_COUNTRIES = new Set(['JP', 'KR', 'KP', 'CN']);
+const WEBSITE_URL = 'https://www.inspire-asset.com';
 
 export async function middleware(request) {
-    console.log("🌐 Middleware triggered");
+    const url = request.nextUrl;
+    const pathname = url.pathname;
+    
+    console.log(`🌐 [${request.method}] ${pathname} | Middleware triggered`);
 
+    // Skip middleware for API routes, static files, and not-legal page
+    if (pathname.startsWith('/api/') || 
+        pathname.startsWith('/_next/') || 
+        pathname.startsWith('/static/') ||
+        pathname === '/not-legal' ||
+        pathname === '/404') {
+        return NextResponse.next();
+    }
+
+    // First check if the page exists (to handle 404s)
+    try {
+        const response = await fetch(new URL(pathname, WEBSITE_URL), {
+            method: 'HEAD'
+        });
+        
+        if (response.status === 404) {
+            console.log(`❌ 404 Not Found: ${pathname}`);
+            return NextResponse.rewrite(new URL('/404', WEBSITE_URL));
+        }
+    } catch (error) {
+        console.error('⚠️ Error checking page existence:', error);
+    }
+
+    // Geo-restriction logic
     const apiKey = process.env.IPINFO_API_KEY;
     if (!apiKey) {
-        console.error("❌ IPINFO_API_KEY is missing from environment variables");
-        // Fail open - allow access if we can't check location
-        return NextResponse.next();
+        console.error("❌ Critical: IPINFO_API_KEY is missing");
+        return process.env.NODE_ENV === 'production' 
+            ? NextResponse.redirect(new URL('/not-legal', WEBSITE_URL))
+            : NextResponse.next();
     }
 
-    // Get client IP with proper fallbacks
-    let ip = request.headers.get("x-forwarded-for") || request.ip || "";
-    ip = ip.split(",")[0].trim() || "8.8.8.8"; // Fallback to Google DNS IP
-    console.log("🔍 Client IP:", ip);
+    let ip = request.headers.get('x-real-ip') || 
+             request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 
+             request.ip || 
+             '8.8.8.8';
 
-    // Skip geo check for local development and private networks
-    if (
-        ip === "127.0.0.1" || 
-        ip === "::1" || 
-        ip.startsWith("192.168.") || 
-        ip.startsWith("10.") ||
-        ip.startsWith("172.16.")
-    ) {
-        console.log("🏠 Skipping geo check for local/private IP");
+    // Skip geo check for local/private IPs
+    if (ip === '127.0.0.1' || ip === '::1' || 
+        ip.startsWith('192.168.') || 
+        ip.startsWith('10.') ||
+        (ip.startsWith('172.') && parseInt(ip.split('.')[1]) >= 16 && parseInt(ip.split('.')[1]) <= 31)) {
+        console.log('🏠 Skipping geo check for local/private IP');
         return NextResponse.next();
     }
-
-    const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    console.log("📡 Fetching geo data from:", apiUrl);
 
     try {
+        const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
         const response = await fetch(apiUrl, {
-            headers: { "Accept": "application/json" },
-            next: { revalidate: 0 } // Always fresh data
+            headers: { 'Accept': 'application/json' }
         });
 
-        if (!response.ok) {
-            throw new Error(`API responded with ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`IP API responded with ${response.status}`);
 
         const geoData = await response.json();
-        console.log("🌍 Geo data:", JSON.stringify(geoData, null, 2));
-
-        const countryCode = geoData.country || "Unknown";
-        console.log("📍 Detected country code:", countryCode);
+        const countryCode = geoData.country || 'Unknown';
 
         if (!ALLOWED_COUNTRIES.has(countryCode)) {
-            console.log("🚫 Access denied for country:", countryCode);
-            return NextResponse.redirect(new URL('/not-legal', request.url), {
-                headers: {
-                    'Cache-Control': 'no-store, no-cache, must-revalidate',
-                    'Pragma': 'no-cache'
-                }
-            });
+            console.log(`🚫 Blocking access from ${countryCode}`);
+            return NextResponse.redirect(new URL('/not-legal', WEBSITE_URL));
         }
 
-        console.log("✅ Access granted for country:", countryCode);
+        console.log(`✅ Allowing access from ${countryCode}`);
         return NextResponse.next();
     } catch (error) {
-        console.error("⚠️ Geo lookup error:", error);
-        // Fail open - allow access if geo check fails
-        return NextResponse.next();
+        console.error('⚠️ Geo lookup error:', error);
+        return process.env.NODE_ENV === 'production'
+            ? NextResponse.redirect(new URL('/not-legal', WEBSITE_URL))
+            : NextResponse.next();
     }
 }
 
@@ -72,12 +86,10 @@ export const config = {
     matcher: [
         /*
          * Match all request paths except for:
-         * - _next static files
-         * - API routes
-         * - static files
-         * - the not-legal page
-         * - favicon
+         * - API routes (/api/)
+         * - Static files (_next/static, _next/image, static/)
+         * - Special pages (not-legal, 404, favicon, robots.txt)
          */
-        '/((?!api|_next/static|_next/image|not-legal|favicon.ico).*)',
+        '/((?!api|_next/static|_next/image|static|not-legal|404|favicon.ico|robots.txt).*)',
     ],
 };
