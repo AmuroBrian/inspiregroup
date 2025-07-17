@@ -6,7 +6,7 @@ export async function middleware(request) {
   const { nextUrl: url } = request;
   const { pathname } = url;
 
-  // Skip middleware for essential resources and the not-legal page itself
+  // Skip middleware for these paths
   if (
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/api/') ||
@@ -17,63 +17,56 @@ export async function middleware(request) {
     return NextResponse.next();
   }
 
-  const apiKey = process.env.IPINFO_API_KEY;
-  if (!apiKey) {
-    console.error("IPINFO_API_KEY is missing");
-    return process.env.NODE_ENV === 'production'
-      ? NextResponse.rewrite(new URL('/not-legal', request.url))
-      : NextResponse.next();
+  // For testing: Force allow/disallow certain IPs
+  const testIp = request.headers.get('x-test-ip');
+  if (testIp) {
+    const testCountry = testIp.split('-')[1];
+    if (!ALLOWED_COUNTRIES.has(testCountry)) {
+      url.pathname = '/not-legal';
+      return NextResponse.redirect(url);
+    }
+    return NextResponse.next();
   }
 
-  let ip = request.headers.get('x-real-ip') ||
-           request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
-           request.ip ||
-           '8.8.8.8';
+  // Get real IP
+  const ip = request.headers.get('x-real-ip') || 
+             request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 
+             request.ip || 
+             '8.8.8.8';
 
-  // Skip geo check for local/private IPs in development
-  if (process.env.NODE_ENV !== 'production') {
-    const isPrivateIP = ip === '127.0.0.1' || 
-                       ip === '::1' ||
-                       ip.startsWith('192.168.') ||
-                       ip.startsWith('10.') ||
-                       (ip.startsWith('172.') && 
-                        parseInt(ip.split('.')[1], 10) >= 16 && 
-                        parseInt(ip.split('.')[1], 10) <= 31);
-    
-    if (isPrivateIP) {
-      return NextResponse.next();
-    }
+  // Allow localhost in development
+  if (process.env.NODE_ENV === 'development' && 
+      (ip === '127.0.0.1' || ip === '::1')) {
+    return NextResponse.next();
   }
 
   try {
-    const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    const response = await fetch(apiUrl, { 
-      headers: { 'Accept': 'application/json' },
-      next: { revalidate: 3600 } // Cache the IP info for 1 hour
+    const apiKey = process.env.IPINFO_API_KEY;
+    if (!apiKey) throw new Error('IPINFO_API_KEY missing');
+
+    const response = await fetch(`https://ipinfo.io/${ip}?token=${apiKey}`, {
+      headers: { 'Accept': 'application/json' }
     });
 
     if (!response.ok) throw new Error(`IP API error: ${response.status}`);
 
     const geoData = await response.json();
-    const countryCode = geoData.country || 'Unknown';
+    const countryCode = geoData.country || 'XX';
 
     if (!ALLOWED_COUNTRIES.has(countryCode)) {
-      // Fetch the not-legal page content
-      const notLegalResponse = await fetch(new URL('/not-legal', request.url));
-      if (!notLegalResponse.ok) throw new Error('Failed to fetch not-legal page');
-      
-      return new NextResponse(notLegalResponse.body, {
-        status: 403,
-        headers: notLegalResponse.headers
-      });
+      url.pathname = '/not-legal';
+      return NextResponse.redirect(url);
     }
 
     return NextResponse.next();
   } catch (error) {
     console.error('Geo check failed:', error);
-    return process.env.NODE_ENV === 'production'
-      ? NextResponse.rewrite(new URL('/not-legal', request.url))
-      : NextResponse.next();
+    // In production, block access if we can't verify country
+    if (process.env.NODE_ENV === 'production') {
+      url.pathname = '/not-legal';
+      return NextResponse.redirect(url);
+    }
+    return NextResponse.next();
   }
 }
 
