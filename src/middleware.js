@@ -3,16 +3,17 @@ import { NextResponse } from "next/server";
 const ALLOWED_COUNTRIES = new Set(['JP', 'KR', 'KP', 'CN']);
 
 export async function middleware(request) {
-  const url = request.nextUrl;
-  const pathname = url.pathname;
+  const { nextUrl: url } = request;
+  const { pathname } = url;
 
   // Skip middleware for essential resources and the not-legal page itself
-  if (pathname.startsWith('/api/') ||
-      pathname.startsWith('/_next/') ||
-      pathname.startsWith('/static/') ||
-      pathname.includes('favicon.ico') ||
-      pathname.includes('robots.txt') ||
-      pathname === '/not-legal') {
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/api/') ||
+    pathname.startsWith('/static/') ||
+    pathname.includes('.') || // static files
+    pathname === '/not-legal'
+  ) {
     return NextResponse.next();
   }
 
@@ -20,7 +21,7 @@ export async function middleware(request) {
   if (!apiKey) {
     console.error("IPINFO_API_KEY is missing");
     return process.env.NODE_ENV === 'production'
-      ? NextResponse.redirect(new URL('/not-legal', request.url))
+      ? NextResponse.rewrite(new URL('/not-legal', request.url))
       : NextResponse.next();
   }
 
@@ -46,7 +47,10 @@ export async function middleware(request) {
 
   try {
     const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    const response = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
+    const response = await fetch(apiUrl, { 
+      headers: { 'Accept': 'application/json' },
+      next: { revalidate: 3600 } // Cache the IP info for 1 hour
+    });
 
     if (!response.ok) throw new Error(`IP API error: ${response.status}`);
 
@@ -54,18 +58,27 @@ export async function middleware(request) {
     const countryCode = geoData.country || 'Unknown';
 
     if (!ALLOWED_COUNTRIES.has(countryCode)) {
-      return NextResponse.redirect(new URL('/not-legal', request.url));
+      // Fetch the not-legal page content
+      const notLegalResponse = await fetch(new URL('/not-legal', request.url));
+      if (!notLegalResponse.ok) throw new Error('Failed to fetch not-legal page');
+      
+      return new NextResponse(notLegalResponse.body, {
+        status: 403,
+        headers: notLegalResponse.headers
+      });
     }
 
     return NextResponse.next();
   } catch (error) {
     console.error('Geo check failed:', error);
     return process.env.NODE_ENV === 'production'
-      ? NextResponse.redirect(new URL('/not-legal', request.url))
+      ? NextResponse.rewrite(new URL('/not-legal', request.url))
       : NextResponse.next();
   }
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|not-legal|.*\\..*).*)',
+  ],
 };
