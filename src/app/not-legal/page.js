@@ -1,56 +1,93 @@
-export const metadata = {
-  title: 'Access Restricted | Inspire Asset',
-  description: 'This content is geo-restricted',
-};
+// src/app/not-legal/page.js
+'use client'; // Essential for client-side components using animations
+
+import Head from 'next/head';
+import { m as motion } from 'framer-motion'; // Using the optimized 'm' component
+import Link from 'next/link';
 
 export default function NotLegal() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden p-8 text-center">
-        <div className="mb-6">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-16 w-16 text-red-500 mx-auto animate-bounce"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
-        </div>
+    <>
+      <Head>
+        <title>Access Restricted | Inspire Asset</title>
+        <meta name="description" content="This content is geo-restricted" />
+      </Head>
 
-        <h1 className="text-3xl font-bold text-gray-800 mb-3">Access Restricted</h1>
-        <p className="text-gray-600 mb-6 leading-relaxed">
-          This website is currently only available in:
-        </p>
-
-        <div className="flex justify-center gap-2 mb-8 flex-wrap">
-          {['Japan (JP)', 'South Korea (KR)', 'North Korea (KP)', 'China (CN)'].map((country) => (
-            <span
-              key={country}
-              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden p-8 text-center"
+        >
+          <div className="mb-6">
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 2, repeatType: "mirror" }}
+              className="inline-block"
             >
-              {country}
-            </span>
-          ))}
-        </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-16 w-16 text-red-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </motion.div>
+          </div>
 
-        <div className="border-t border-gray-100 pt-6">
-          <p className="text-sm text-gray-500 mb-4">
-            If you believe this is an error, please contact support.
+          <h1 className="text-3xl font-bold text-gray-800 mb-3">Access Restricted</h1>
+          <p className="text-gray-600 mb-6 leading-relaxed">
+            This website is currently only available in Japan, North Korea, South Korea, and China.
           </p>
-          <a
-            href="mailto:support@inspire-asset.com"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 w-full sm:w-auto"
-          >
-            Contact Support
-          </a>
-        </div>
-      </div>
 
-      <div className="mt-8 text-center text-sm text-gray-500">
-        <p>© {new Date().getFullYear()} Inspire Asset. All rights reserved.</p>
+          <div className="mb-8">
+            <div className="flex justify-center space-x-2 mb-4">
+              {['JP', 'KR', 'KP', 'CN'].map((code) => (
+                <span
+                  key={code}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  {code}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t border-gray-100 pt-6">
+            <p className="text-sm text-gray-500 mb-4">
+              If you believe this is an error, please contact our support team.
+            </p>
+
+            <Link
+              href="mailto:support@inspire-asset.com"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              </svg>
+              Contact Support
+            </Link>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mt-8 text-center text-sm text-gray-500"
+        >
+          <p>© {new Date().getFullYear()} Inspire Asset. All rights reserved.</p>
+        </motion.div>
       </div>
-    </div>
+    </>
   );
 }
