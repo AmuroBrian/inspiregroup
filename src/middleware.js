@@ -1,53 +1,50 @@
-import { NextResponse } from "next/server";
-
-const RESTRICTED_COUNTRY = 'PH'; // Only Philippines is blocked
-
-export async function middleware(request) {
-  const { nextUrl: url, headers } = request;
-  const NOT_LEGAL_PAGE = '/not-legal';
-  
-  // Skip middleware for non-page requests & not-legal page itself
-  if (
-    url.pathname === NOT_LEGAL_PAGE ||
-    url.pathname.startsWith('/_next/') ||
-    url.pathname.startsWith('/api/') ||
-    url.pathname.includes('.')
-  ) {
-    return NextResponse.next();
-  }
-
-  // 1. Get IP (with fallback for local testing)
-  let ip = headers.get('x-real-ip') || 
-           headers.get('x-forwarded-for')?.split(',')[0].trim() || 
-           '8.8.8.8'; // Default to a US IP for testing
-
-  // 2. Skip geo-check in development (optional)
-  if (process.env.NODE_ENV === 'development') {
-    const isLocalIP = ip === '127.0.0.1' || ip === '::1';
-    if (isLocalIP) return NextResponse.next();
-  }
-
-  // 3. Fetch country from IP
-  try {
-    const apiKey = process.env.IPINFO_API_KEY;
-    if (!apiKey) throw new Error("IPINFO_API_KEY missing");
-
-    const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    const res = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
-    const { country } = await res.json();
-
-    // 4. BLOCK PHILIPPINES (Rewrite to /not-legal)
-    if (country === RESTRICTED_COUNTRY) {
-      return NextResponse.rewrite(new URL(NOT_LEGAL_PAGE, url));
-    }
-
-    return NextResponse.next();
-  } catch (error) {
-    console.error("Geo-block error:", error);
-    return NextResponse.next(); // Allow access if API fails
-  }
-}
+import { NextResponse } from 'next/server';
 
 export const config = {
-  matcher: ['/((?!_next|api|favicon.ico|robots.txt|not-legal).*)'],
+  matcher: '/:path*',
 };
+
+export async function middleware(request) {
+  const { nextUrl } = request;
+
+  // Skip if already on /not-legal
+  if (nextUrl.pathname === '/not-legal') {
+    const response = NextResponse.next();
+    response.headers.set('x-not-legal', 'true');
+    return response;
+  }
+
+  // Skip static files and API routes
+  if (nextUrl.pathname.startsWith('/_next') || 
+      nextUrl.pathname.startsWith('/api') ||
+      nextUrl.pathname.startsWith('/favicon.ico')) {
+    return NextResponse.next();
+  }
+
+  // Force PH IP for testing (remove in production)
+  const TEST_IP = '110.54.224.218'; // Philippine IP for testing
+  const ip = request.ip || TEST_IP;
+
+  try {
+    const response = await fetch(
+      `https://ipinfo.io/${ip}/json?token=${process.env.IPINFO_API_KEY}`
+    );
+    const data = await response.json();
+    const country = data.country;
+
+    // BLOCK ONLY PHILIPPINES (PH)
+    if (country === 'PH') {
+      const blockedResponse = NextResponse.redirect(new URL('/not-legal', request.url));
+      blockedResponse.headers.set('x-not-legal', 'true');
+      return blockedResponse;
+    }
+
+    // ALLOW ALL OTHER COUNTRIES
+    return NextResponse.next();
+
+  } catch (error) {
+    console.error('Geo-block error:', error);
+    // Allow access if geo lookup fails (fail-open)
+    return NextResponse.next();
+  }
+}
