@@ -6,12 +6,13 @@ export async function middleware(request) {
   const url = request.nextUrl;
   const pathname = url.pathname;
 
-  // Skip middleware for essential resources
+  // Skip middleware for essential resources and the not-legal page itself
   if (pathname.startsWith('/api/') ||
       pathname.startsWith('/_next/') ||
       pathname.startsWith('/static/') ||
       pathname.includes('favicon.ico') ||
-      pathname.includes('robots.txt')) {
+      pathname.includes('robots.txt') ||
+      pathname === '/not-legal') {
     return NextResponse.next();
   }
 
@@ -19,7 +20,7 @@ export async function middleware(request) {
   if (!apiKey) {
     console.error("IPINFO_API_KEY is missing");
     return process.env.NODE_ENV === 'production'
-      ? new NextResponse(null, { status: 404 })
+      ? NextResponse.redirect(new URL('/not-legal', request.url))
       : NextResponse.next();
   }
 
@@ -53,17 +54,18 @@ export async function middleware(request) {
     const countryCode = geoData.country || 'Unknown';
 
     if (!ALLOWED_COUNTRIES.has(countryCode)) {
-      return new NextResponse(null, { status: 404 });
+      return NextResponse.redirect(new URL('/not-legal', request.url));
     }
 
     return NextResponse.next();
   } catch (error) {
+    console.error('Geo check failed:', error);
     return process.env.NODE_ENV === 'production'
-      ? new NextResponse(null, { status: 404 })
+      ? NextResponse.redirect(new URL('/not-legal', request.url))
       : NextResponse.next();
   }
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
 };
