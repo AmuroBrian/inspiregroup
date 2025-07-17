@@ -1,73 +1,53 @@
 import { NextResponse } from "next/server";
 
-// Only Philippines is restricted
-const RESTRICTED_COUNTRIES = new Set(['PH']);
+const RESTRICTED_COUNTRY = 'PH'; // Only Philippines is blocked
 
 export async function middleware(request) {
-  const url = request.nextUrl;
-  const pathname = url.pathname;
-  const NOT_LEGAL_PAGE_PATH = '/not-legal';
-
-  // Skip middleware for essential resources and not-legal page itself
-  if (pathname === NOT_LEGAL_PAGE_PATH || 
-      pathname.startsWith('/api/') ||
-      pathname.startsWith('/_next/') ||
-      pathname.startsWith('/static/') ||
-      pathname.includes('favicon.ico') ||
-      pathname.includes('robots.txt')) {
+  const { nextUrl: url, headers } = request;
+  const NOT_LEGAL_PAGE = '/not-legal';
+  
+  // Skip middleware for non-page requests & not-legal page itself
+  if (
+    url.pathname === NOT_LEGAL_PAGE ||
+    url.pathname.startsWith('/_next/') ||
+    url.pathname.startsWith('/api/') ||
+    url.pathname.includes('.')
+  ) {
     return NextResponse.next();
   }
 
-  const apiKey = process.env.IPINFO_API_KEY;
-  if (!apiKey) {
-    console.error("IPINFO_API_KEY is missing");
-    return NextResponse.next(); // Allow access if API key is missing
+  // 1. Get IP (with fallback for local testing)
+  let ip = headers.get('x-real-ip') || 
+           headers.get('x-forwarded-for')?.split(',')[0].trim() || 
+           '8.8.8.8'; // Default to a US IP for testing
+
+  // 2. Skip geo-check in development (optional)
+  if (process.env.NODE_ENV === 'development') {
+    const isLocalIP = ip === '127.0.0.1' || ip === '::1';
+    if (isLocalIP) return NextResponse.next();
   }
 
-  let ip = request.headers.get('x-real-ip') ||
-           request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
-           request.ip ||
-           '8.8.8.8';
-
-  // Skip geo check for local/private IPs in development
-  if (process.env.NODE_ENV !== 'production') {
-    const isPrivateIP = ip === '127.0.0.1' || ip === '::1' || 
-                        ip.startsWith('192.168.') || ip.startsWith('10.') ||
-                        (ip.startsWith('172.') && parseInt(ip.split('.')[1], 10) >= 16 && 
-                         parseInt(ip.split('.')[1], 10) <= 31);
-    if (isPrivateIP) {
-      return NextResponse.next();
-    }
-  }
-
+  // 3. Fetch country from IP
   try {
+    const apiKey = process.env.IPINFO_API_KEY;
+    if (!apiKey) throw new Error("IPINFO_API_KEY missing");
+
     const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    const response = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
+    const res = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
+    const { country } = await res.json();
 
-    if (!response.ok) {
-      console.error(`IP API error: ${response.status} for IP: ${ip}`);
-      return NextResponse.next(); // Allow access if API fails
-    }
-
-    const geoData = await response.json();
-    const countryCode = geoData.country || 'Unknown';
-
-    // Only redirect if country is Philippines
-    if (RESTRICTED_COUNTRIES.has(countryCode)) {
-      // For root path, rewrite instead of redirect to avoid flash of homepage
-      if (pathname === '/') {
-        return NextResponse.rewrite(new URL(NOT_LEGAL_PAGE_PATH, request.url));
-      }
-      return NextResponse.redirect(new URL(NOT_LEGAL_PAGE_PATH, request.url));
+    // 4. BLOCK PHILIPPINES (Rewrite to /not-legal)
+    if (country === RESTRICTED_COUNTRY) {
+      return NextResponse.rewrite(new URL(NOT_LEGAL_PAGE, url));
     }
 
     return NextResponse.next();
   } catch (error) {
-    console.error("Error in middleware:", error);
-    return NextResponse.next(); // Allow access if any error occurs
+    console.error("Geo-block error:", error);
+    return NextResponse.next(); // Allow access if API fails
   }
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
+  matcher: ['/((?!_next|api|favicon.ico|robots.txt|not-legal).*)'],
 };
