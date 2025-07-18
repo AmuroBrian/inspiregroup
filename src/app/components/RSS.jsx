@@ -26,18 +26,22 @@ export default function NewsFeed() {
   const [error, setError] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const { translateDynamicText, t, isClient } = useTranslation();
+  const [isLanguageChanging, setIsLanguageChanging] = useState(false); // State for language change in progress
+  const { translateDynamicText, t, isClient, language } = useTranslation();
 
+  // Memoized visible count based on window width
   const visibleCount = useMemo(() => {
     if (windowWidth < BREAKPOINTS.mobile) return 1;
     if (windowWidth < BREAKPOINTS.tablet) return 2;
     return 3;
   }, [windowWidth]);
 
+  // Memoized visible items
   const visibleItems = useMemo(() => (
     feedItems.slice(currentStartIndex, currentStartIndex + visibleCount)
   ), [feedItems, currentStartIndex, visibleCount]);
 
+  // Intersection observer for animations
   useEffect(() => {
     setPrefersReducedMotion(
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -56,11 +60,14 @@ export default function NewsFeed() {
     };
   }, []);
 
+  // Main feed fetching function with proper translation handling
   const fetchFeed = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true); // Always set loading to true when starting a fetch
       setError(null);
-      
+      setFeedItems([]); // Clear existing items while loading
+
+      // Fetch RSS feed
       const res = await fetch(RSS_FEED_URL);
       if (!res.ok) throw new Error("Failed to fetch feed");
       
@@ -72,6 +79,7 @@ export default function NewsFeed() {
         throw new Error("Error parsing XML feed");
       }
 
+      // Parse feed items
       const items = Array.from(xmlDoc.getElementsByTagName("item")).map((item) => {
         const description = item.getElementsByTagName("description")[0]?.textContent || "";
         const pubDate = item.getElementsByTagName("pubDate")[0]?.textContent;
@@ -92,31 +100,56 @@ export default function NewsFeed() {
 
       const validItems = items.filter(item => item.title && item.link);
 
-      const translatedItems = await Promise.all(
-        validItems.map(async (item) => ({
-          ...item,
-          title: await translateDynamicText(item.title),
-          description: await translateDynamicText(item.description),
-        }))
-      );
+      // Process translations sequentially to avoid API rate limits
+      const translatedItems = [];
+      for (const item of validItems) {
+        try {
+          // Only translate if not English
+          const shouldTranslate = language !== "en";
+          
+          const [translatedTitle, translatedDescription] = await Promise.all([
+            shouldTranslate ? 
+              translateDynamicText(item.title).catch(() => item.title) : 
+              Promise.resolve(item.title),
+            shouldTranslate ? 
+              translateDynamicText(item.description).catch(() => item.description) : 
+              Promise.resolve(item.description)
+          ]);
+
+          translatedItems.push({
+            ...item,
+            title: translatedTitle,
+            description: translatedDescription
+          });
+        } catch (err) {
+          console.error("Error processing item:", err);
+          translatedItems.push(item); // Fallback to original item
+        }
+      }
 
       setFeedItems(translatedItems);
     } catch (err) {
       console.error("Error fetching feed:", err);
       setError(err.message);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Always set loading to false when fetch is complete
+      setIsLanguageChanging(false); // Reset language changing state
     }
-  }, [translateDynamicText]);
+  }, [translateDynamicText, language]); // Dependencies ensure fetchFeed re-creates if language or translate function changes
 
+  // Fetch feed when language changes or on initial client load
+  // FIX: Removed setTimeout to fetch immediately on language change
   useEffect(() => {
-    fetchFeed();
-  }, [fetchFeed]);
+    if (isClient) {
+      setIsLanguageChanging(true); // Set to true when a language change triggers a fetch
+      fetchFeed();
+    }
+  }, [fetchFeed, isClient, language]); // 'language' is now a direct trigger
 
+  // Window resize handler
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-      // Reset to first page when screen size changes
       setCurrentStartIndex(0);
     };
 
@@ -125,6 +158,7 @@ export default function NewsFeed() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Pagination controls
   const nextPage = useCallback(() => {
     setCurrentStartIndex(prevIndex => {
       const nextIndex = prevIndex + visibleCount;
@@ -139,6 +173,7 @@ export default function NewsFeed() {
     });
   }, [visibleCount, feedItems.length]);
 
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "ArrowRight") nextPage();
@@ -149,16 +184,19 @@ export default function NewsFeed() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [nextPage, prevPage]);
 
+  // Auto-rotation of items
   useEffect(() => {
-    if (feedItems.length === 0 || isLoading || error) return;
+    // Only auto-rotate if there are items, not loading, no error, and language isn't actively changing
+    if (feedItems.length === 0 || isLoading || error || isLanguageChanging) return;
 
     const interval = setInterval(() => {
       nextPage();
-    }, 8000);
+    }, 8000); // Rotate every 8 seconds
 
     return () => clearInterval(interval);
-  }, [feedItems.length, isLoading, error, nextPage]);
+  }, [feedItems.length, isLoading, error, nextPage, isLanguageChanging]);
 
+  // Loading skeletons
   const renderSkeletons = useCallback(() => (
     Array(visibleCount).fill(0).map((_, index) => (
       <div key={`skeleton-${index}`} className="p-6 border border-blue-100 rounded-2xl shadow-sm bg-white flex flex-col h-full animate-pulse">
@@ -171,12 +209,13 @@ export default function NewsFeed() {
     ))
   ), [visibleCount]);
 
+  // Pagination dots
   const paginationDots = useMemo(() => {
-    if (isLoading || error || feedItems.length === 0) return null;
+    if (isLoading || error || feedItems.length === 0 || isLanguageChanging) return null;
     
     const totalPages = Math.ceil(feedItems.length / visibleCount);
     const currentPage = Math.floor(currentStartIndex / visibleCount);
-    const maxDots = 5;
+    const maxDots = 5; // Max number of dots to show
     
     let startPage, endPage;
     if (totalPages <= maxDots) {
@@ -209,21 +248,23 @@ export default function NewsFeed() {
         />
       );
     });
-  }, [isLoading, error, feedItems.length, visibleCount, currentStartIndex, windowWidth]);
+  }, [isLoading, error, feedItems.length, visibleCount, currentStartIndex, windowWidth, isLanguageChanging]);
 
   return (
     <section 
       id="news-feed"
       className="relative w-full min-h-fit bg-gradient-to-br from-blue-50 to-white py-16 px-4 sm:px-6 lg:px-8"
-      aria-busy={isLoading}
+      aria-busy={isLoading || isLanguageChanging}
       aria-live="polite"
     >
       <div className="max-w-7xl mx-auto relative">
+        {/* Background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-100 opacity-20 blur-xl"></div>
           <div className="absolute bottom-40 right-20 w-48 h-48 rounded-full bg-blue-200 opacity-15 blur-xl"></div>
         </div>
 
+        {/* Title section */}
         <motion.div 
           className="relative w-full mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -251,6 +292,7 @@ export default function NewsFeed() {
           </div>
         </motion.div>
         
+        {/* Error state */}
         {error ? (
           <motion.div 
             className="text-center py-10"
@@ -268,19 +310,21 @@ export default function NewsFeed() {
           </motion.div>
         ) : (
           <div className="relative">
+            {/* Previous button */}
             <button
               onClick={prevPage}
               aria-label="Previous articles"
-              disabled={isLoading || feedItems.length <= visibleCount}
+              disabled={isLoading || feedItems.length <= visibleCount || isLanguageChanging}
               className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-8 bg-white text-blue-600 p-3 rounded-full shadow-lg hover:bg-blue-50 transition-all z-10 border border-blue-100 hover:border-blue-200 ${
-                isLoading || feedItems.length <= visibleCount ? "opacity-50 cursor-not-allowed" : ""
+                isLoading || feedItems.length <= visibleCount || isLanguageChanging ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               <FiChevronLeft className="w-6 h-6" />
             </button>
 
+            {/* Feed items */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {isLoading ? (
+              {isLoading || isLanguageChanging ? (
                 renderSkeletons()
               ) : (
                 visibleItems.map((item, index) => (
@@ -333,12 +377,13 @@ export default function NewsFeed() {
               )}
             </div>
 
+            {/* Next button */}
             <button
               onClick={nextPage}
               aria-label="Next articles"
-              disabled={isLoading || feedItems.length <= visibleCount}
+              disabled={isLoading || feedItems.length <= visibleCount || isLanguageChanging}
               className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 bg-white text-blue-600 p-3 rounded-full shadow-lg hover:bg-blue-50 transition-all z-10 border border-blue-100 hover:border-blue-200 ${
-                isLoading || feedItems.length <= visibleCount ? "opacity-50 cursor-not-allowed" : ""
+                isLoading || feedItems.length <= visibleCount || isLanguageChanging ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               <FiChevronRight className="w-6 h-6" />
@@ -346,7 +391,8 @@ export default function NewsFeed() {
           </div>
         )}
 
-        {!isLoading && !error && feedItems.length > visibleCount && (
+        {/* Pagination dots */}
+        {!isLoading && !error && !isLanguageChanging && feedItems.length > visibleCount && (
           <motion.div 
             className="flex justify-center mt-10"
             initial={{ opacity: 0 }}
