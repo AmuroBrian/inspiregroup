@@ -1,4 +1,4 @@
-import { GeistSans, GeistMono } from 'geist/font'; // Correct import from 'geist' package
+import { GeistSans, GeistMono } from 'geist/font';
 import { headers } from 'next/headers';
 import "./globals.css";
 import Header from "./components/Header";
@@ -12,27 +12,34 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const headerList = await headers();
-  const isNotLegalPage = headerList.get('x-not-legal') === 'true';
+  const headerList = headers();
+  const isNotLegalPage = headerList.get('x-not-legal') === 'true' || 
+                         headerList.get('next-url')?.includes('/not-legal');
 
+  // For not-legal pages, show only the content without any layout
+  if (isNotLegalPage) {
+    return (
+      <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+        <body>
+          <TranslationProvider>
+            {children}
+          </TranslationProvider>
+        </body>
+      </html>
+    );
+  }
+
+  // Normal layout for allowed countries
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="antialiased min-h-screen flex flex-col">
         <TranslationProvider>
-          {!isNotLegalPage ? (
-            <>
-              <LoadingScreen />
-              <Header />
-              <main className="flex-1">
-                {children}
-              </main>
-              <Footer />
-            </>
-          ) : (
-            <main className="flex-1">
-              {children}
-            </main>
-          )}
+          <LoadingScreen />
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
         </TranslationProvider>
       </body>
     </html>
