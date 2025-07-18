@@ -1,74 +1,89 @@
 import { NextResponse } from "next/server";
 
 const BLACKLISTED_COUNTRY = 'PH';
-const NOT_LEGAL_URL = '/not-legal'; // Single source of truth for the blocked page
+const NOT_LEGAL_URL = '/not-legal';
 
-export async function middleware(request) {
+// 1. FIRST LAYER - Edge Function Immediate Block (Vercel)
+export const config = {
+  matcher: ["/((?!not-legal|_next/static|_next/image|favicon.ico).*)"],
+  runtime: 'experimental-edge', // Critical for instant blocking
+};
+
+export default async function middleware(request) {
   const url = request.nextUrl;
 
-  // 1. Skip ONLY the not-legal page itself to prevent infinite redirects
-  if (url.pathname === NOT_LEGAL_URL) {
-    return NextResponse.next();
+  // 2. SECOND LAYER - Vercel GeoIP (Instant)
+  if (request.geo?.country === BLACKLISTED_COUNTRY) {
+    return fullBlockRedirect(url);
   }
 
-  // 2. Immediate blocking if geo info is available (Vercel/Nexthost)
-  if (process.env.NODE_ENV === 'production' && request.geo?.country === BLACKLISTED_COUNTRY) {
-    return NextResponse.redirect(new URL(NOT_LEGAL_URL, request.url));
-  }
-
-  // 3. Fallback to manual IP check for non-Vercel hosts or missing geo
+  // 3. THIRD LAYER - Manual IP Check (Non-Vercel)
   try {
     const ip = getClientIP(request);
     const country = await getCountryFromIP(ip);
     
     if (country === BLACKLISTED_COUNTRY) {
-      return NextResponse.redirect(new URL(NOT_LEGAL_URL, request.url));
+      return fullBlockRedirect(url);
     }
   } catch (error) {
-    console.error('IP detection failed:', error);
-    // Fail securely - block access if we can't verify
-    if (process.env.NODE_ENV === 'production') {
-      return NextResponse.redirect(new URL(NOT_LEGAL_URL, request.url));
-    }
+    console.error('Geo check failed:', error);
+    return process.env.NODE_ENV === 'production' 
+      ? fullBlockRedirect(url)
+      : NextResponse.next();
   }
 
   return NextResponse.next();
 }
 
-// Helper: Extract client IP from headers
-function getClientIP(request) {
-  return (
-    request.headers.get('x-real-ip') ||
-    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
-    request.ip ||
-    '8.8.8.8' // Fallback IP
-  );
+// Nuclear redirect - prevents ANY content loading
+function fullBlockRedirect(url) {
+  const blockedUrl = new URL(NOT_LEGAL_URL, url.origin);
+  
+  // Critical headers to prevent any rendering
+  const headers = new Headers();
+  headers.set('x-middleware-rewrite', blockedUrl.toString());
+  headers.set('Cache-Control', 'no-store, max-age=0');
+  
+  return new NextResponse(null, {
+    status: 307,
+    headers
+  });
 }
 
-// Helper: Fetch country from IP
-async function getCountryFromIP(ip) {
-  const apiKey = process.env.IPINFO_API_KEY;
-  if (!apiKey) throw new Error('IPINFO_API_KEY missing');
+// IP extraction with all possible headers
+function getClientIP(request) {
+  const headers = [
+    'cf-connecting-ip', // Cloudflare
+    'x-real-ip',
+    'x-forwarded-for',
+    'x-vercel-forwarded-for'
+  ];
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 2000); // 2s timeout
-
-  const response = await fetch(`https://ipinfo.io/${ip}?token=${apiKey}`, {
-    headers: { 'Accept': 'application/json' },
-    signal: controller.signal
-  });
-
-  clearTimeout(timeout);
-
-  if (!response.ok) {
-    throw new Error(`IP API error: ${response.status}`);
+  for (const header of headers) {
+    const ip = request.headers.get(header);
+    if (ip) return header === 'x-forwarded-for' ? ip.split(',')[0].trim() : ip;
   }
 
-  const data = await response.json();
-  return data.country || 'Unknown';
+  return request.ip || '8.8.8.8';
 }
 
-// Apply to ALL routes except NOT_LEGAL_URL
-export const config = {
-  matcher: ["/((?!not-legal).*)"], 
-};
+// IP lookup with multiple fallbacks
+async function getCountryFromIP(ip) {
+  const services = [
+    `https://ipinfo.io/${ip}/json?token=${process.env.IPINFO_API_KEY}`,
+    `https://ipapi.co/${ip}/json/`,
+    `https://geolocation-db.com/json/${ip}`
+  ];
+
+  for (const url of services) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(1500) });
+      if (res.ok) {
+        const data = await res.json();
+        return data.country || data.country_code;
+      }
+    } catch (_) { continue; }
+  }
+
+  throw new Error('All geo services failed');
+}
