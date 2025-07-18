@@ -20,18 +20,12 @@ export const TranslationProvider = ({ children }) => {
     if (!isClient || language === "en") return text;
     
     try {
-      // First try Google Translate API
       const res = await fetch(
-        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${language}&dt=t&q=${encodeURIComponent(text)}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          referrerPolicy: 'no-referrer',
-        }
+        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${language}&dt=t&q=${encodeURIComponent(text)}`
       );
       
       if (!res.ok) {
+        console.error("Translation API error:", res.status, await res.text());
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       
@@ -71,3 +65,7 @@ export const TranslationProvider = ({ children }) => {
 };
 
 export const useTranslation = () => useContext(TranslationContext);
+
+fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ja&dt=t&q=Hello%20world')
+  .then(r => r.json())
+  .then(console.log)
