@@ -53,9 +53,9 @@ export async function middleware(request) {
     const countryCode = geoData.country || 'Unknown';
 
     if (countryCode === BLACKLISTED_COUNTRY) {
-      // Create a rewrite response to avoid changing the URL
+      // Redirect to /not-legal to ensure nothing else renders
       const notLegalUrl = new URL('/not-legal', request.url);
-      return NextResponse.rewrite(notLegalUrl);
+      return NextResponse.redirect(notLegalUrl);
     }
 
     return NextResponse.next();
