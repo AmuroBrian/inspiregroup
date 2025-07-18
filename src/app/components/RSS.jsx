@@ -62,6 +62,7 @@ export default function NewsFeed() {
 
   // Main feed fetching function with proper translation handling
   const fetchFeed = useCallback(async () => {
+    console.log("[RSS] fetchFeed called. Current language:", language); // Debug log
     try {
       setIsLoading(true); // Always set loading to true when starting a fetch
       setError(null);
@@ -141,7 +142,7 @@ export default function NewsFeed() {
   // FIX: Removed setTimeout to fetch immediately on language change
   useEffect(() => {
     if (isClient) {
-      setIsLanguageChanging(true); // Set to true when a language change triggers a fetch
+      console.log("[RSS] Language changed to:", language); // Debug log
       fetchFeed();
     }
   }, [fetchFeed, isClient, language]); // 'language' is now a direct trigger
@@ -368,9 +369,9 @@ export default function NewsFeed() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-auto inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors group-hover:underline"
-                      aria-label={`Read more about ${item.title}`}
+                      aria-label={`${t.readMore || "Read more"} about ${item.title}`}
                     >
-                      Read more <FiExternalLink className="ml-2 w-4 h-4" />
+                      {t.readMore || "Read more"} <FiExternalLink className="ml-2 w-4 h-4" />
                     </a>
                   </motion.article>
                 ))
