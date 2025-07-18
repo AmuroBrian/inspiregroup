@@ -1,89 +1,74 @@
 import { NextResponse } from "next/server";
 
 const BLACKLISTED_COUNTRY = 'PH';
-const NOT_LEGAL_URL = '/not-legal';
 
-// 1. FIRST LAYER - Edge Function Immediate Block (Vercel)
-export const config = {
-  matcher: ["/((?!not-legal|_next/static|_next/image|favicon.ico).*)"],
-  runtime: 'experimental-edge', // Critical for instant blocking
-};
-
-export default async function middleware(request) {
+export async function middleware(request) {
   const url = request.nextUrl;
+  const pathname = url.pathname;
 
-  // 2. SECOND LAYER - Vercel GeoIP (Instant)
-  if (request.geo?.country === BLACKLISTED_COUNTRY) {
-    return fullBlockRedirect(url);
+  // Skip middleware for API routes, static files, and the not-legal page itself
+  if (pathname.startsWith('/api/') ||
+      pathname.startsWith('/_next/') ||
+      pathname.startsWith('/static/') ||
+      pathname.includes('favicon.ico') ||
+      pathname.includes('robots.txt') ||
+      pathname === '/not-legal') {
+    return NextResponse.next();
   }
 
-  // 3. THIRD LAYER - Manual IP Check (Non-Vercel)
-  try {
-    const ip = getClientIP(request);
-    const country = await getCountryFromIP(ip);
+  // In production, immediately redirect if API key is missing
+  const apiKey = process.env.IPINFO_API_KEY;
+  if (!apiKey && process.env.NODE_ENV === 'production') {
+    return NextResponse.redirect(new URL('/not-legal', request.url));
+  }
+
+  let ip = request.headers.get('x-real-ip') ||
+           request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+           request.ip ||
+           '8.8.8.8';
+
+  // Skip geo check for private IPs in development
+  if (process.env.NODE_ENV !== 'production') {
+    const isPrivateIP = ip === '127.0.0.1' || 
+                       ip === '::1' ||
+                       ip.startsWith('192.168.') ||
+                       ip.startsWith('10.') ||
+                       (ip.startsWith('172.') && 
+                        parseInt(ip.split('.')[1], 10) >= 16 && 
+                        parseInt(ip.split('.')[1], 10) <= 31);
     
-    if (country === BLACKLISTED_COUNTRY) {
-      return fullBlockRedirect(url);
+    if (isPrivateIP) {
+      return NextResponse.next();
     }
+  }
+
+  try {
+    const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
+    const response = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
+
+    if (!response.ok) {
+      throw new Error(`IP API error: ${response.status}`);
+    }
+
+    const geoData = await response.json();
+    const countryCode = geoData.country || 'Unknown';
+
+    if (countryCode === BLACKLISTED_COUNTRY) {
+      // Set a header to indicate this is a blocked request
+      const response = NextResponse.redirect(new URL('/not-legal', request.url));
+      response.headers.set('x-not-legal', 'true');
+      return response;
+    }
+
+    return NextResponse.next();
   } catch (error) {
     console.error('Geo check failed:', error);
-    return process.env.NODE_ENV === 'production' 
-      ? fullBlockRedirect(url)
+    return process.env.NODE_ENV === 'production'
+      ? NextResponse.redirect(new URL('/not-legal', request.url))
       : NextResponse.next();
   }
-
-  return NextResponse.next();
 }
 
-// Nuclear redirect - prevents ANY content loading
-function fullBlockRedirect(url) {
-  const blockedUrl = new URL(NOT_LEGAL_URL, url.origin);
-  
-  // Critical headers to prevent any rendering
-  const headers = new Headers();
-  headers.set('x-middleware-rewrite', blockedUrl.toString());
-  headers.set('Cache-Control', 'no-store, max-age=0');
-  
-  return new NextResponse(null, {
-    status: 307,
-    headers
-  });
-}
-
-// IP extraction with all possible headers
-function getClientIP(request) {
-  const headers = [
-    'cf-connecting-ip', // Cloudflare
-    'x-real-ip',
-    'x-forwarded-for',
-    'x-vercel-forwarded-for'
-  ];
-
-  for (const header of headers) {
-    const ip = request.headers.get(header);
-    if (ip) return header === 'x-forwarded-for' ? ip.split(',')[0].trim() : ip;
-  }
-
-  return request.ip || '8.8.8.8';
-}
-
-// IP lookup with multiple fallbacks
-async function getCountryFromIP(ip) {
-  const services = [
-    `https://ipinfo.io/${ip}/json?token=${process.env.IPINFO_API_KEY}`,
-    `https://ipapi.co/${ip}/json/`,
-    `https://geolocation-db.com/json/${ip}`
-  ];
-
-  for (const url of services) {
-    try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(1500) });
-      if (res.ok) {
-        const data = await res.json();
-        return data.country || data.country_code;
-      }
-    } catch (_) { continue; }
-  }
-
-  throw new Error('All geo services failed');
-}
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
+};
