@@ -7,6 +7,7 @@ export async function middleware(request) {
   const pathname = url.pathname;
 
   if (pathname.startsWith('/api/') ||
+      pathname.startsWith('/layout.js') ||
       pathname.startsWith('/_next/') ||
       pathname.startsWith('/static/') ||
       pathname.includes('favicon.ico') ||
@@ -15,6 +16,8 @@ export async function middleware(request) {
     console.log(`Middleware skipped for path: ${pathname}`);
     return NextResponse.next();
   }
+  
+
 
   const apiKey = process.env.IPINFO_API_KEY;
   if (!apiKey) {
