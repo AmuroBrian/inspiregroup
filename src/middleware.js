@@ -20,7 +20,7 @@ export async function middleware(request) {
   if (!apiKey) {
     console.error("IPINFO_API_KEY is missing. Please set IPINFO_API_KEY environment variable.");
     return process.env.NODE_ENV === 'production'
-      ? NextResponse.redirect(new URL('/not-legal', request.url))
+      ? NextResponse.rewrite(new URL('/404', request.url))
       : NextResponse.next();
   }
 
@@ -64,7 +64,7 @@ export async function middleware(request) {
 
     if (countryCode === BLACKLISTED_COUNTRY) {
       console.warn(`Blacklisted country detected (${countryCode}). Redirecting to /not-legal`);
-      return NextResponse.redirect(new URL('/not-legal', request.url));
+      return NextResponse.rewrite(new URL('/404', request.url));
     }
 
     console.log(`Country (${countryCode}) is allowed. Proceeding.`);
@@ -72,7 +72,7 @@ export async function middleware(request) {
   } catch (error) {
     console.error('Geo check failed:', error);
     return process.env.NODE_ENV === 'production'
-      ? NextResponse.redirect(new URL('/not-legal', request.url))
+      ? NextResponse.rewrite(new URL('/404', request.url))
       : NextResponse.next();
   }
 }
