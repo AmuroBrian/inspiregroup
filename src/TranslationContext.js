@@ -9,26 +9,51 @@ export const TranslationProvider = ({ children }) => {
   const { language, setLanguage } = useLanguageStore();
   const [isClient, setIsClient] = useState(false);
 
-  // Ensure we're on the client side before rendering translated content
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   const translateDynamicText = async (text) => {
     if (!text) return "";
+    
+    // Return original text if we're not on the client or if language is English
+    if (!isClient || language === "en") return text;
+    
     try {
+      // First try Google Translate API
       const res = await fetch(
-        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${language}&dt=t&q=${encodeURIComponent(text)}`
+        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${language}&dt=t&q=${encodeURIComponent(text)}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          referrerPolicy: 'no-referrer',
+        }
       );
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
       const data = await res.json();
-      return data[0][0][0]; // Extract translated text
+      return data[0][0][0];
     } catch (error) {
-      console.error("Translation error:", error);
+      console.warn("Translation API failed, falling back to local translations:", error);
+      
+      // Fallback 1: Check if we have a local translation for this exact text
+      const localTranslations = translations[language];
+      if (localTranslations) {
+        const exactMatch = Object.entries(localTranslations).find(
+          ([key]) => key.toLowerCase() === text.toLowerCase()
+        );
+        if (exactMatch) return exactMatch[1];
+      }
+      
+      // Fallback 2: Return the original text
       return text;
     }
   };
 
-  // During SSR, always use English translations to prevent hydration mismatch
   const currentLanguage = isClient ? language : "en";
   const currentTranslations = translations[currentLanguage] || translations.en;
 
@@ -45,5 +70,4 @@ export const TranslationProvider = ({ children }) => {
   );
 };
 
-// Custom hook
 export const useTranslation = () => useContext(TranslationContext);
