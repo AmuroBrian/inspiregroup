@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 const BLACKLISTED_COUNTRY = 'PH';
 
 export async function middleware(request) {
-  const url = request.nextUrl;
-  const pathname = url.pathname;
+  const { pathname } = request.nextUrl;
 
   // Skip middleware for API routes, static files, and the not-legal page itself
   if (pathname.startsWith('/api/') ||
@@ -54,10 +53,9 @@ export async function middleware(request) {
     const countryCode = geoData.country || 'Unknown';
 
     if (countryCode === BLACKLISTED_COUNTRY) {
-      // Set a header to indicate this is a blocked request
-      const response = NextResponse.redirect(new URL('/not-legal', request.url));
-      response.headers.set('x-not-legal', 'true');
-      return response;
+      // Create a rewrite response to avoid changing the URL
+      const notLegalUrl = new URL('/not-legal', request.url);
+      return NextResponse.rewrite(notLegalUrl);
     }
 
     return NextResponse.next();
