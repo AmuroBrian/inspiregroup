@@ -1,53 +1,82 @@
 import { NextResponse } from "next/server";
 
-const RESTRICTED_COUNTRY = 'PH'; // Only Philippines is blocked
+const BLACKLISTED_COUNTRY = 'PH';
 
 export async function middleware(request) {
-  const { nextUrl: url, headers } = request;
-  const NOT_LEGAL_PAGE = '/not-legal';
-  
-  // Skip middleware for non-page requests & not-legal page itself
-  if (
-    url.pathname === NOT_LEGAL_PAGE ||
-    url.pathname.startsWith('/_next/') ||
-    url.pathname.startsWith('/api/') ||
-    url.pathname.includes('.')
-  ) {
+  const url = request.nextUrl;
+  const pathname = url.pathname;
+
+  if (pathname.startsWith('/api/') ||
+      pathname.startsWith('/_next/') ||
+      pathname.startsWith('/static/') ||
+      pathname.includes('favicon.ico') ||
+      pathname.includes('robots.txt') ||
+      pathname === '/not-legal') {
+    console.log(`Middleware skipped for path: ${pathname}`);
     return NextResponse.next();
   }
 
-  // 1. Get IP (with fallback for local testing)
-  let ip = headers.get('x-real-ip') || 
-           headers.get('x-forwarded-for')?.split(',')[0].trim() || 
-           '8.8.8.8'; // Default to a US IP for testing
-
-  // 2. Skip geo-check in development (optional)
-  if (process.env.NODE_ENV === 'development') {
-    const isLocalIP = ip === '127.0.0.1' || ip === '::1';
-    if (isLocalIP) return NextResponse.next();
+  const apiKey = process.env.IPINFO_API_KEY;
+  if (!apiKey) {
+    console.error("IPINFO_API_KEY is missing. Please set IPINFO_API_KEY environment variable.");
+    return process.env.NODE_ENV === 'production'
+      ? NextResponse.redirect(new URL('/not-legal', request.url))
+      : NextResponse.next();
   }
 
-  // 3. Fetch country from IP
+  let ip = request.headers.get('x-real-ip') ||
+           request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+           request.ip ||
+           '8.8.8.8';
+
+  console.log(`Incoming IP: ${ip}`);
+
+  if (process.env.NODE_ENV !== 'production') {
+    const isPrivateIP = ip === '127.0.0.1' || 
+                       ip === '::1' ||
+                       ip.startsWith('192.168.') ||
+                       ip.startsWith('10.') ||
+                       (ip.startsWith('172.') && 
+                        parseInt(ip.split('.')[1], 10) >= 16 && 
+                        parseInt(ip.split('.')[1], 10) <= 31);
+    
+    if (isPrivateIP) {
+      console.log(`Skipping geo check for private IP in development: ${ip}`);
+      return NextResponse.next();
+    }
+  }
+
   try {
-    const apiKey = process.env.IPINFO_API_KEY;
-    if (!apiKey) throw new Error("IPINFO_API_KEY missing");
-
     const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    const res = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
-    const { country } = await res.json();
+    console.log(`Fetching geo data from: ${apiUrl}`);
+    const response = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
 
-    // 4. BLOCK PHILIPPINES (Rewrite to /not-legal)
-    if (country === RESTRICTED_COUNTRY) {
-      return NextResponse.rewrite(new URL(NOT_LEGAL_PAGE, url));
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`IP API error: ${response.status} - ${errorText}`);
     }
 
+    const geoData = await response.json();
+    const countryCode = geoData.country || 'Unknown';
+
+    console.log(`Geo data received for IP ${ip}:`, JSON.stringify(geoData));
+    console.log(`Detected Country Code: ${countryCode}`);
+
+    if (countryCode === BLACKLISTED_COUNTRY) {
+      console.warn(`Blacklisted country detected (${countryCode}). Redirecting to /not-legal`);
+      return NextResponse.redirect(new URL('/not-legal', request.url));
+    }
+
+    console.log(`Country (${countryCode}) is allowed. Proceeding.`);
     return NextResponse.next();
   } catch (error) {
-    console.error("Geo-block error:", error);
-    return NextResponse.next(); // Allow access if API fails
+    console.error('Geo check failed:', error);
+    return process.env.NODE_ENV === 'production'
+      ? NextResponse.redirect(new URL('/not-legal', request.url))
+      : NextResponse.next();
   }
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|favicon.ico|robots.txt|not-legal).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
 };
