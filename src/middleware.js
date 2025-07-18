@@ -6,19 +6,28 @@ export async function middleware(request) {
   const url = request.nextUrl;
   const pathname = url.pathname;
 
-  if (pathname.startsWith('/api/') ||
-      pathname.startsWith('/_next/') ||
+  // Skip middleware for these paths
+  if (pathname.startsWith('/_next/') ||
       pathname.startsWith('/static/') ||
-      pathname.includes('favicon.ico') ||
-      pathname.includes('robots.txt') ||
+      pathname.includes('.') || // Skip files
       pathname === '/not-legal') {
-    console.log(`Middleware skipped for path: ${pathname}`);
     return NextResponse.next();
+  }
+
+  // Skip API routes (if you want to allow API access)
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+
+  // In production, immediately redirect if we already know it's PH
+  if (process.env.NODE_ENV === 'production' && 
+      request.geo?.country === BLACKLISTED_COUNTRY) {
+    return NextResponse.redirect(new URL('/not-legal', request.url));
   }
 
   const apiKey = process.env.IPINFO_API_KEY;
   if (!apiKey) {
-    console.error("IPINFO_API_KEY is missing. Please set IPINFO_API_KEY environment variable.");
+    console.error("IPINFO_API_KEY is missing");
     return process.env.NODE_ENV === 'production'
       ? NextResponse.redirect(new URL('/not-legal', request.url))
       : NextResponse.next();
@@ -29,8 +38,9 @@ export async function middleware(request) {
            request.ip ||
            '8.8.8.8';
 
-  console.log(`Incoming IP: ${ip}`);
+  console.log(`Checking IP: ${ip}`);
 
+  // Skip geo check for private IPs in development
   if (process.env.NODE_ENV !== 'production') {
     const isPrivateIP = ip === '127.0.0.1' || 
                        ip === '::1' ||
@@ -41,36 +51,35 @@ export async function middleware(request) {
                         parseInt(ip.split('.')[1], 10) <= 31);
     
     if (isPrivateIP) {
-      console.log(`Skipping geo check for private IP in development: ${ip}`);
+      console.log(`Skipping geo check for private IP: ${ip}`);
       return NextResponse.next();
     }
   }
 
   try {
     const apiUrl = `https://ipinfo.io/${ip}?token=${apiKey}`;
-    console.log(`Fetching geo data from: ${apiUrl}`);
-    const response = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
+    const response = await fetch(apiUrl, { 
+      headers: { 'Accept': 'application/json' },
+      // Add timeout for production reliability
+      signal: AbortSignal.timeout(2000)
+    });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`IP API error: ${response.status} - ${errorText}`);
+      throw new Error(`IP API error: ${response.status}`);
     }
 
     const geoData = await response.json();
     const countryCode = geoData.country || 'Unknown';
 
-    console.log(`Geo data received for IP ${ip}:`, JSON.stringify(geoData));
-    console.log(`Detected Country Code: ${countryCode}`);
-
     if (countryCode === BLACKLISTED_COUNTRY) {
-      console.warn(`Blacklisted country detected (${countryCode}). Redirecting to /not-legal`);
+      console.warn(`Blocking access from ${countryCode}`);
       return NextResponse.redirect(new URL('/not-legal', request.url));
     }
 
-    console.log(`Country (${countryCode}) is allowed. Proceeding.`);
     return NextResponse.next();
   } catch (error) {
     console.error('Geo check failed:', error);
+    // In production, be strict and block if we can't verify
     return process.env.NODE_ENV === 'production'
       ? NextResponse.redirect(new URL('/not-legal', request.url))
       : NextResponse.next();
@@ -78,5 +87,8 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
+  // Match all paths except specific excluded ones
+  matcher: [
+    '/((?!_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'
+  ],
 };
