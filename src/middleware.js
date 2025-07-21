@@ -10,7 +10,8 @@ export async function middleware(request) {
       pathname.startsWith('/_next/') ||
       pathname.startsWith('/static/') ||
       pathname.includes('favicon.ico') ||
-      pathname.includes('robots.txt')) {
+      pathname.includes('robots.txt') ||
+      pathname === '/not-legal') {
     console.log(`Middleware skipped for path: ${pathname}`);
     return NextResponse.next();
   }
@@ -77,5 +78,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
 };
