@@ -63,7 +63,7 @@ export async function middleware(request) {
     console.log(`Detected Country Code: ${countryCode}`);
 
     if (countryCode === BLACKLISTED_COUNTRY) {
-      console.warn(`Blacklisted country detected (${countryCode}). Redirecting to 404`);
+      console.warn(`Blacklisted country detected (${countryCode}). Redirecting to `);
       return NextResponse.rewrite(new URL('/404', request.url));
     }
 
