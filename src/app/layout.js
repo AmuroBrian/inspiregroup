@@ -1,5 +1,6 @@
 import { GeistSans, GeistMono } from 'geist/font'; // Correct import from 'geist' package
 import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -22,7 +23,7 @@ export default async function RootLayout({ children }) {
           {!isNotLegalPage ? (
             <>
               <LoadingScreen />
-              <Header />
+              <Header /> 
               <main className="flex-1">
                 {children}
               </main>

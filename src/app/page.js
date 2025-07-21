@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import HeroSection from "./components/HeroSection";
 import ProjectCards from "./components/ProjectCards";
@@ -12,25 +13,32 @@ import InspireWalletIntro from "./components/InspireWalletIntro";
 import AnnouncementModal from "./components/AnnouncementModal";
 
 export default function HomePage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
-    }
-  }, []);
+    fetch("https://ipinfo.io/json?token=3be44d6d9f910c")
+      .then(res => res.json())
+      .then(data => {
+        if (data.country === "PH") {
+          router.replace("/404");
+        } else {
+          setChecking(false);
+        }
+      })
+      .catch(() => setChecking(false));
+  }, [router]);
+
+  if (checking) return null;
 
   return (
     <>
-      
-     
       <AnnouncementModal />
       <HeroSection />
-       <WelcomeToHol />
+      <WelcomeToHol />
       <InspireWalletIntro />
       <ProjectCards />
       <CompanyInfo />
-
       <EmailSection />
       <RSS />
     </>
