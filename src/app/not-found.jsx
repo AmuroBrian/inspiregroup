@@ -158,3 +158,7 @@ export default function Custom404() {
     </div>
   );
 }
+
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt).*)'],
+};
