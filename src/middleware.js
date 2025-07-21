@@ -10,7 +10,8 @@ export async function middleware(request) {
       pathname.startsWith('/_next/') ||
       pathname.startsWith('/static/') ||
       pathname.includes('favicon.ico') ||
-      pathname.includes('robots.txt')) {
+      pathname.includes('robots.txt') ||
+      pathname === '/not-legal') {
     console.log(`Middleware skipped for path: ${pathname}`);
     return NextResponse.next();
   }
@@ -56,9 +57,7 @@ export async function middleware(request) {
     }
 
     const geoData = await response.json();
-    // TESTING: Force block for all users as if from PH
-    const countryCode = 'PH'; // <-- Remove this after testing
-    // const countryCode = geoData.country || 'Unknown';
+    const countryCode = geoData.country || 'Unknown';
 
     console.log(`Geo data received for IP ${ip}:`, JSON.stringify(geoData));
     console.log(`Detected Country Code: ${countryCode}`);
@@ -79,5 +78,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|static|favicon.ico|robots.txt|not-legal).*)'],
 };
