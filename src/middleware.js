@@ -56,9 +56,7 @@ export async function middleware(request) {
     }
 
     const geoData = await response.json();
-    // TESTING: Force block for all users as if from PH
-    const countryCode = 'PH'; // <-- Remove this after testing
-    // const countryCode = geoData.country || 'Unknown';
+    const countryCode = geoData.country || 'Unknown';
 
     console.log(`Geo data received for IP ${ip}:`, JSON.stringify(geoData));
     console.log(`Detected Country Code: ${countryCode}`);
