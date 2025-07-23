@@ -1,48 +1,85 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@/TranslationContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faGlobe, faBuilding } from '@fortawesome/free-solid-svg-icons';
 
 const Footer = () => {
+  const [accessStatus, setAccessStatus] = useState('checking'); // 'checking' | 'allowed' | 'blocked'
   const { t } = useTranslation();
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const checkCountRef = useRef(0);
 
+  // Robust IP verification
   useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 200);
+    const MAX_CHECKS = 2;
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    const verifyLocation = async (attempt = 0) => {
+      try {
+        checkCountRef.current++;
+        const apiUrl = attempt % 2 === 0 
+          ? `https://ipapi.co/json/?${Date.now()}`
+          : `https://ipinfo.io/json?token=${process.env.NEXT_PUBLIC_IPINFO_API_URL}&${Date.now()}`;
+
+        const response = await fetch(apiUrl, { signal });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        const isPH = ["PH", "PHL"].includes(data.country);
+
+        if (isPH) {
+          setAccessStatus('blocked');
+          return;
+        }
+
+        if (attempt < MAX_CHECKS - 1) {
+          // Double-check if not PH
+          setTimeout(() => verifyLocation(attempt + 1), 500);
+        } else {
+          setAccessStatus('allowed');
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('Location check error:', error);
+          if (checkCountRef.current >= MAX_CHECKS) {
+            setAccessStatus('allowed'); // Default to showing if checks fail
+          }
+        }
+      }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    verifyLocation();
+
+    return () => controller.abort();
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  // Scroll handler
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 200);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const currentYear = new Date().getFullYear();
+  // Render nothing while checking or if blocked
+  if (accessStatus !== 'allowed') return null;
 
+  // Full footer rendering
   return (
     <footer className="bg-gradient-to-r from-black to-blue-950 text-gray-200 border-t border-blue-900 shadow-2xl relative overflow-hidden">
-      {/* Background overlay for subtle texture/pattern */}
-      {/* Ensure you have bg-dots-pattern defined in your tailwind.config.js if you want this effect */}
-      {/* Consider adjusting opacity or color of dots if they clash with blue */}
-      <div className="absolute inset-0 bg-dots-pattern opacity-10" aria-hidden="true"></div> {/* Increased opacity slightly for visibility on dark blue */}
-
+      <div className="absolute inset-0 bg-dots-pattern opacity-10" aria-hidden="true"></div>
+      
       <div className="container mx-auto px-6 py-16 relative z-10">
-        {/* Main grid for footer sections */}
         <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 lg:gap-x-20">
-
-          {/* Section 1: Branding and Copyright */}
+          
+          {/* Branding Section */}
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
             <h3 className="text-4xl font-semibold text-white mb-4 tracking-tight leading-tight">
               {t.inspireGroup || "Inspire Holdings Inc."}
             </h3>
             <p className="text-base text-blue-100 leading-relaxed mb-3">
-              &copy; {currentYear} {t.inspireGroup || "Inspire Holdings Inc."}.{" "}
+              &copy; {new Date().getFullYear()} {t.inspireGroup || "Inspire Holdings Inc."}.{" "}
               {t.allRightsReserved || "All Rights Reserved."}
             </p>
             <p className="text-sm text-blue-200">
@@ -53,7 +90,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Section 2: Head Office and Satellite Offices */}
+          {/* Offices Section - All details included */}
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
             <h4 className="text-xl font-semibold text-white mb-6 flex items-center justify-center md:justify-start">
               <FontAwesomeIcon icon={faBuilding} className="mr-3 text-blue-300 text-2xl" />
@@ -91,35 +128,19 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright and Scroll to top (Centered below content) */}
         <div className="border-t border-blue-900 mt-16 pt-8 text-center text-blue-300 text-sm">
-          <p>
-            {t.footerNote || "Inspiring innovation, building futures."}
-          </p>
+          <p>{t.footerNote || "Inspiring innovation, building futures."}</p>
         </div>
-
-        {/* Scroll to top button */}
-        {showScrollTop && (
-          <button
-            onClick={scrollToTop}
-            className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110 z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
-            aria-label="Scroll to top"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        )}
       </div>
+
+      {showScrollTop && (
+        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} 
+          className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110 z-50">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+          </svg>
+        </button>
+      )}
     </footer>
   );
 };

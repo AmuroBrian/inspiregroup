@@ -15,6 +15,7 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const headerList = await headers();
   const isNotLegalPage = headerList.get('x-not-legal') === 'true';
+  const isPHCountry = headerList.get('x-ph-country') === 'true';
 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
