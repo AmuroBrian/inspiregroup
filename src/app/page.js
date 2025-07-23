@@ -17,7 +17,7 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("https://ipinfo.io/json?token=3be44d6d9f910c")
+    fetch(`https://ipinfo.io/json?token=${process.env.NEXT_PUBLIC_IPINFO_API_URL}`)
       .then(res => res.json())
       .then(data => {
         if (data.country === "PH") {
