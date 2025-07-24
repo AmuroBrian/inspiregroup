@@ -430,7 +430,7 @@ const ProjectCards = () => {
       </motion.div>
       {/* Main content container */}
       <motion.div 
-          className="w-full max-w-[1200px] mx-auto relative z-10"
+          className="w-full max-w-[1200px] mx-auto relative z-10 pb-12 md:pb-16 lg:pb-20"
           initial={prefersReducedMotion ? false : { y: 30, opacity: 0 }}
           animate={prefersReducedMotion ? false : { y: 0, opacity: 1 }}
           transition={{ ...springConfig, delay: 0.2 }}
