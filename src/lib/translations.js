@@ -899,7 +899,7 @@ pdfDocument: "PDF 문서",
     welcometohol_subheading: "外国企业家和投资者的世界级私人银行专家",
     welcometohol_body: "灵感集团提供一个独家的精英私人银行专家网络，服务全球企业家和投资者。凭借与政府机构、大型企业和主要行政机构的紧密联系，我们继续成长为菲律宾最强大的企业之一。我们强大的声誉和卓越的业绩记录使我们能够实现其他人认为不可能的事情。我们提供超越传统界限的独特商业机会。在灵感集团，我们不仅创造未来，还将您的愿景转化为持久的成功。",
 
-    introWalletTitle: "介绍 Inspire Wallet",
+    introWalletTitle: "推出 Inspire 钱包",
     introWalletDesc:
       "体验终极资产管理应用程序和无缝银行账户开设服务！ Inspire Wallet 资产管理应用程序可以轻松连接您想要开设的银行账户，提供流畅且高效的金融体验。此外，通过 Inspire 开设银行账户既简单又快捷，让您轻松使用金融服务。此外，Inspire Wallet 已正式获得 Apple 和 Google 认证为金融应用程序，与银行机构同级别认证。立即发现 Inspire Wallet 的便捷性和安全性！",
 
