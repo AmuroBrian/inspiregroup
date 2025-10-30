@@ -5,55 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faGlobe, faBuilding } from '@fortawesome/free-solid-svg-icons';
 
 const Footer = () => {
-  const [accessStatus, setAccessStatus] = useState('checking'); // 'checking' | 'allowed' | 'blocked'
+  // Access gating handled in middleware; render unconditionally
   const { t } = useTranslation();
   const [showScrollTop, setShowScrollTop] = useState(false);
   const checkCountRef = useRef(0);
 
-  // Robust IP verification
-  useEffect(() => {
-    const MAX_CHECKS = 2;
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    const verifyLocation = async (attempt = 0) => {
-      try {
-        checkCountRef.current++;
-        const apiUrl = attempt % 2 === 0 
-          ? `https://ipapi.co/json/?${Date.now()}`
-          : `https://ipinfo.io/json?token=${process.env.NEXT_PUBLIC_IPINFO_API_URL}&${Date.now()}`;
-
-        const response = await fetch(apiUrl, { signal });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
-        const data = await response.json();
-        const isPH = ["PH", "PHL"].includes(data.country);
-
-        if (isPH) {
-          setAccessStatus('blocked');
-          return;
-        }
-
-        if (attempt < MAX_CHECKS - 1) {
-          // Double-check if not PH
-          setTimeout(() => verifyLocation(attempt + 1), 500);
-        } else {
-          setAccessStatus('allowed');
-        }
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          console.error('Location check error:', error);
-          if (checkCountRef.current >= MAX_CHECKS) {
-            setAccessStatus('allowed'); // Default to showing if checks fail
-          }
-        }
-      }
-    };
-
-    verifyLocation();
-
-    return () => controller.abort();
-  }, []);
+  // Removed client-side geo verification; rely on server/middleware
 
   // Scroll handler
   useEffect(() => {
@@ -62,8 +19,7 @@ const Footer = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Render nothing while checking or if blocked
-  if (accessStatus !== 'allowed') return null;
+  // Always render; server enforces access rules
 
   // Full footer rendering
   return (
