@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { TranslationProvider } from "./../TranslationContext";
 import LoadingScreen from "./components/LoadingScreen";
+import MaintenancePage from "./maintenance/page";
 
 export const metadata = {
   title: "Inspire Group",
@@ -16,24 +17,27 @@ export default async function RootLayout({ children }) {
   const headerList = await headers();
   const isNotLegalPage = headerList.get('x-not-legal') === 'true';
   const isPHCountry = headerList.get('x-ph-country') === 'true';
+  const maintenanceEnvTrue = process.env.MAINTENANCE_MODE === 'true' || process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
+  const maintenanceEnvFalse = process.env.MAINTENANCE_MODE === 'false' || process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'false';
+  const maintenanceEnabled = maintenanceEnvFalse ? false : (maintenanceEnvTrue || true);
 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className="antialiased min-h-screen flex flex-col">
+      <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <TranslationProvider>
-          {!isNotLegalPage ? (
+          {maintenanceEnabled ? (
+            <main className="flex-1">
+              <MaintenancePage />
+            </main>
+          ) : isNotLegalPage ? (
+            <main className="flex-1">{children}</main>
+          ) : (
             <>
               <LoadingScreen />
-              <Header /> 
-              <main className="flex-1">
-                {children}
-              </main>
+              <Header />
+              <main className="flex-1">{children}</main>
               <Footer />
             </>
-          ) : (
-            <main className="flex-1">
-              {children}
-            </main>
           )}
         </TranslationProvider>
       </body>

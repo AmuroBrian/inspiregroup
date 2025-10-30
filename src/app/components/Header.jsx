@@ -10,8 +10,7 @@ import {
 import { AgentCodeEntry } from "./AgentHubCode/AgentCodeEntry";
 
 const Header = () => {
-  const [checking, setChecking] = useState(true);
-  const [isPhilippines, setIsPhilippines] = useState(false);
+  // IP gating handled server-side in middleware; no client geo fetch
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -36,19 +35,7 @@ const Header = () => {
   // Get current language details
   const currentLanguage = languageOptions.find(lang => lang.code === language) || languageOptions[0];
 
-  // IP Check Effect
-  useEffect(() => {
-    fetch(`https://ipinfo.io/json?token=${process.env.NEXT_PUBLIC_IPINFO_API_URL}`)
-      .then(res => res.json())
-      .then(data => {
-        setIsPhilippines(data.country === "PH");
-        setChecking(false);
-      })
-      .catch(() => {
-        setIsPhilippines(false);
-        setChecking(false);
-      });
-  }, []);
+  // Removed client-side IP fetch to avoid CORS/ad blocker issues
 
   useEffect(() => {
     const handleLoginStatusChange = () => {
@@ -112,8 +99,7 @@ const Header = () => {
     router.push("/");
   };
 
-  // Don't render header if checking or if user is from Philippines
-  if (checking || isPhilippines) return null;
+  // Always render; access gating is done in middleware
 
   return (
     <>
