@@ -2,6 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Slow spin utilities for subtle background motion */
+.animate-spin-slow {
+  animation: spin 16s linear infinite;
+}
+.animate-spin-slower {
+  animation: spin 28s linear infinite;
+}
+
+/* Dino-style offline effect */
+@keyframes ground-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes cloud-drift {
+  0% { transform: translateX(0); opacity: .9; }
+  100% { transform: translateX(-120%); opacity: .9; }
+}
+
+@keyframes obstacle-run {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-120%); }
+}
+
+@keyframes dino-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.dino-ground {
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.25) 0 12px, transparent 12px 24px);
+  animation: ground-scroll 2.2s linear infinite;
+}
+
+.dino-cloud {
+  animation: cloud-drift 28s linear infinite;
+}
+
+.dino-obstacle {
+  animation: obstacle-run 2.4s linear infinite;
+}
+
+.dino-bob {
+  animation: dino-bob 600ms ease-in-out infinite;
+}
+
 /* Universal Box-Sizing for consistent layout calculation */
 /* This is crucial for responsive design, ensuring padding and border are included in element's width/height */
 *,

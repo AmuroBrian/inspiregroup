@@ -6,6 +6,48 @@ export async function middleware(request) {
   const url = request.nextUrl;
   const pathname = url.pathname;
 
+  // Maintenance mode gate (defaults to ON until explicitly disabled)
+  const envMaintenance = process.env.MAINTENANCE_MODE === 'true' || process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
+  const envExplicitOff = process.env.MAINTENANCE_MODE === 'false' || process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'false';
+  const maintenanceOn = envExplicitOff ? false : (envMaintenance || true);
+
+  // Allow bypass via cookie or query (?bypass_maintenance=1)
+  const bypassQuery = url.searchParams.get('bypass_maintenance') === '1';
+  const bypassCookie = request.cookies.get('bypass_maintenance')?.value === '1';
+  if (bypassQuery) {
+    const res = NextResponse.next();
+    res.cookies.set('bypass_maintenance', '1', { path: '/', httpOnly: false });
+    return res;
+  }
+
+  if (maintenanceOn && !bypassCookie) {
+    const locale = url.locale || 'en';
+    const isAssetOrApi =
+      pathname.startsWith('/_next/') ||
+      pathname.startsWith('/static/') ||
+      pathname.startsWith('/api/') ||
+      pathname.startsWith('/images/') ||
+      pathname.startsWith('/videos/') ||
+      pathname.startsWith('/docs/') ||
+      pathname.endsWith('.ico') ||
+      pathname.endsWith('.svg') ||
+      pathname.endsWith('.png') ||
+      pathname.endsWith('.jpg') ||
+      pathname.endsWith('.jpeg') ||
+      pathname.endsWith('.webp') ||
+      pathname.endsWith('/robots.txt');
+
+    if (pathname === '/maintenance' || pathname === `/${locale}/maintenance` || isAssetOrApi) {
+      return NextResponse.next(); // short-circuit: show maintenance or serve assets
+    }
+
+    const maintenanceUrl = new URL(`/${locale}/maintenance`, request.url);
+    const response = NextResponse.rewrite(maintenanceUrl);
+    response.headers.set('Cache-Control', 'no-store');
+    response.headers.set('Retry-After', '3600');
+    return response;
+  }
+
   if (pathname.startsWith('/api/') ||
       pathname.startsWith('/_next/') ||
       pathname.startsWith('/static/') ||
